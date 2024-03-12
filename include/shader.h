@@ -15,7 +15,6 @@ private:
     unsigned int id;
 
 public:
-    Shader();
     ~Shader();
 
     void addVertexShader(std::string path);

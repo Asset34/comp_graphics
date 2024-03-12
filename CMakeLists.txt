@@ -19,7 +19,12 @@ set_property(TARGET libglfw3 PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${PROJECT_SO
 set_property(TARGET libglfw3 PROPERTY IMPORTED_LOCATION ${PROJECT_SOURCE_DIR}/${LIB}/${LIB_PLATFORM}/libglfw3.a)
 
 # Define GLAD as object library
-add_library(glad OBJECT ${SRC}/glad.c)
+add_library(glad OBJECT
+    ${SRC}/glad.c
+    ${SRC}/shader.cpp
+    ${SRC}/renderer.cpp
+    ${SRC}/window.cpp
+)
 target_include_directories(glad PUBLIC ${INCLUDE})
 
 add_executable(test

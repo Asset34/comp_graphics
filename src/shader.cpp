@@ -1,10 +1,5 @@
 #include "shader.h"
 
-Shader::Shader()
-{
-    id = glCreateProgram();
-}
-
 Shader::~Shader()
 {
     glDeleteShader(vertexId);
@@ -28,12 +23,9 @@ void Shader::addVertexShader(std::string path)
 
     const char *codeShader = code.c_str();
 
-    fragmentId = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(fragmentId, 1, &codeShader, NULL);
-    glCompileShader(fragmentId);
-
-    // Attach shader
-    glAttachShader(id, fragmentId);
+    vertexId = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(vertexId, 1, &codeShader, NULL);
+    glCompileShader(vertexId);
 }
 
 void Shader::addFragmentShader(std::string path)
@@ -53,16 +45,17 @@ void Shader::addFragmentShader(std::string path)
 
     const char *codeShader = code.c_str();
 
-    vertexId = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(vertexId, 1, &codeShader, NULL);
-    glCompileShader(vertexId);
-
-    // Attach shader
-    glAttachShader(id, vertexId);
+    fragmentId = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragmentId, 1, &codeShader, NULL);
+    glCompileShader(fragmentId);
 }
 
 void Shader::link()
 {
+    id = glCreateProgram();
+    glAttachShader(id, vertexId);
+    glAttachShader(id, fragmentId);
+
     glLinkProgram(id);
 }
 
