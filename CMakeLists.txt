@@ -21,16 +21,18 @@ set_property(TARGET libglfw3 PROPERTY IMPORTED_LOCATION ${PROJECT_SOURCE_DIR}/${
 # Define GLAD as object library
 add_library(glad OBJECT
     ${SRC}/glad.c
-    ${SRC}/shader.cpp
-    ${SRC}/renderer.cpp
-    ${SRC}/window.cpp
 )
 target_include_directories(glad PUBLIC ${INCLUDE})
 
-add_executable(test
+# Create executavle
+add_executable(lr1
     ${SRC}/main.cpp
+    ${SRC}/sceneobj.cpp
+    ${SRC}/shader.cpp
+    ${SRC}/renderer.cpp
+    ${SRC}/window.cpp
     $<TARGET_OBJECTS:glad>
 )
-
-set_target_properties(test PROPERTIES CXX_STANDARD 11)
-target_link_libraries(test libglfw3)
+set_target_properties(lr1 PROPERTIES CXX_STANDARD 11)
+target_link_libraries(lr1 libglfw3)
+target_include_directories(lr1 PUBLIC ${INCLUDE})
