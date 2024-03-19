@@ -5,7 +5,7 @@
 #include "sceneobj.h"
 
 struct Polygon {
-    std::vector<float> vertices;
+    std::vector<vec3> vertices;
     vec3 color;
 };
 

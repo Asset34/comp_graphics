@@ -2,8 +2,16 @@
 #define RENDERER_H_H
 
 #include "shader.h"
+#include "scene.h"
 
 class Renderer {
+public:
+    Renderer();
+
+    void init();
+    void render();
+    void attachScene(const Scene &scene);
+
 private:
     // Buffers
     unsigned int vbo, vao;
@@ -13,9 +21,7 @@ private:
     const std::string fragmentShaderPath = "../shaders/fragment_shader.glsl";
     Shader shader;
 
-public:
-    void init();
-    void render();
+    const Scene *m_scene;
 
 };
 

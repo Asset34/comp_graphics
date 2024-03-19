@@ -17,6 +17,7 @@ private:
     Shape *m_shape;
     mat4 m_viewMatrix;
     vec3 m_backgroundColor;
+    
 };
 
 #endif // SCENE_H_

@@ -3,6 +3,11 @@
 #include "glad/glad.h"
 #include "glfw/glfw3.h"
 
+Renderer::Renderer()
+    :m_scene(nullptr)
+{
+}
+
 void Renderer::init()
 {
     // Load glad
@@ -32,7 +37,16 @@ void Renderer::init()
 
 void Renderer::render()
 {
-    shader.use();
-    glBindVertexArray(vao);
+    // shader.use();
+    // glBindVertexArray(vao);
+
     // TODO: draw
+
+    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+}
+
+void Renderer::attachScene(const Scene &scene)
+{
+    m_scene = &scene;
 }

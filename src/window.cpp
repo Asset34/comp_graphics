@@ -1,16 +1,8 @@
 #include "window.h"
 
 Window::Window(std::string title, int width, int height)
-    :title(title), width(width), height(height)
-{
-}
-
-Window::~Window()
-{
-    close();
-}
-
-bool Window::open()
+    :m_title(title), m_width(width), m_height(height)
+    
 {
     // Init OPENGL context
     glfwInit();
@@ -19,34 +11,36 @@ bool Window::open()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     // Create GLFW window
-    window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
-    if (window == NULL)
+    m_window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
+    if (m_window == NULL)
     {
         glfwTerminate();
-        return false;
+    } else {
+        glfwMakeContextCurrent(m_window);
     }
-    glfwMakeContextCurrent(window);
 
-    return true;
+    // Setup renderer
+    m_renderer.init();
+    m_renderer.attachScene(m_scene);
 }
 
-void Window::close()
+Window::~Window()
 {
     glfwTerminate();
 }
 
 void Window::draw()
 {
-    // Init renderer
-    renderer.init();
-    
     while (!shouldClose()) {
-        glfwSwapBuffers(window);
+        m_scene.update();
+        m_renderer.render();
+
+        glfwSwapBuffers(m_window);
         glfwPollEvents();
     }
 }
 
 bool Window::shouldClose() const
 {
-    return glfwWindowShouldClose(window);
+    return glfwWindowShouldClose(m_window);
 }
