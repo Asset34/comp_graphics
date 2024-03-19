@@ -1,19 +1,20 @@
 #include "shape.h"
 
-
 Shape::Shape(int size)
-    :m_polygons(size)
+    :m_vertices(size),
+     m_polygonsOverallSize(0)
 {
+    this->polygonBegin();
 }
 
-void Shape::setPolygon(int i, const Polygon &polygon)
+int Shape::getSize() const
 {
-    m_polygons[i] = polygon;
+    return m_vertices.size();
 }
 
-const Polygon &Shape::getPolygon(int i) const
+const std::vector<vec3> &Shape::getVertices() const
 {
-    return m_polygons[i];
+    return m_vertices;
 }
 
 int Shape::getPolygonsNumber() const
@@ -21,13 +22,47 @@ int Shape::getPolygonsNumber() const
     return m_polygons.size();
 }
 
-int Shape::getVerticesNumber() const
+int Shape::getPolygonSize() const
 {
-    int n = 0;
+    return m_polygonsIterator->indices.size();
+}
 
-    for (int i = 0; i < m_polygons.size(); i++) {
-        n += m_polygons[i].vertices.size();
-    }
+int Shape::getPolygonsOverallSize() const
+{
+    return m_polygonsOverallSize;
+}
 
-    return n;
+const std::vector<int> &Shape::getPolygonIndices() const
+{
+    return m_polygonsIterator->indices;
+}
+
+const vec3 &Shape::getPolygonColor() const
+{
+    return m_polygonsIterator->color;
+}
+
+void Shape::polygonBegin()
+{
+    m_polygonsIterator = m_polygons.begin();
+}
+
+void Shape::polygonNext()
+{
+    ++m_polygonsIterator;
+}
+
+bool Shape::polygonEnd() const
+{
+    return m_polygonsIterator == m_polygons.end();
+}
+
+void Shape::setVertex(int i, const vec3 &vertex)
+{
+    m_vertices[i] = vertex;
+}
+
+void Shape::definePolygon(const std::vector<int> &indices, const vec3 &color)
+{
+    m_polygonsOverallSize += indices.size();
 }
