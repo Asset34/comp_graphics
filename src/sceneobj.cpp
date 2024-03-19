@@ -3,163 +3,273 @@
 #include <cmath>
 
 SceneObj::SceneObj()
-    :center(glm::vec2(0.0f, 0.0f)),
-     unit(glm::vec2(0.0f, 1.0f)),
-     scaleFactor(glm::vec2(1.0f, 1.0f)),
-     modelMatr(glm::mat3(1.0f))
+    :m_position(vec3(0.0f, 0.0f, 0.0f)),
+     m_rotationAngles(vec3(0.0f, 0.0f, 0.0f)),
+     m_scaleFactors(vec3(1.0f, 1.0f, 1.0f)),
+     m_modelMatrix(mat4(1.0f)) // Identity matrix
 {
 }
 
-void SceneObj::translate(const glm::vec2 &tv)
+SceneObj::~SceneObj()
 {
-    glm::mat3 translationMatr = this->createTranslationMatrix(tv);
-
-    this->updateModemMatr(translationMatr);
-    this->updateCenter(translationMatr);
 }
 
-void SceneObj::translateTo(const glm::vec2 &pos)
+const vec3 &SceneObj::getPosition() const
 {
-    // Compute translation vector
-    glm::vec2 vt = pos - center;
-
-    // Translate
-    this->translate(vt);
+    return m_position;
 }
 
-void SceneObj::rotate(float angle, const glm::vec2 &origin)
+const vec3 &SceneObj::getRotationAngles() const
 {
-    glm::mat3 rotationMatrix = this->createRotationMatrix(angle, origin);
-
-    this->updateModemMatr(rotationMatrix);
-    this->updateCenter(rotationMatrix);
-    this->updateUnit(rotationMatrix);
+    return m_rotationAngles;
 }
 
-void SceneObj::rotateModel(float angle)
+const vec3 &SceneObj::getScaleFactors() const
 {
-    this->rotate(angle, center);
+    return m_scaleFactors;
 }
 
-void SceneObj::rotateModelTo(float angle)
+const mat4 &SceneObj::getModelMatrix() const
 {
-    float currentAngle = this->getAngle();
-    float dAngle = angle - currentAngle;
-
-    this->rotateModel(dAngle);
+    return m_modelMatrix;
 }
 
-void SceneObj::scale(const glm::vec2 &sv, const glm::vec2 &origin)
+void SceneObj::translate(const vec3 &dv)
 {
-    glm::mat3 scaleMatrix = this->createScaleMatrix(sv, origin);
+    // Make translation matrix
+    mat4 translationMatrix(1.0f);
+    translationMatrix[3] = vec4(dv, 1.0f);
 
-    this->updateModemMatr(scaleMatrix);
-    this->updateCenter(scaleMatrix);
-    this->updateScaleFactor(scaleMatrix);
+    // Apply
+    m_modelMatrix = translationMatrix * m_modelMatrix;
+
+    // Update position
+    m_position += dv;
 }
 
-void SceneObj::scaleModel(const glm::vec2 &sv)
+void SceneObj::translateTo(const vec3 &pos)
 {
-    this->scale(sv, center);
+    this->translate(-m_position);
+    this->translate(pos);
 }
 
-void SceneObj::scaleModelTo(const glm::vec2 &sv)
+void SceneObj::rotatex(float angle)
 {
-    float sx = sv.x / scaleFactor.x;
-    float sy = sv.y / scaleFactor.y;
-    glm::vec2 dScale(sx, sy);
+    // Convert angle to radians
+    float angleRadian = glm::radians(angle);
 
-    this->scaleModel(dScale);
+    // Make rotation matrix
+    mat4 rotationMatrix(1.0f);
+    rotationMatrix[1][1] = cos(angleRadian);
+    rotationMatrix[2][1] = -sin(angleRadian);
+    rotationMatrix[1][2] = sin(angleRadian);
+    rotationMatrix[2][2] = cos(angleRadian);
+
+    // Apply
+    m_modelMatrix = rotationMatrix * m_modelMatrix;
+
+    // Update rotation angles
+    m_rotationAngles.x += angle;
 }
 
-const glm::vec2 &SceneObj::getCenter() const
+void SceneObj::rotatey(float angle)
 {
-    return this->center;
+    // Convert angle to radians
+    float angleRadian = glm::radians(angle);
+
+    // Make rotation matrix
+    mat4 rotationMatrix(1.0f);
+    rotationMatrix[0][0] = cos(angleRadian);
+    rotationMatrix[2][0] = -sin(angleRadian);
+    rotationMatrix[0][2] = sin(angleRadian);
+    rotationMatrix[2][2] = cos(angleRadian);
+
+    // Apply
+    m_modelMatrix = rotationMatrix * m_modelMatrix;
+
+    // Update rotation angles
+    m_rotationAngles.y += angle;
 }
 
-float SceneObj::getAngle() const
+void SceneObj::rotatez(float angle)
 {
-    glm::vec2 originalUnit(0.0f, 1.0f);
+    // Convert angle to radians
+    float angleRadian = glm::radians(angle);
 
-    // Comoute value (using Dot Product)
-    float dotProduct = originalUnit.x * unit.x + originalUnit.y * unit.y;
-    float denominator= glm::length(originalUnit) * glm::length(unit);
-    float angleR = acos(dotProduct / denominator);
+    // Make rotation matrix
+    mat4 rotationMatrix(1.0f);
+    rotationMatrix[0][0] = cos(angleRadian);
+    rotationMatrix[1][0] = -sin(angleRadian);
+    rotationMatrix[0][1] = sin(angleRadian);
+    rotationMatrix[1][1] = cos(angleRadian);
 
-    // Compute sign (using Perp Dot Product)
-    float perpDotProduct = originalUnit.x * unit.y - originalUnit.y * unit.x;
-    if (perpDotProduct < 0) {
-        angleR = -angleR;
+    // Apply
+    m_modelMatrix = rotationMatrix * m_modelMatrix;
+
+    // Update rotation angles
+    m_rotationAngles.z += angle;
+}
+
+void SceneObj::rotate(const vec3 &angles, const vec3 &point)
+{
+    // Translate origin to the point
+    this->translate(-point);
+
+    // Rotate
+    this->rotatex(angles.x);
+    this->rotatey(angles.y);
+    this->rotatez(angles.z);
+
+    // Translate origin back
+    this->translate(point);
+}
+
+void SceneObj::rotateTo(const vec3 &angles, const vec3 &point)
+{
+    this->rotate(-m_rotationAngles, point);
+    this->rotate(angles, point);
+}
+
+void SceneObj::rotateAround(float angle, const vec3 &axisPos, const vec3 &axisVec)
+{
+    // Translate origin to the axis point
+    this->translate(-axisPos);
+
+    // Compute auxiliary rotation angles
+    vec2 auxiliaryAngles = computeAuxiliaryAngles(axisVec);
+
+    // Perform auxiliary rotations
+    // to coincide specified axis with Z axis
+    this->rotatex(auxiliaryAngles.x);
+    this->rotatey(auxiliaryAngles.y);
+
+    // Rotate
+    this->rotatez(angle);
+
+    // Undo auxiliary rotations
+    this->rotatey(-auxiliaryAngles.x);
+    this->rotatex(-auxiliaryAngles.y);
+
+    // Translate origin back
+    this->translate(-axisPos);
+}
+
+void SceneObj::rotateItself(const vec3 &angles)
+{
+    this->rotate(angles, m_position);
+}
+
+void SceneObj::rotateItselfTo(const vec3 &angles)
+{
+    this->rotateTo(angles, m_position);
+}
+
+void SceneObj::scale(const vec3 &factors, const vec3 &point)
+{
+    // Translate origin to the point
+    this->translate(-point);
+
+    // Make scale matrix
+    mat4 scaleMatrix(1.0f);
+    scaleMatrix[0][0] = factors.x;
+    scaleMatrix[1][1] = factors.y;
+    scaleMatrix[2][2] = factors.z;
+
+    // Apply matrix
+    m_modelMatrix = scaleMatrix * m_modelMatrix;
+
+    // Translate origin back
+    this->translate(point);
+
+    // Update scale factors
+    m_scaleFactors *= factors;
+
+    // Update rotation angles
+    if (m_scaleFactors.x < 0) {
+        m_rotationAngles.y = -m_rotationAngles.y;
+        m_rotationAngles.z = -m_rotationAngles.z;
     }
-
-    return glm::degrees(angleR);
+    if (m_scaleFactors.y < 0) {
+        m_rotationAngles.x = -m_rotationAngles.x;
+        m_rotationAngles.z = -m_rotationAngles.z;
+    }
+    if (m_scaleFactors.z < 0) {
+        m_rotationAngles.x = -m_rotationAngles.x;
+        m_rotationAngles.y = -m_rotationAngles.y;
+    }
 }
 
-const glm::mat3 &SceneObj::getModelMatrix() const
+void SceneObj::scaleTo(const vec3 &factors, const vec3 &point)
 {
-    return modelMatr;
+    vec3 reverseFactors;
+    reverseFactors.x = 1.0 / m_scaleFactors.x;
+    reverseFactors.y = 1.0 / m_scaleFactors.y;
+    reverseFactors.z = 1.0 / m_scaleFactors.z;
+
+    this->scale(reverseFactors, point);
+    this->scale(factors, point);
 }
 
-glm::mat3 SceneObj::createTranslationMatrix(const glm::vec2 &tv) const
+void SceneObj::scaleItself(const vec3 &factors)
 {
-    glm::mat3 matr(1.0f);
-    matr[2] = glm::vec3(tv.x, tv.y, 1.0f);
-
-    return matr;
+    this->scale(factors, m_position);
 }
 
-glm::mat3 SceneObj::createRotationMatrix(float angle, const glm::vec2 &origin) const
+void SceneObj::scaleItselfTo(const vec3 &factors)
 {
-    // Transform angle from degree to radian
-    float angleR = glm::radians(angle);
-
-    // Steps:
-    // 1. translate system to the origin
-    // 2. rotate
-    // 3. translate back
-    glm::mat3 translationMatr1(1.0f), rotationMatr(1.0f), translationMatr2(1.0f);
-    translationMatr1[2] = glm::vec3(-origin.x, -origin.y, 1.0f);
-    rotationMatr[0] = glm::vec3(cos(angleR), sin(angleR), 1.0f);
-    rotationMatr[1] = glm::vec3(-sin(angleR), cos(angleR), 1.0f);
-    translationMatr2[2] = glm::vec3(origin.x, origin.y, 1.0f);
-
-    return translationMatr2 * rotationMatr * translationMatr1;
+    this->scaleTo(factors, m_position);
 }
 
-glm::mat3 SceneObj::createScaleMatrix(const glm::vec2 &sv, const glm::vec2 &origin) const
+void SceneObj::reflect(const vec3 &planePos, const vec3 &planeNormal)
 {
-    glm::mat3 matr(1.0f);
+    // Translate origin to the plane position
+    this->translate(-planePos);
 
-    // Steps:
-    // 1. translate system to the origin
-    // 2. scale
-    // 3. translate back
-    glm::mat3 translationMatr1(1.0f), scaleMatr(1.0f), translationMatr2(1.0f);
-    translationMatr1[2] = glm::vec3(-origin.x, -origin.y, 1.0f);
-    scaleMatr[0][0] = sv.x;
-    scaleMatr[1][1] = sv.y;
-    translationMatr2[2] = glm::vec3(origin.x, origin.y, 1.0f);
+    // Compute auxiliary rotation angles
+    vec2 auxiliaryAngles = computeAuxiliaryAngles(planeNormal);
 
-    return translationMatr2 * scaleMatr * translationMatr1;
+    // Perform auxiliary rotations
+    // to coincide plane normal with Z axis
+    this->rotatex(auxiliaryAngles.x);
+    this->rotatey(auxiliaryAngles.y);
+
+    // Reflect relative to the XY plane
+    reflectxy();
+
+    // Undo auxiliary rotations
+    this->rotatex(-auxiliaryAngles.x);
+    this->rotatey(-auxiliaryAngles.y);
+
+    // Translate origin back
+    this->translate(planePos);
 }
 
-void SceneObj::updateModemMatr(const glm::mat3 &t)
+void SceneObj::reflectxy()
 {
-    modelMatr = t * modelMatr;
+    vec3 factors(m_scaleFactors);
+    factors.z = -factors.z;
+
+    this->scale(factors);
 }
 
-void SceneObj::updateCenter(const glm::mat3 &t)
+void SceneObj::reset()
 {
-    center = t * glm::vec3(center.x, center.y, 1.0f);
+    m_position = vec3(0.0f, 0.0f, 0.0f);
+    m_rotationAngles = vec3(0.0f, 0.0f, 0.0f);
+    m_scaleFactors = vec3(1.0f, 1.0f, 1.0f);
+    m_modelMatrix = mat4(1.0f);
 }
 
-void SceneObj::updateUnit(const glm::mat3 &t)
-{
-    unit = t * glm::vec3(unit.x, unit.y, 1.0f);
-    glm::normalize(unit);
-}
+vec2 SceneObj::computeAuxiliaryAngles(const vec3 &v) {
+    vec3 unit = glm::normalize(v);
+    vec2 auxiliaryAngles;
 
-void SceneObj::updateScaleFactor(const glm::mat3 &t)
-{
-    scaleFactor = t * glm::vec3(scaleFactor.x, scaleFactor.y, 1.0f);
+    float unitProjLength = sqrt(unit.y * unit.y + unit.z * unit.z);
+    float anglexRadians = acos(unit.z / unitProjLength);
+    float angleyRadians = acos(unitProjLength);
+
+    auxiliaryAngles.x = glm::degrees(anglexRadians);
+    auxiliaryAngles.y = glm::degrees(angleyRadians);
+
+    return auxiliaryAngles;
 }

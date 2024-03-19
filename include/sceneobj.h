@@ -3,42 +3,48 @@
 
 #include "glm/glm.hpp"
 
-class SceneObj {
-private:
-    glm::vec2 center;
-    glm::vec2 unit;
-    glm::vec2 scaleFactor;
+using glm::vec2;
+using glm::vec3;
+using glm::vec4;
+using glm::mat4;
 
-    glm::mat3 modelMatr;
+class SceneObj {
 
 public:
     SceneObj();
     virtual ~SceneObj() = 0;
 
-    void translate(const glm::vec2 &tv);
-    void translateTo(const glm::vec2 &pos);
+    const vec3 &getPosition() const;
+    const vec3 &getRotationAngles() const;
+    const vec3 &getScaleFactors() const;
+    const mat4 &getModelMatrix() const;
 
-    void rotate(float angle, const glm::vec2 &origin = glm::vec2(0.0f, 0.0f));
-    void rotateModel(float angle);
-    void rotateModelTo(float angle);
+    void translate(const vec3 &dv);
+    void translateTo(const vec3& pos);
+    void rotatex(float angle);
+    void rotatey(float angle);
+    void rotatez(float angle);
+    void rotate(const vec3 &angles, const vec3 &point = vec3(0.0f, 0.0f, 0.0f));
+    void rotateTo(const vec3 &angles, const vec3 &point = vec3(0.0f, 0.0f, 0.0f));
+    void rotateAround(float angle, const vec3 &axisPos, const vec3 &axisVec);
+    void rotateItself(const vec3 &angles);
+    void rotateItselfTo(const vec3 &angles);
+    void scale(const vec3 &factors, const vec3 &point = vec3(0.0f, 0.0f, 0.0f));
+    void scaleTo(const vec3 &factors, const vec3 &point = vec3(0.0f, 0.0f, 0.0f));
+    void scaleItself(const vec3 &factors);
+    void scaleItselfTo(const vec3 &factors);
+    void reflect(const vec3 &planePos, const vec3 &planeNormal);
+    void reflectxy();
 
-    void scale(const glm::vec2 &sv, const glm::vec2 &origin = glm::vec2(0.0f, 0.0f));
-    void scaleModel(const glm::vec2 &sv);
-    void scaleModelTo(const glm::vec2 &sv);
-
-    const glm::vec2 &getCenter() const;
-    float getAngle() const;
-    const glm::mat3 &getModelMatrix() const;
+    void reset();
 
 private:
-    glm::mat3 createTranslationMatrix(const glm::vec2 &tv) const;
-    glm::mat3 createRotationMatrix(float angle, const glm::vec2 &origin) const;
-    glm::mat3 createScaleMatrix(const glm::vec2 &sv, const glm::vec2 &origin) const;
+    vec2 computeAuxiliaryAngles(const vec3 &v);
 
-    void updateModemMatr(const glm::mat3 &t);
-    void updateCenter(const glm::mat3 &t);
-    void updateUnit(const glm::mat3 &t);
-    void updateScaleFactor(const glm::mat3 &t);
+    vec3 m_position;
+    vec3 m_rotationAngles;
+    vec3 m_scaleFactors;
+    mat4 m_modelMatrix;
 
 };
 
