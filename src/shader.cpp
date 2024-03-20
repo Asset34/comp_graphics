@@ -26,6 +26,16 @@ void Shader::addVertexShader(const std::string &path)
     m_vertexId = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(m_vertexId, 1, &codeShader, NULL);
     glCompileShader(m_vertexId);
+
+    // Check for errors
+    int success;
+    char infoLog[512];
+    glGetShaderiv(m_vertexId, GL_COMPILE_STATUS, &success);
+    if (!success)
+    {
+        glGetShaderInfoLog(m_vertexId, 512, NULL, infoLog);
+        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+    }
 }
 
 void Shader::addFragmentShader(const std::string &path)
@@ -46,6 +56,16 @@ void Shader::addFragmentShader(const std::string &path)
     m_fragmentId = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(m_fragmentId, 1, &codeShader, NULL);
     glCompileShader(m_fragmentId);
+
+    // Check for errors
+    int success;
+    char infoLog[512];
+    glGetShaderiv(m_fragmentId, GL_COMPILE_STATUS, &success);
+    if (!success)
+    {
+        glGetShaderInfoLog(m_fragmentId, 512, NULL, infoLog);
+        std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
+    }
 }
 
 void Shader::link()
@@ -55,6 +75,15 @@ void Shader::link()
     glAttachShader(m_id, m_fragmentId);
 
     glLinkProgram(m_id);
+
+    // Check for errors
+    int success;
+    char infoLog[512];
+    glGetProgramiv(m_id, GL_LINK_STATUS, &success);
+    if (!success) {
+        glGetProgramInfoLog(m_id, 512, NULL, infoLog);
+        std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
+    }
 }
 
 void Shader::use()

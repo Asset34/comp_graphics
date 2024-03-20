@@ -70,6 +70,9 @@ void SceneObj::rotatex(float angle)
 
     // Update rotation angles
     m_rotationAngles.x += angle;
+    
+    // Update position
+    m_position = rotationMatrix * vec4(m_position, 1.0f);
 }
 
 void SceneObj::rotatey(float angle)
@@ -89,6 +92,9 @@ void SceneObj::rotatey(float angle)
 
     // Update rotation angles
     m_rotationAngles.y += angle;
+    
+    // Update position
+    m_position = rotationMatrix * vec4(m_position, 1.0f);
 }
 
 void SceneObj::rotatez(float angle)
@@ -108,12 +114,18 @@ void SceneObj::rotatez(float angle)
 
     // Update rotation angles
     m_rotationAngles.z += angle;
+
+    // Update position
+    m_position = rotationMatrix * vec4(m_position, 1.0f);
 }
 
 void SceneObj::rotate(const vec3 &angles, const vec3 &point)
 {
+    // Remember point (because reference)
+    vec3 p(point);
+
     // Translate origin to the point
-    this->translate(-point);
+    this->translate(-p);
 
     // Rotate
     this->rotatex(angles.x);
@@ -121,13 +133,13 @@ void SceneObj::rotate(const vec3 &angles, const vec3 &point)
     this->rotatez(angles.z);
 
     // Translate origin back
-    this->translate(point);
+    this->translate(p);
 }
 
 void SceneObj::rotateTo(const vec3 &angles, const vec3 &point)
 {
-    this->rotate(-m_rotationAngles, point);
-    this->rotate(angles, point);
+    vec3 dAngles = angles - m_rotationAngles;
+    this->rotate(dAngles, point);
 }
 
 void SceneObj::rotateAround(float angle, const vec3 &axisPos, const vec3 &axisVec)
@@ -166,8 +178,11 @@ void SceneObj::rotateItselfTo(const vec3 &angles)
 
 void SceneObj::scale(const vec3 &factors, const vec3 &point)
 {
+    // Remember point (because reference)
+    vec3 p(point);
+
     // Translate origin to the point
-    this->translate(-point);
+    this->translate(-p);
 
     // Make scale matrix
     mat4 scaleMatrix(1.0f);
@@ -179,7 +194,7 @@ void SceneObj::scale(const vec3 &factors, const vec3 &point)
     m_modelMatrix = scaleMatrix * m_modelMatrix;
 
     // Translate origin back
-    this->translate(point);
+    this->translate(p);
 
     // Update scale factors
     m_scaleFactors *= factors;

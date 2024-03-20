@@ -1,8 +1,8 @@
 #include "window.h"
 
 Window::Window(std::string title, int width, int height)
-    :m_title(title), m_width(width), m_height(height)
-    
+    : m_title(title), m_width(width), m_height(height)
+
 {
     // Init OPENGL context
     glfwInit();
@@ -22,6 +22,9 @@ Window::Window(std::string title, int width, int height)
     // Setup renderer
     m_renderer.attachScene(m_scene);
     m_renderer.init();
+    // m_renderer.testInit();
+
+    glViewport(0, 0, width, height);
 }
 
 Window::~Window()
@@ -34,6 +37,8 @@ void Window::draw()
     while (!shouldClose()) {
         m_scene.update();
         m_renderer.render();
+
+        // m_renderer.testDraw();
 
         glfwSwapBuffers(m_window);
         glfwPollEvents();

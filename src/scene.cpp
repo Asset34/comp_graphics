@@ -3,67 +3,25 @@
 Scene::Scene()
     :m_shape(0, 0)
 {
-    // TODO: Create shape
-    // m_shape = new Shape(6);
-    // Polygon p[6];
+    // Setup shape
+    this->makeTestShape1();
 
-    // p[0].vertices = {
-    //     vec3(50.0f ,  50.0f, 50.0f),
-    //     vec3(50.0f , -50.0f, 50.0f),
-    //     vec3(-50.0f, -50.0f, 50.0f),
-    //     vec3(-50.0f,  50.0f, 50.0f)
-    // };
-    // p[1].vertices = {
-    //     vec3(50.0f ,  50.0f, -50.0f),
-    //     vec3(50.0f , -50.0f, -50.0f),
-    //     vec3(-50.0f, -50.0f, -50.0f),
-    //     vec3(-50.0f,  50.0f, -50.0f)
-    // };
-    // p[2].vertices = {
-    //     vec3(50.0f,  50.0f,  50.0f),
-    //     vec3(50.0f, -50.0f,  50.0f),
-    //     vec3(50.0f, -50.0f, -50.0f),
-    //     vec3(50.0f,  50.0f, -50.0f)
-    // };
-    // p[3].vertices = {
-    //     vec3(-50.0f,  50.0f,  50.0f),
-    //     vec3(-50.0f, -50.0f,  50.0f),
-    //     vec3(-50.0f, -50.0f, -50.0f),
-    //     vec3(-50.0f,  50.0f, -50.0f)
-    // };
-    // p[4].vertices = {
-    //     vec3(50.0f , 50.0f,  50.0f),
-    //     vec3(50.0f , 50.0f, -50.0f),
-    //     vec3(-50.0f, 50.0f, -50.0f),
-    //     vec3(-50.0f, 50.0f,  50.0f)
-    // };
-    // p[5].vertices = {
-    //     vec3(50.0f , -50.0f,  50.0f),
-    //     vec3(50.0f , -50.0f, -50.0f),
-    //     vec3(-50.0f, -50.0f, -50.0f),
-    //     vec3(-50.0f, -50.0f,  50.0f)
-    // };
-
-    // p[0].color = vec3(0.25f, 0.25f, 0.25f);
-    // p[1].color = vec3(1.0f, 0.0f, 0.0f);
-    // p[2].color = vec3(0.0f, 1.0f, 0.0f);
-    // p[3].color = vec3(0.0f, 0.0f, 1.0f);
-    // p[4].color = vec3(1.0f, 1.0f, 0.0f);
-    // p[5].color = vec3(1.0f, 0.0f, 1.0f);
-
-    // for (int i = 0; i < 6; i++) {
-    //     m_shape->setPolygon(i, p[i]);
-    // }
-
-    // TODO: Define camera (view matrix)
+    // Define camera (view matrix)
     m_viewMatrix = mat4(1.0f);
 
-    // TODO: Setup background color
-    m_backgroundColor = vec3(1.0f, 1.0f, 1.0f);
+    // Setup background color
+    m_backgroundColor = vec3(0.2f, 0.2f, 0.2f);
 }
 
 void Scene::update()
 {
+    // m_shape.rotate(vec3(0, 0, 1));
+    // m_shape.rotateItself(vec3(1, 2, -3));
+}
+
+const vec3 &Scene::getBackgroundColor() const
+{
+    return m_backgroundColor;
 }
 
 const mat4 &Scene::getViewMatrix() const
@@ -74,4 +32,27 @@ const mat4 &Scene::getViewMatrix() const
 const Shape &Scene::getShape() const
 {
     return m_shape;
+}
+
+void Scene::makeTestShape1()
+{
+    m_shape = Shape(8, 6);
+
+    // Set vertices
+    m_shape.setVertex(0, vec3(-0.5f,  0.5f,  0.5f));
+    m_shape.setVertex(1, vec3(-0.5f, -0.5f,  0.5f));
+    m_shape.setVertex(2, vec3( 0.5f, -0.5f,  0.5f));
+    m_shape.setVertex(3, vec3( 0.5f,  0.5f,  0.5f));
+    m_shape.setVertex(4, vec3(-0.5f,  0.5f, -0.5f));
+    m_shape.setVertex(5, vec3(-0.5f, -0.5f, -0.5f));
+    m_shape.setVertex(6, vec3( 0.5f, -0.5f, -0.5f));
+    m_shape.setVertex(7, vec3( 0.5f,  0.5f, -0.5f));
+
+    // Define polygones
+    m_shape.definePolygon(0, {0, 1, 2, 3}, vec3(1.0f, 0.0f, 0.0f));
+    m_shape.definePolygon(1, {4, 5, 6, 7}, vec3(0.0f, 1.0f, 0.0f));
+    m_shape.definePolygon(2, {0, 4, 7, 3}, vec3(0.0f, 0.0f, 1.0f));
+    m_shape.definePolygon(3, {1, 5, 6, 2}, vec3(1.0f, 0.0f, 1.0f));
+    m_shape.definePolygon(4, {3, 7, 6, 2}, vec3(1.0f, 1.0f, 0.0f));
+    m_shape.definePolygon(5, {0, 4, 5, 1}, vec3(0.0f, 1.0f, 1.0f));
 }
