@@ -6,7 +6,6 @@
 class Scene {
 public:
     Scene();
-    ~Scene();
 
     void update();
 
@@ -14,7 +13,7 @@ public:
     const Shape &getShape() const;
 
 private:
-    Shape *m_shape;
+    Shape m_shape;
     mat4 m_viewMatrix;
     vec3 m_backgroundColor;
     

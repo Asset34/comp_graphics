@@ -10,18 +10,22 @@ public:
 
     void init();
     void render();
-    void attachScene(const Scene &scene);
+    void attachScene(Scene &scene);
 
 private:
+    void loadShaders();
+    void loadBuffers();
+    void loadVertexData();
+    void loadIndicesData();
+
+    void renderBackground();
+    void renderShape();
+
     // Buffers
-    unsigned int vbo, vao;
+    unsigned int vbo, ebo, vao;
 
-    // Shaders
-    const std::string vertexShaderPath = "../shaders/vertex_shader.glsl";
-    const std::string fragmentShaderPath = "../shaders/fragment_shader.glsl";
-    Shader shader;
-
-    const Scene *m_scene;
+    Shader m_shader;
+    Scene *m_scene;
 
 };
 

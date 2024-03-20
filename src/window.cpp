@@ -20,8 +20,8 @@ Window::Window(std::string title, int width, int height)
     }
 
     // Setup renderer
-    m_renderer.init();
     m_renderer.attachScene(m_scene);
+    m_renderer.init();
 }
 
 Window::~Window()
