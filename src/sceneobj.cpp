@@ -159,11 +159,11 @@ void SceneObj::rotateAround(float angle, const vec3 &axisPos, const vec3 &axisVe
     this->rotatez(angle);
 
     // Undo auxiliary rotations
-    this->rotatey(-auxiliaryAngles.x);
-    this->rotatex(-auxiliaryAngles.y);
+    this->rotatey(-auxiliaryAngles.y);
+    this->rotatex(-auxiliaryAngles.x);
 
     // Translate origin back
-    this->translate(-axisPos);
+    this->translate(axisPos);
 }
 
 void SceneObj::rotateItself(const vec3 &angles)
@@ -280,7 +280,12 @@ vec2 SceneObj::computeAuxiliaryAngles(const vec3 &v) {
     vec2 auxiliaryAngles;
 
     float unitProjLength = sqrt(unit.y * unit.y + unit.z * unit.z);
-    float anglexRadians = acos(unit.z / unitProjLength);
+    float anglexRadians;
+    if (unitProjLength) {
+        anglexRadians = acos(unit.z / unitProjLength);
+    } else {
+        anglexRadians = 0;
+    }
     float angleyRadians = acos(unitProjLength);
 
     auxiliaryAngles.x = glm::degrees(anglexRadians);
