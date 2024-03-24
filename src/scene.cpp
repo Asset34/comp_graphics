@@ -6,6 +6,13 @@ Scene::Scene()
     // Setup shape
     this->makeTestShape1();
     m_shape.scaleItselfTo(vec3(0.2, 0.2, 0.2));
+    m_shape.translate(vec3(-0.5, 0.3, 0.0));
+    m_shape.reflect(vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0));
+
+    // m_shape.translate(vec3(0.0, 0.5, 0.0));
+    // m_shape.scale(vec3(1, 2, 1));
+    // m_shape.rotateItself(vec3(0, 0, 45));
+
 
     // Define camera (view matrix)
     m_viewMatrix = mat4(1.0f);
@@ -18,7 +25,9 @@ void Scene::update()
 {
     // m_shape.rotate(vec3(0, 0, 1));
     // m_shape.rotateItself(vec3(1, 2, -3));
-    m_shape.rotateAround(1, vec3(0.5, 0.25, 0.0), vec3(1.0, 0.0, 1.0));
+    // m_shape.rotateAround(1, vec3(0.5, 0.25, 0.0), vec3(1.0, 0.0, 1.0));
+
+    // m_shape.rotateItself(vec3(0, 0, 1));
 }
 
 const vec3 &Scene::getBackgroundColor() const

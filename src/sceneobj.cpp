@@ -1,6 +1,7 @@
 #include "sceneobj.h"
 
 #include <cmath>
+#include <iostream>
 
 SceneObj::SceneObj()
     :m_position(vec3(0.0f, 0.0f, 0.0f)),
@@ -193,6 +194,9 @@ void SceneObj::scale(const vec3 &factors, const vec3 &point)
     // Apply matrix
     m_modelMatrix = scaleMatrix * m_modelMatrix;
 
+    // Update position
+    m_position = scaleMatrix * vec4(m_position, 1.0f);
+
     // Translate origin back
     this->translate(p);
 
@@ -216,13 +220,9 @@ void SceneObj::scale(const vec3 &factors, const vec3 &point)
 
 void SceneObj::scaleTo(const vec3 &factors, const vec3 &point)
 {
-    vec3 reverseFactors;
-    reverseFactors.x = 1.0 / m_scaleFactors.x;
-    reverseFactors.y = 1.0 / m_scaleFactors.y;
-    reverseFactors.z = 1.0 / m_scaleFactors.z;
+    vec3 dFactors = factors / m_scaleFactors;
 
-    this->scale(reverseFactors, point);
-    this->scale(factors, point);
+    this->scale(dFactors, point);
 }
 
 void SceneObj::scaleItself(const vec3 &factors)
@@ -246,14 +246,17 @@ void SceneObj::reflect(const vec3 &planePos, const vec3 &planeNormal)
     // Perform auxiliary rotations
     // to coincide plane normal with Z axis
     this->rotatex(auxiliaryAngles.x);
-    this->rotatey(auxiliaryAngles.y);
+    this->rotatey(-auxiliaryAngles.y);
+
+    std::cout << m_rotationAngles.x << "; " << m_rotationAngles.y << "; " << m_rotationAngles.z << std::endl;
+    std::cout << m_position.x << "; " << m_position.y << "; " << m_position.z << std::endl;
 
     // Reflect relative to the XY plane
     reflectxy();
 
     // Undo auxiliary rotations
+    this->rotatey(auxiliaryAngles.y);
     this->rotatex(-auxiliaryAngles.x);
-    this->rotatey(-auxiliaryAngles.y);
 
     // Translate origin back
     this->translate(planePos);
@@ -261,10 +264,7 @@ void SceneObj::reflect(const vec3 &planePos, const vec3 &planeNormal)
 
 void SceneObj::reflectxy()
 {
-    vec3 factors(m_scaleFactors);
-    factors.z = -factors.z;
-
-    this->scale(factors);
+    this->scale(vec3(1.0f, 1.0f, -1.0f));
 }
 
 void SceneObj::reset()
