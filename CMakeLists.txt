@@ -30,6 +30,7 @@ add_executable(lr1
     ${SRC}/main.cpp
     ${SRC}/sceneobj.cpp
     ${SRC}/shape.cpp
+    ${SRC}/camera.cpp
     ${SRC}/scene.cpp
     ${SRC}/shader.cpp
     ${SRC}/renderer.cpp
