@@ -19,6 +19,8 @@ private:
     vec3 m_backgroundColor;
 
     void makeTestShape1();
+    void shapeInit();
+    void shapeIdleUpdate();
 };
 
 #endif // SCENE_H_
