@@ -8,6 +8,10 @@ Shape::Shape(int size, int polygonsNumber)
     // this->polygonBegin();
 }
 
+Shape::~Shape()
+{
+}
+
 int Shape::getSize() const
 {
     return m_vertices.size();

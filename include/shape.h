@@ -7,6 +7,7 @@
 class Shape : public SceneObj {
 public:
     Shape(int size, int polygonsNumber);
+    ~Shape();
 
     int getSize() const;
     const vec3 &getVertex(int i) const;
