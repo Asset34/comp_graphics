@@ -117,7 +117,10 @@ void Renderer::renderShape()
     m_shader.use();
     glBindVertexArray(vao);
 
+    // Setup scene matrices
     m_shader.setMat4("model", m_scene->getShape().getModelMatrix());
+    m_shader.setMat4("view", m_scene->getViewMatrix());
+    m_shader.setMat4("proj", m_scene->getProjectionMatrix());
 
     int offset = 0;
     for (int i = 0; i < m_scene->getShape().getPolygonsNumber(); i++) {
