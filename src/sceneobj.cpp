@@ -84,8 +84,8 @@ void SceneObj::rotatey(float angle)
     // Make rotation matrix
     mat4 rotationMatrix(1.0f);
     rotationMatrix[0][0] = cos(angleRadian);
-    rotationMatrix[2][0] = -sin(angleRadian);
-    rotationMatrix[0][2] = sin(angleRadian);
+    rotationMatrix[2][0] = sin(angleRadian);
+    rotationMatrix[0][2] = -sin(angleRadian);
     rotationMatrix[2][2] = cos(angleRadian);
 
     // Apply
@@ -246,16 +246,13 @@ void SceneObj::reflect(const vec3 &planePos, const vec3 &planeNormal)
     // Perform auxiliary rotations
     // to coincide plane normal with Z axis
     this->rotatex(auxiliaryAngles.x);
-    this->rotatey(-auxiliaryAngles.y);
-
-    std::cout << m_rotationAngles.x << "; " << m_rotationAngles.y << "; " << m_rotationAngles.z << std::endl;
-    std::cout << m_position.x << "; " << m_position.y << "; " << m_position.z << std::endl;
+    this->rotatey(auxiliaryAngles.y);
 
     // Reflect relative to the XY plane
     reflectxy();
 
     // Undo auxiliary rotations
-    this->rotatey(auxiliaryAngles.y);
+    this->rotatey(-auxiliaryAngles.y);
     this->rotatex(-auxiliaryAngles.x);
 
     // Translate origin back
