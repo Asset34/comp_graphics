@@ -11,7 +11,7 @@ public:
     void update();
 
     const vec3 &getBackgroundColor() const;
-    const mat4 &getViewMatrix() const;
+    const mat4 &getViewMatrix();
     const mat4 &getProjectionMatrix() const;
     const Shape &getShape() const;
 

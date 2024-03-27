@@ -8,7 +8,7 @@ public:
     Camera(float hfov = 45.0, float aspectRatio = 1.0, float near = 0.01, float far = 100.0);
     ~Camera();
 
-    const mat4 &getViewMatrix() const;
+    const mat4 &getViewMatrix();
     const mat4 &getProjectionMatrix() const;
 
     void setAspectRatio(float aspectRatio);

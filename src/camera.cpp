@@ -14,8 +14,15 @@ Camera::~Camera()
 {
 }
 
-const mat4 &Camera::getViewMatrix() const
+const mat4 &Camera::getViewMatrix()
 {
+    mat4 translateMatrix(1.0f);
+    vec3 pos = this->getPosition();
+    translateMatrix[3] = vec4(-pos, 1.0f);
+
+    mat4 rotateMatrix = glm::transpose(this->getUnits());
+
+    m_viewMatrix = rotateMatrix * translateMatrix;
     return m_viewMatrix;
 }
 

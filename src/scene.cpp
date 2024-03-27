@@ -8,9 +8,9 @@ Scene::Scene()
     this->shapeInit2();
 
     // Setup Camera
+    m_camera.setPosition(vec3(0.0f, 0.0f, 100.0f));
     m_camera.setVolume(90.0, 1.0, 10, 1000.0);
-    // m_camera.setPerspectiveProjection();
-    m_camera.setOrthoProjection();
+    m_camera.setPerspectiveProjection();
 
     // Setup background color
     m_backgroundColor = vec3(0.2f, 0.2f, 0.2f);
@@ -26,7 +26,7 @@ const vec3 &Scene::getBackgroundColor() const
     return m_backgroundColor;
 }
 
-const mat4 &Scene::getViewMatrix() const
+const mat4 &Scene::getViewMatrix()
 {
     return m_camera.getViewMatrix();
 }
@@ -66,8 +66,6 @@ void Scene::makeTestShape1()
 
 void Scene::shapeInit1()
 {
-    m_shape.scaleItselfTo(vec3(0.5f, 0.5f, 0.5f));
-    m_shape.translate(vec3(-0.5, 0.3, 0.0));
 }
 
 void Scene::makeTestShape2()
@@ -95,11 +93,13 @@ void Scene::makeTestShape2()
 
 void Scene::shapeInit2()
 {
-    m_shape.scaleItselfTo(vec3(0.35f, 0.35f, 0.35f));
-    m_shape.translate(vec3(0.0f, 0.0f, -40.0f));
+    // m_shape.translate(vec3(-30.0f, 20.0f, 0.0f));
 }
 
 void Scene::shapeIdleUpdate()
 {
-    m_shape.rotateAround(1, vec3(0.0f, 0.0f, -30.0f), vec3(0.0f, 1.0f, 0.0f));
+    // m_shape.rotateAround(1, vec3(-20.0f, 0.0f, 0.0f), vec3(1.0f, 1.0f, 0.0f));
+    // m_shape.rotateItselfy(-1);
+
+    m_camera.rotatex(1);
 }
