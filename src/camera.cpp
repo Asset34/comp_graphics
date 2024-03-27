@@ -1,7 +1,5 @@
 #include "camera.h"
 
-#include <cmath>
-
 Camera::Camera(float hfov, float aspectRatio, float near, float far)
     :m_viewMatrix(1.0f),
      m_projMatrix(1.0f),
@@ -69,6 +67,12 @@ void Camera::setPerspectiveProjection()
 {
     m_projType = ProjType::Perspective;
     this->computeProjection();
+}
+
+void Camera::lookAt(const vec3 &point)
+{
+    vec3 vector = this->getPosition() - point;
+    this->coincidez(vector);
 }
 
 void Camera::computeTop(float hfov)

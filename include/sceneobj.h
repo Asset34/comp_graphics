@@ -40,6 +40,8 @@ public:
     void reflectz();
     void reflect(const vec3 &point, const vec3 &normal);
 
+    void coincidez(const vec3 &vector);
+
     void reset();
 
 private:

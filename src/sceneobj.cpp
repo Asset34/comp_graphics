@@ -255,6 +255,32 @@ void SceneObj::reflect(const vec3 &point, const vec3 &normal)
     this->translate(point);
 }
 
+void SceneObj::coincidez(const vec3 &vector)
+{
+    // Translate origin to the plane position
+    vec3 point = m_position;
+    this->translate(-point);
+
+    // Compute values for rotation matrices    
+    vec3 unit = glm::normalize(vector);
+    float d = sqrt(unit.y * unit.y + unit.z * unit.z);
+    float cosValuex, sinValuex, cosValuey, sinValuey;
+
+    if (d > 0) {
+        cosValuex = unit.z / d;
+        sinValuex = unit.y / d;
+        cosValuey = d;
+        sinValuey = unit.x;
+
+        // Rotate to coincide vector with Z axis
+        this->rotatex_util(-sinValuex, cosValuex);
+        this->rotatey_util(-sinValuey, cosValuey);
+    }
+
+    // Translate origin back
+    this->translate(point);
+}
+
 void SceneObj::reset()
 {
     m_modelMatrix = mat4(1.0f), // Identity matrix

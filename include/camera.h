@@ -18,6 +18,8 @@ public:
     void setOrthoProjection();
     void setPerspectiveProjection();
 
+    void lookAt(const vec3 &point = vec3(0.0f, 0.0f, 0.0f));
+
 private:
     void computeTop(float hfov);
     void computeRight(float aspectRatio);
