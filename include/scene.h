@@ -13,6 +13,8 @@ public:
     void setCameraAspectRatio(float aspectRatio);
     void cameraRotateYaw(float angle);
     void cameraRotatePitch(float angle);
+    void cameraZoomIn();
+    void cameraZoomOut();
 
     const vec3 &getBackgroundColor() const;
     const mat4 &getViewMatrix();

@@ -43,6 +43,20 @@ void Scene::cameraRotatePitch(float angle)
     m_camera.rotateAround(angle, vec3(0.0f, 0.0f, 0.0f), m_camera.getUnitx());
 }
 
+void Scene::cameraZoomIn()
+{
+    vec3 unit = m_camera.getUnitz();
+
+    m_camera.translate(-unit);
+}
+
+void Scene::cameraZoomOut()
+{
+    vec3 unit = m_camera.getUnitz();
+
+    m_camera.translate(unit);
+}
+
 const vec3 &Scene::getBackgroundColor() const
 {
     return m_backgroundColor;

@@ -99,5 +99,13 @@ void Window::mouseMovementEvent(GLFWwindow *window, double xpos, double ypos)
 
 void Window::museScrollEvent(GLFWwindow *window, double xoffset, double yoffset)
 {
-    
+    // std::cout << yoffset << std::endl;
+    Window *w = reinterpret_cast<Window *>(glfwGetWindowUserPointer(window));
+
+    if (yoffset > 0) {
+        w->m_scene.cameraZoomIn();
+
+    } else {
+        w->m_scene.cameraZoomOut();
+    }
 }
