@@ -14,20 +14,24 @@ public:
 
 private:
     void loadShaders();
-    void loadBuffers();
-    void loadVertexData();
-    void loadIndicesData();
+
+    void loadShapeBuffers();
+    void loadShapeVertexData();
+    void loadShapeIndexData();
+
+    void loadLineBuffers();
+    void loadLineVertexData();
 
     void renderBackground();
     void renderShape();
+    void renderLine();
 
     // Buffers
-    unsigned int vbo, ebo, vao;
+    unsigned int vbo_shape, ebo_shape, vao_shape;
+    unsigned int vbo_line, vao_line;
 
     Shader m_shader;
     Scene *m_scene;
-
-    unsigned int VAO, VBO, EBO;
     
 };
 

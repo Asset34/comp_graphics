@@ -17,13 +17,15 @@ void Renderer::init()
     glEnable(GL_DEPTH_TEST);
     
     this->loadShaders();
-    this->loadBuffers();
+    this->loadShapeBuffers();
+    this->loadLineBuffers();
 }
 
 void Renderer::render()
 {
     this->renderBackground();
     this->renderShape();
+    this->renderLine();
 }
 
 void Renderer::attachScene(Scene &scene)
@@ -38,21 +40,21 @@ void Renderer::loadShaders()
     m_shader.link();
 }
 
-void Renderer::loadBuffers()
+void Renderer::loadShapeBuffers()
 {
     // Generate bufers
-    glGenVertexArrays(1, &vao);
-    glGenBuffers(1, &vbo);
-    glGenBuffers(1, &ebo);
+    glGenVertexArrays(1, &vao_shape);
+    glGenBuffers(1, &vbo_shape);
+    glGenBuffers(1, &ebo_shape);
 
     // Bind buffers
-    glBindVertexArray(vao);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+    glBindVertexArray(vao_shape);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_shape);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo_shape);
     
-    // Load buffers
-    this->loadVertexData();
-    this->loadIndicesData();
+    // Load data
+    this->loadShapeVertexData();
+    this->loadShapeIndexData();
 
     // Unbind buffers
     glBindVertexArray(0);
@@ -60,9 +62,8 @@ void Renderer::loadBuffers()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-void Renderer::loadVertexData()
+void Renderer::loadShapeVertexData()
 {
-    // Prepare data
     int size = m_scene->getShape().getSize();
     int rawSize = size * 3;
     float data[rawSize];
@@ -77,16 +78,13 @@ void Renderer::loadVertexData()
         k += 3;
     }
 
-    // Load data
     glBufferData(GL_ARRAY_BUFFER, sizeof(data), data, GL_STATIC_DRAW);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
-    
 }
 
-void Renderer::loadIndicesData()
+void Renderer::loadShapeIndexData()
 {
-    // Prepare data
     int size = m_scene->getShape().getPolygonsOverallSize();
     unsigned int data[size];
     int k = 0;
@@ -100,8 +98,43 @@ void Renderer::loadIndicesData()
         }
     }
 
-    // Load data
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(data), data, GL_STATIC_DRAW);
+}
+
+void Renderer::loadLineBuffers()
+{
+    // Generate buffers
+    glGenVertexArrays(1, &vao_line);
+    glGenBuffers(1, &vbo_line);
+
+    // Bind buffers
+    glBindVertexArray(vao_line);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_line);
+
+    // Load data
+    this->loadLineVertexData();
+
+    // Unbind buffers
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+void Renderer::loadLineVertexData()
+{
+    vec3 begin = m_scene->getLine().getBegin();
+    vec3 end = m_scene->getLine().getEnd();
+
+    float data[6];
+    data[0] = begin.x;
+    data[1] = begin.y;
+    data[2] = begin.z;
+    data[3] = end.x;
+    data[4] = end.y;
+    data[5] = end.z;
+
+    glBufferData(GL_ARRAY_BUFFER, sizeof(data), data, GL_STATIC_DRAW);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
 }
 
 void Renderer::renderBackground()
@@ -115,7 +148,7 @@ void Renderer::renderBackground()
 void Renderer::renderShape()
 {
     m_shader.use();
-    glBindVertexArray(vao);
+    glBindVertexArray(vao_shape);
 
     // Setup scene matrices
     m_shader.setMat4("model", m_scene->getShape().getModelMatrix());
@@ -132,4 +165,20 @@ void Renderer::renderShape()
 
         offset += number;
     }
+}
+
+void Renderer::renderLine()
+{
+    m_shader.use();
+    glBindVertexArray(vao_line);
+
+    // Setup scene matrices
+    m_shader.setMat4("model", m_scene->getLine().getModelMatrix());
+    m_shader.setMat4("view", m_scene->getViewMatrix());
+    m_shader.setMat4("proj", m_scene->getProjectionMatrix());
+
+    vec3 color = m_scene->getLine().getColor();
+    m_shader.setVec3("color", color);
+
+    glDrawArrays(GL_LINES, 0, 2);
 }

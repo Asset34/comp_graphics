@@ -5,17 +5,13 @@
 Scene::Scene()
     :m_shape(0, 0)
 {
-    // Setup shape
+    // Setup shapes
     this->makeTestShape2();
     this->shapeInit2();
+    this->makeTestLine();
 
     // Setup Camera
-    // m_camera.setPosition(vec3(0.0f, 50.0f, 100.0f));
     m_camera.setPosition(vec3(0.0f, 0.0f, 100.0f));
-    // m_camera.rotateItselfx(-20);
-    // m_camera.lookAt();
-    // m_camera.rotatex(-45);
-    // m_camera.rotateItselfx(30);
     m_camera.setVolume(90.0, 1.0, 10, 1000.0);
     m_camera.setPerspectiveProjection();
 
@@ -77,6 +73,11 @@ const Shape &Scene::getShape() const
     return m_shape;
 }
 
+const Line &Scene::getLine() const
+{
+    return m_line;
+}
+
 void Scene::makeTestShape1()
 {
     m_shape = Shape(8, 6);
@@ -132,17 +133,17 @@ void Scene::shapeInit2()
     // m_shape.translate(vec3(-30.0f, 20.0f, 0.0f));
 }
 
+void Scene::makeTestLine()
+{
+    m_line.setBegin(vec3(0.0f, 0.0f, 0.0f));
+    m_line.setEnd(vec3(10.0f, 30.0f, -50.0f));
+    m_line.setColor(vec3(1.0f, 0.0f, 0.0f));
+
+    m_line.translate(vec3(0.0f, 20.0f, +10.0f));
+}
+
 void Scene::shapeIdleUpdate()
 {
-    // m_shape.rotateAround(1, vec3(-20.0f, 0.0f, 0.0f), vec3(1.0f, 1.0f, 0.0f));
-    // m_shape.rotateItselfy(-1);
-
-    // m_camera.rotatex(1);
-    // m_camera.lookAt();
-
-    // m_camera.rotateItselfx(-0.5);
-    // m_camera.rotateItselfy(0.1);
-
-    // vec3 pos = m_camera.getPosition();
-    // std::cout << pos.x << " " << pos.y << " " << pos.z << std::endl;
+    m_shape.rotateAround(1, m_line.getPoint(), m_line.getUnit());
+    m_shape.translate(m_line.getUnit());
 }

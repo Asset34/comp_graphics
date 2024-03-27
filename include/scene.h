@@ -3,6 +3,7 @@
 
 #include "shape.h"
 #include "camera.h"
+#include "line.h"
 
 class Scene {
 public:
@@ -19,7 +20,9 @@ public:
     const vec3 &getBackgroundColor() const;
     const mat4 &getViewMatrix();
     const mat4 &getProjectionMatrix() const;
+
     const Shape &getShape() const;
+    const Line &getLine() const;
 
 private:
     // Cube in NDC coordinates
@@ -29,9 +32,12 @@ private:
     void makeTestShape2();
     void shapeInit2();
 
+    void makeTestLine();
+
     void shapeIdleUpdate();
 
     Shape m_shape;
+    Line m_line;
     Camera m_camera;
 
     vec3 m_backgroundColor;
