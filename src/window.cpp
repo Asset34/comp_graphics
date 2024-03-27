@@ -18,13 +18,17 @@ Window::Window(std::string title, int width, int height)
     } else {
         glfwMakeContextCurrent(m_window);
     }
+    glfwSetWindowUserPointer(m_window, this);
+
+    // Setup event handlers
+    glfwSetFramebufferSizeCallback(m_window, resizeEvent);
 
     // Setup renderer
     m_renderer.attachScene(m_scene);
     m_renderer.init();
-    // m_renderer.testInit();
 
-    glViewport(0, 0, width, height);
+    // Setup scene
+    m_scene.setCameraAspectRatio((float) m_width / m_height);
 }
 
 Window::~Window()
@@ -48,4 +52,13 @@ void Window::draw()
 bool Window::shouldClose() const
 {
     return glfwWindowShouldClose(m_window);
+}
+
+void Window::resizeEvent(GLFWwindow *window, int width, int height)
+{
+    Window *w = reinterpret_cast<Window *>(glfwGetWindowUserPointer(window));
+
+    w->m_scene.setCameraAspectRatio((float) width / height);
+
+    glViewport(0, 0, width, height);
 }

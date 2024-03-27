@@ -1,5 +1,7 @@
 #include "scene.h"
 
+#include <iostream>
+
 Scene::Scene()
     :m_shape(0, 0)
 {
@@ -8,7 +10,12 @@ Scene::Scene()
     this->shapeInit2();
 
     // Setup Camera
-    m_camera.setPosition(vec3(0.0f, 0.0f, 100.0f));
+    // m_camera.setPosition(vec3(0.0f, 50.0f, 100.0f));
+    m_camera.setPosition(vec3(-40.0f, -60.0f, 100.0f));
+    // m_camera.rotateItselfx(-20);
+    m_camera.lookAt();
+    // m_camera.rotatex(-45);
+    // m_camera.rotateItselfx(30);
     m_camera.setVolume(90.0, 1.0, 10, 1000.0);
     m_camera.setPerspectiveProjection();
 
@@ -19,6 +26,11 @@ Scene::Scene()
 void Scene::update()
 {
     this->shapeIdleUpdate();
+}
+
+void Scene::setCameraAspectRatio(float aspectRatio)
+{
+    m_camera.setAspectRatio(aspectRatio);
 }
 
 const vec3 &Scene::getBackgroundColor() const
@@ -101,5 +113,12 @@ void Scene::shapeIdleUpdate()
     // m_shape.rotateAround(1, vec3(-20.0f, 0.0f, 0.0f), vec3(1.0f, 1.0f, 0.0f));
     // m_shape.rotateItselfy(-1);
 
-    m_camera.rotatex(1);
+    // m_camera.rotatex(1);
+    // m_camera.lookAt();
+
+    // m_camera.rotateItselfx(-0.5);
+    // m_camera.rotateItselfy(0.1);
+
+    // vec3 pos = m_camera.getPosition();
+    // std::cout << pos.x << " " << pos.y << " " << pos.z << std::endl;
 }

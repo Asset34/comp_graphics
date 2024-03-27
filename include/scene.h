@@ -10,6 +10,8 @@ public:
 
     void update();
 
+    void setCameraAspectRatio(float aspectRatio);
+
     const vec3 &getBackgroundColor() const;
     const mat4 &getViewMatrix();
     const mat4 &getProjectionMatrix() const;
