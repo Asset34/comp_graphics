@@ -12,6 +12,8 @@ if(WIN32)
     set(LIB_PLATFORM "windows")
 elseif(LINUX)
     set(LIB_PLATFORM "linux")
+elseif(UNIX)
+    set(LIB_PLATFORM "linux")
 endif()
 
 # Import GLFW library
