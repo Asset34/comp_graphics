@@ -11,9 +11,9 @@ Scene::Scene()
 
     // Setup Camera
     // m_camera.setPosition(vec3(0.0f, 50.0f, 100.0f));
-    m_camera.setPosition(vec3(-40.0f, -60.0f, 100.0f));
+    m_camera.setPosition(vec3(0.0f, 0.0f, 100.0f));
     // m_camera.rotateItselfx(-20);
-    m_camera.lookAt();
+    // m_camera.lookAt();
     // m_camera.rotatex(-45);
     // m_camera.rotateItselfx(30);
     m_camera.setVolume(90.0, 1.0, 10, 1000.0);
@@ -31,6 +31,16 @@ void Scene::update()
 void Scene::setCameraAspectRatio(float aspectRatio)
 {
     m_camera.setAspectRatio(aspectRatio);
+}
+
+void Scene::cameraRotateYaw(float angle)
+{
+    m_camera.rotatey(angle);
+}
+
+void Scene::cameraRotatePitch(float angle)
+{
+    m_camera.rotateAround(angle, vec3(0.0f, 0.0f, 0.0f), m_camera.getUnitx());
 }
 
 const vec3 &Scene::getBackgroundColor() const

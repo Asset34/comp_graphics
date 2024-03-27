@@ -22,6 +22,21 @@ const mat3 &SceneObj::getUnits() const
     return m_units;
 }
 
+vec3 SceneObj::getUnitx() const
+{
+    return m_units[0];
+}
+
+vec3 SceneObj::getUnity() const
+{
+    return m_units[1];
+}
+
+vec3 SceneObj::getUnitz() const
+{
+    return m_units[2];
+}
+
 const vec3 &SceneObj::getPosition() const
 {
     return m_position;

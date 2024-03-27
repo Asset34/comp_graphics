@@ -1,8 +1,13 @@
 #include "window.h"
 
-Window::Window(std::string title, int width, int height)
-    : m_title(title), m_width(width), m_height(height)
+#include <iostream>
 
+Window::Window(std::string title, int width, int height)
+    :m_title(title),
+     m_width(width),
+     m_height(height),
+     m_mouseFirstClick(true),
+     m_mouseSensitivity(1.0f)
 {
     // Init OPENGL context
     glfwInit();
@@ -22,6 +27,8 @@ Window::Window(std::string title, int width, int height)
 
     // Setup event handlers
     glfwSetFramebufferSizeCallback(m_window, resizeEvent);
+    glfwSetCursorPosCallback(m_window, mouseMovementEvent);
+    glfwSetScrollCallback(m_window, museScrollEvent);
 
     // Setup renderer
     m_renderer.attachScene(m_scene);
@@ -59,6 +66,38 @@ void Window::resizeEvent(GLFWwindow *window, int width, int height)
     Window *w = reinterpret_cast<Window *>(glfwGetWindowUserPointer(window));
 
     w->m_scene.setCameraAspectRatio((float) width / height);
-
     glViewport(0, 0, width, height);
+}
+
+void Window::mouseMovementEvent(GLFWwindow *window, double xpos, double ypos)
+{
+    Window *w = reinterpret_cast<Window *>(glfwGetWindowUserPointer(window));
+
+    int state = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
+    if (state == GLFW_PRESS)
+    {
+        if (w->m_mouseFirstClick) {
+            w->m_mouseLastx = xpos;
+            w->m_mouseLasty = ypos;
+
+            w->m_mouseFirstClick = false;
+        }
+
+        float offsetx = (xpos - w->m_mouseLastx) * w->m_mouseSensitivity;
+        float offsety = (ypos - w->m_mouseLasty) * w->m_mouseSensitivity;
+        
+        w->m_mouseLastx = xpos;
+        w->m_mouseLasty = ypos;
+
+        w->m_scene.cameraRotateYaw(-offsetx);
+        w->m_scene.cameraRotatePitch(-offsety);
+        
+    } else {
+        w->m_mouseFirstClick = true;
+    }
+}
+
+void Window::museScrollEvent(GLFWwindow *window, double xoffset, double yoffset)
+{
+    
 }

@@ -11,6 +11,8 @@ public:
     void update();
 
     void setCameraAspectRatio(float aspectRatio);
+    void cameraRotateYaw(float angle);
+    void cameraRotatePitch(float angle);
 
     const vec3 &getBackgroundColor() const;
     const mat4 &getViewMatrix();
@@ -18,11 +20,6 @@ public:
     const Shape &getShape() const;
 
 private:
-    Shape m_shape;
-    Camera m_camera;
-
-    vec3 m_backgroundColor;
-
     // Cube in NDC coordinates
     void makeTestShape1();
     void shapeInit1();
@@ -31,6 +28,12 @@ private:
     void shapeInit2();
 
     void shapeIdleUpdate();
+
+    Shape m_shape;
+    Camera m_camera;
+
+    vec3 m_backgroundColor;
+
 };
 
 #endif // SCENE_H_

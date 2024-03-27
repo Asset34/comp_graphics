@@ -16,6 +16,9 @@ public:
 
     const mat4 &getModelMatrix() const;
     const mat3 &getUnits() const;
+    vec3 getUnitx() const;
+    vec3 getUnity() const;
+    vec3 getUnitz() const;
     const vec3 &getPosition() const;
     const vec3 &getScales() const;
 
