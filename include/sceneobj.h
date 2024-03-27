@@ -3,9 +3,9 @@
 
 #include "glm/glm.hpp"
 
-using glm::vec2;
 using glm::vec3;
 using glm::vec4;
+using glm::mat3;
 using glm::mat4;
 
 class SceneObj {
@@ -14,37 +14,48 @@ public:
     SceneObj();
     virtual ~SceneObj() = 0;
 
-    const vec3 &getPosition() const;
-    const vec3 &getRotationAngles() const;
-    const vec3 &getScaleFactors() const;
     const mat4 &getModelMatrix() const;
+    const mat3 &getUnits() const;
+    const vec3 &getPosition() const;
+    const vec3 &getScales() const;
 
-    void translate(const vec3 &dv);
-    void translateTo(const vec3& pos);
-    void rotatex(float angle);
-    void rotatey(float angle);
-    void rotatez(float angle);
-    void rotate(const vec3 &angles, const vec3 &point = vec3(0.0f, 0.0f, 0.0f));
-    void rotateTo(const vec3 &angles, const vec3 &point = vec3(0.0f, 0.0f, 0.0f));
-    void rotateAround(float angle, const vec3 &axisPos, const vec3 &axisVec);
-    void rotateItself(const vec3 &angles);
-    void rotateItselfTo(const vec3 &angles);
-    void scale(const vec3 &factors, const vec3 &point = vec3(0.0f, 0.0f, 0.0f));
-    void scaleTo(const vec3 &factors, const vec3 &point = vec3(0.0f, 0.0f, 0.0f));
-    void scaleItself(const vec3 &factors);
-    void scaleItselfTo(const vec3 &factors);
-    void reflect(const vec3 &planePos, const vec3 &planeNormal);
-    void reflectxy();
+    void translate(const vec3 &t);
+    void setPosition(const vec3 &pos);
+
+    void rotatex(float angle, const vec3 &point = {0.0f, 0.0f, 0.0f});
+    void rotatey(float angle, const vec3 &point = {0.0f, 0.0f, 0.0f});
+    void rotatez(float angle, const vec3 &point = {0.0f, 0.0f, 0.0f});
+    void rotateItselfx(float angle);
+    void rotateItselfy(float angle);
+    void rotateItselfz(float angle);
+    void rotateAround(float angle, const vec3 &point, const vec3 &vector);
+    // void setAngles(float anglex, float angley, float anglez);
+
+    void scale(float sx, float sy, float sz, const vec3 &point = {0.0f, 0.0f, 0.0f});
+    void scaleItself(float sx, float sy, float sz);
+    void setScales(float sx, float sy, float sz);
+
+    void reflectx();
+    void reflecty();
+    void reflectz();
+    void reflect(const vec3 &point, const vec3 &normal);
 
     void reset();
 
 private:
-    vec2 computeAuxiliaryAngles(const vec3 &v);
+    void rotatex_util(float sinValue, float cosValue);
+    void rotatey_util(float sinValue, float cosValue);
+    void rotatez_util(float sinValue, float cosValue);
 
-    vec3 m_position;
-    vec3 m_rotationAngles;
-    vec3 m_scaleFactors;
+    void updatePosition(const mat4 &t);
+    void updateUnits(const mat4 &t);
+
     mat4 m_modelMatrix;
+    
+    mat3 m_units;
+    vec3 m_position;
+    vec3 m_scales;
+    // vec3 m_angles;
 
 };
 
