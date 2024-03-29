@@ -23,9 +23,23 @@ set_property(TARGET libglfw3 PROPERTY IMPORTED_LOCATION ${PROJECT_SOURCE_DIR}/${
 
 # Define GLAD as object library
 add_library(glad OBJECT
-    ${SRC}/glad.c
+    ${SRC}/${LIB}/glad/glad.c
 )
 target_include_directories(glad PUBLIC ${INCLUDE}/${INCLUDE_LIB})
+
+# Define ImGui as object library
+add_library(imgui OBJECT
+    ${SRC}/${LIB}/imgui/imgui.cpp
+    ${SRC}/${LIB}/imgui/imgui_widgets.cpp
+    ${SRC}/${LIB}/imgui/imgui_draw.cpp
+    ${SRC}/${LIB}/imgui/imgui_impl_opengl3.cpp
+    ${SRC}/${LIB}/imgui/imgui_tables.cpp
+    ${SRC}/${LIB}/imgui/imgui_impl_glfw.cpp
+)
+target_include_directories(imgui PUBLIC ${INCLUDE}/${INCLUDE_LIB})
+target_include_directories(imgui PUBLIC ${INCLUDE}/${INCLUDE_LIB}/imgui)
+
+# message(STATUS ${INCLUDE}/${INCLUDE_LIB}/imgui)
 
 # Create executavle
 add_executable(lr1
@@ -37,9 +51,12 @@ add_executable(lr1
     ${SRC}/scene.cpp
     ${SRC}/shader.cpp
     ${SRC}/renderer.cpp
+    ${SRC}/uimanager.cpp
     ${SRC}/window.cpp
     $<TARGET_OBJECTS:glad>
+    $<TARGET_OBJECTS:imgui>
 )
 set_target_properties(lr1 PROPERTIES CXX_STANDARD 11)
 target_link_libraries(lr1 libglfw3)
 target_include_directories(lr1 PUBLIC ${INCLUDE})
+target_include_directories(lr1 PUBLIC ${INCLUDE}/${INCLUDE_LIB})
