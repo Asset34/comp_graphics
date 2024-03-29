@@ -7,6 +7,7 @@
 #include "glfw/glfw3.h"
 #include "renderer.h"
 #include "scene.h"
+#include "uimanager.h"
 
 class Window {
 public:
@@ -23,6 +24,7 @@ private:
     static void museScrollEvent(GLFWwindow* window, double xoffset, double yoffset);
 
     Renderer m_renderer;
+    UiManager m_uimanager;
     Scene m_scene;
     GLFWwindow* m_window;
 

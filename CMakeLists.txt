@@ -30,12 +30,13 @@ target_include_directories(glad PUBLIC ${INCLUDE}/${INCLUDE_LIB})
 # Define ImGui as object library
 add_library(imgui OBJECT
     ${SRC}/${LIB}/imgui/imgui.cpp
+    ${SRC}/${LIB}/imgui/imgui_tables.cpp
     ${SRC}/${LIB}/imgui/imgui_widgets.cpp
     ${SRC}/${LIB}/imgui/imgui_draw.cpp
+    ${SRC}/${LIB}/imgui/imgui_demo.cpp
     ${SRC}/${LIB}/imgui/imgui_impl_opengl3.cpp
-    ${SRC}/${LIB}/imgui/imgui_tables.cpp
     ${SRC}/${LIB}/imgui/imgui_impl_glfw.cpp
-)
+    )
 target_include_directories(imgui PUBLIC ${INCLUDE}/${INCLUDE_LIB})
 target_include_directories(imgui PUBLIC ${INCLUDE}/${INCLUDE_LIB}/imgui)
 

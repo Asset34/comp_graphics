@@ -30,12 +30,17 @@ Window::Window(std::string title, int width, int height)
     glfwSetCursorPosCallback(m_window, mouseMovementEvent);
     glfwSetScrollCallback(m_window, museScrollEvent);
 
-    // Setup renderer
+    // Setup scene
+    m_scene.setCameraAspectRatio((float) m_width / m_height);
+
+    // Setup Renderer
     m_renderer.attachScene(m_scene);
     m_renderer.init();
 
-    // Setup scene
-    m_scene.setCameraAspectRatio((float) m_width / m_height);
+    // Setup UiManager
+    m_uimanager.attachScene(m_scene);
+    m_uimanager.attachWindow(m_window);
+    m_uimanager.init();
 }
 
 Window::~Window()
@@ -46,13 +51,13 @@ Window::~Window()
 void Window::draw()
 {
     while (!shouldClose()) {
+        glfwPollEvents();
+
         m_scene.update();
         m_renderer.render();
-
-        // m_renderer.testDraw();
+        m_uimanager.render();
 
         glfwSwapBuffers(m_window);
-        glfwPollEvents();
     }
 }
 
