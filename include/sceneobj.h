@@ -15,52 +15,71 @@ public:
     virtual ~SceneObj() = 0;
 
     const mat4 &getModelMatrix() const;
-    const mat3 &getUnits() const;
-    vec3 getUnitx() const;
-    vec3 getUnity() const;
-    vec3 getUnitz() const;
-    const vec3 &getPosition() const;
+    const mat4 &getNormalMatrix() const;
+    const vec3 &getUnitx() const;
+    const vec3 &getUnity() const;
+    const vec3 &getUnitz() const;
+    const vec3 &getOrigin() const;
     const vec3 &getScales() const;
 
-    void translate(const vec3 &t);
-    void setPosition(const vec3 &pos);
+    void reset();
 
-    void rotatex(float angle, const vec3 &point = {0.0f, 0.0f, 0.0f});
-    void rotatey(float angle, const vec3 &point = {0.0f, 0.0f, 0.0f});
-    void rotatez(float angle, const vec3 &point = {0.0f, 0.0f, 0.0f});
+    void translate(const vec3 &t);
+    void translateTo(const vec3 &pos);
+    void translateItselfTo(const vec3 &pos);
+
+    void rotatex(float angle, const vec3 &point = {0, 0, 0});
+    void rotatey(float angle, const vec3 &point = {0, 0, 0});
+    void rotatez(float angle, const vec3 &point = {0, 0, 0});
     void rotateItselfx(float angle);
     void rotateItselfy(float angle);
     void rotateItselfz(float angle);
     void rotateAround(float angle, const vec3 &point, const vec3 &vector);
-    // void setAngles(float anglex, float angley, float anglez);
 
-    void scale(float sx, float sy, float sz, const vec3 &point = {0.0f, 0.0f, 0.0f});
+    void scale(float sx, float sy, float sz, const vec3 &point = {0, 0, 0});
+    void scaleTo(float sx, float sy, float sz, const vec3 &point = {0, 0, 0});
     void scaleItself(float sx, float sy, float sz);
-    void setScales(float sx, float sy, float sz);
+    void scaleItselfTo(float sx, float sy, float sz);
 
     void reflectx();
     void reflecty();
     void reflectz();
     void reflect(const vec3 &point, const vec3 &normal);
 
-    void coincidez(const vec3 &vector);
+    void coincideWithZ(const vec3 &vector);
 
-    void reset();
+protected:
+    virtual void transformationCallback();
+    virtual const vec3 &selfOrigin() const = 0;
 
 private:
-    void rotatex_util(float sinValue, float cosValue);
-    void rotatey_util(float sinValue, float cosValue);
-    void rotatez_util(float sinValue, float cosValue);
+    void translate_base(const vec3 &t);
+    void rotatex_base(float angle);
+    void rotatey_base(float angle);
+    void rotatez_base(float angle);
+    void rotatex_base_values(float sinValue, float cosValue);
+    void rotatey_base_values(float sinValue, float cosValue);
+    void rotatez_base_values(float sinValue, float cosValue);
+    void scale_base(float sx, float sy, float sz);
 
-    void updatePosition(const mat4 &t);
-    void updateUnits(const mat4 &t);
+    void coincidez_values(const vec3 &vector, float &sinx, float &cosx, float &siny, float &cosy);
 
+    // Default values
+    static const vec3 UNITX_DEFAULT;  // {1, 0, 0}
+    static const vec3 UNITY_DEFAULT;  // {0, 1, 0}
+    static const vec3 UNITZ_DEFAULT;  // {0, 0, 1}
+    static const vec3 ORIGIN_DEFAULT; // {0, 0, 0}
+    static const vec3 SCALES_DEFAULT; // {0, 0, 0}
+
+    // Transformation matrices
     mat4 m_modelMatrix;
+    mat4 m_normalMatrix;
+    mat4 m_scaleMatrix;
     
-    mat3 m_units;
-    vec3 m_position;
+    // Geometrical values
+    vec3 m_unitx, m_unity, m_unitz;
+    vec3 m_origin;
     vec3 m_scales;
-    // vec3 m_angles;
 
 };
 

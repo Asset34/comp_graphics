@@ -1,10 +1,20 @@
 #include "sceneobj.h"
 
+const vec3 SceneObj::UNITX_DEFAULT = {1, 0, 0};
+const vec3 SceneObj::UNITY_DEFAULT = {0, 1, 0};
+const vec3 SceneObj::UNITZ_DEFAULT = {0, 0, 1};
+const vec3 SceneObj::ORIGIN_DEFAULT = {0, 0, 0};
+const vec3 SceneObj::SCALES_DEFAULT = {0, 0, 0};
+
 SceneObj::SceneObj()
     :m_modelMatrix(1.0f), // Identity matrix
-     m_units(1.0f), // columns of basic unit vectors (1,0,0), (0,1,0) and (0,0,1)
-     m_position(0.0f),
-     m_scales(1.0f, 1.0f, 1.0f)
+     m_normalMatrix(1.0f), // Identity matrix
+     m_scaleMatrix(1.0f), // Identity matrix
+     m_unitx(UNITX_DEFAULT),
+     m_unity(UNITY_DEFAULT),
+     m_unitz(UNITZ_DEFAULT),
+     m_origin(ORIGIN_DEFAULT),
+     m_scales(SCALES_DEFAULT)
 {
 }
 
@@ -17,29 +27,29 @@ const mat4 &SceneObj::getModelMatrix() const
     return m_modelMatrix;
 }
 
-const mat3 &SceneObj::getUnits() const
+const mat4 &SceneObj::getNormalMatrix() const
 {
-    return m_units;
+    return m_normalMatrix;
 }
 
-vec3 SceneObj::getUnitx() const
+const vec3 &SceneObj::getUnitx() const
 {
-    return m_units[0];
+    return m_unitx;
 }
 
-vec3 SceneObj::getUnity() const
+const vec3 &SceneObj::getUnity() const
 {
-    return m_units[1];
+    return m_unity;
 }
 
-vec3 SceneObj::getUnitz() const
+const vec3 &SceneObj::getUnitz() const
 {
-    return m_units[2];
+    return m_unitz;
 }
 
-const vec3 &SceneObj::getPosition() const
+const vec3 &SceneObj::getOrigin() const
 {
-    return m_position;
+    return m_origin;
 }
 
 const vec3 &SceneObj::getScales() const
@@ -47,7 +57,207 @@ const vec3 &SceneObj::getScales() const
     return m_scales;
 }
 
+void SceneObj::reset()
+{
+    m_modelMatrix = mat4(1.0f), // Identity matrix
+    m_normalMatrix = mat4(1.0f), // Identity matrix
+    m_scaleMatrix = mat4(1.0f), // Identity matrix
+
+    m_unitx = UNITX_DEFAULT;
+    m_unity = UNITY_DEFAULT;
+    m_unitz = UNITZ_DEFAULT;
+    m_origin = ORIGIN_DEFAULT;
+    m_scales = SCALES_DEFAULT;
+}
+
 void SceneObj::translate(const vec3 &t)
+{
+    this->translate_base(t);
+    this->transformationCallback();
+}
+
+void SceneObj::translateTo(const vec3 &pos)
+{
+    this->translate_base(pos - m_origin);
+    this->transformationCallback();
+}
+
+void SceneObj::translateItselfTo(const vec3 &pos)
+{
+    this->translate_base(pos - this->selfOrigin());
+}
+
+void SceneObj::rotatex(float angle, const vec3 &point)
+{
+    this->translate_base(-point);
+    this->rotatex_base(angle);
+    this->translate_base(point);
+
+    this->transformationCallback();
+}
+
+void SceneObj::rotatey(float angle, const vec3 &point)
+{
+    this->translate_base(-point);
+    this->rotatey_base(angle);
+    this->translate_base(point);
+
+    this->transformationCallback();
+}
+
+void SceneObj::rotatez(float angle, const vec3 &point)
+{
+    this->translate_base(-point);
+    this->rotatez_base(angle);
+    this->translate_base(point);
+
+    this->transformationCallback();
+}
+
+void SceneObj::rotateItselfx(float angle)
+{
+    this->translate_base(-this->selfOrigin());
+    this->rotatex_base(angle);
+    this->translate_base(this->selfOrigin());
+
+    this->transformationCallback();
+}
+
+void SceneObj::rotateItselfy(float angle)
+{
+    this->translate_base(-this->selfOrigin());
+    this->rotatey_base(angle);
+    this->translate_base(this->selfOrigin());
+
+    this->transformationCallback();
+}
+
+void SceneObj::rotateItselfz(float angle)
+{
+    this->translate_base(-this->selfOrigin());
+    this->rotatez_base(angle);
+    this->translate_base(this->selfOrigin());
+
+    this->transformationCallback();
+}
+
+void SceneObj::rotateAround(float angle, const vec3 &point, const vec3 &vector)
+{
+    float sinx, cosx, siny, cosy;
+    this->coincidez_values(vector, sinx, cosx, siny, cosy);
+
+    this->translate_base(-point);
+    this->rotatex_base_values(sinx, cosx);
+    this->rotatey_base_values(siny, cosy);
+    this->rotatez_base(angle);
+    this->rotatey_base_values(-siny, cosy);
+    this->rotatex_base_values(-sinx, cosx);
+    this->translate_base(point);
+
+    this->transformationCallback();
+}
+
+void SceneObj::scale(float sx, float sy, float sz, const vec3 &point)
+{
+    this->translate_base(-point);
+    this->scale_base(sx, sy, sz);
+    this->translate_base(point);
+
+    this->transformationCallback();
+}
+
+void SceneObj::scaleTo(float sx, float sy, float sz, const vec3 &point)
+{
+    this->translate_base(-point);
+    this->scale_base(sx / m_scales.x, sy / m_scales.y, sz / m_scales.z);
+    this->translate_base(point);
+
+    this->transformationCallback();
+}
+
+void SceneObj::scaleItself(float sx, float sy, float sz)
+{
+    this->translate_base(-this->selfOrigin());
+    this->scale_base(sx, sy, sz);
+    this->translate_base(this->selfOrigin());
+
+    this->transformationCallback();
+}
+
+void SceneObj::scaleItselfTo(float sx, float sy, float sz)
+{
+    this->translate_base(-this->selfOrigin());
+    this->scale_base(sx / m_scales.x, sy / m_scales.x, sz / m_scales.x);
+    this->translate_base(this->selfOrigin());
+
+    this->transformationCallback();
+}
+
+void SceneObj::reflectx()
+{
+    this->scale_base(-1.0, 1.0, 1.0);
+
+    this->transformationCallback();
+}
+
+void SceneObj::reflecty()
+{
+    this->scale_base(1.0, -1.0, 1.0);
+
+    this->transformationCallback();
+}
+
+void SceneObj::reflectz()
+{
+    this->scale_base(1.0, 1.0, -1.0);
+
+    this->transformationCallback();
+}
+
+void SceneObj::reflect(const vec3 &point, const vec3 &normal)
+{
+    float cosx, sinx, cosy, siny;
+    this->coincidez_values(normal, sinx, cosx, siny, cosy);
+
+    this->translate_base(-point);
+    this->rotatex_base_values(sinx, cosx);
+    this->rotatey_base_values(-siny, cosy);
+    this->reflectz();
+    this->rotatey_base_values(siny, cosy);
+    this->rotatex_base_values(-sinx, cosx);
+    this->translate_base(point);
+
+    this->transformationCallback();
+}
+
+void SceneObj::coincideWithZ(const vec3 &vector)
+{
+    float cosx, sinx, cosy, siny;
+    this->coincidez_values(vector, sinx, cosx, siny, cosy);
+ 
+    this->translate_base(-m_origin);
+    this->rotatex_base_values(sinx, cosx);
+    this->rotatey_base_values(siny, cosy);
+    this->translate_base(m_origin);
+
+    this->transformationCallback();
+}
+
+void SceneObj::transformationCallback()
+{
+    // Update origin
+    m_origin = m_modelMatrix * vec4(ORIGIN_DEFAULT, 1.0f);
+
+    // Update units
+    m_unitx = m_normalMatrix * vec4(UNITX_DEFAULT, 1.0f);
+    m_unity = m_normalMatrix * vec4(UNITY_DEFAULT, 1.0f);
+    m_unitz = m_normalMatrix * vec4(UNITZ_DEFAULT, 1.0f);
+
+    // Update scales
+    m_scales = m_scaleMatrix * vec4(SCALES_DEFAULT, 1.0f);
+}
+
+void SceneObj::translate_base(const vec3 &t)
 {
     // Make translation matrix
     mat4 matr(1.0f);
@@ -55,256 +265,27 @@ void SceneObj::translate(const vec3 &t)
 
     // Apply transformation
     m_modelMatrix = matr * m_modelMatrix;
-    this->updatePosition(matr);
 }
 
-void SceneObj::setPosition(const vec3 &pos)
+void SceneObj::rotatex_base(float angle)
 {
-    vec3 dpos;
-    dpos.x = pos.x - m_position.x;
-    dpos.y = pos.y - m_position.y;
-    dpos.z = pos.z - m_position.z;
-
-    this->translate(dpos);
-}
-
-void SceneObj::rotatex(float angle, const vec3 &point)
-{
-    // Translate origin to the axis point
-    this->translate(-point);
-
-    // Convert angle to radians
     float angleRadian = glm::radians(angle);
-
-    // Make rotation matrix
-    mat4 matr(1.0f);
-    matr[1][1] = glm::cos(angleRadian);
-    matr[2][1] = -glm::sin(angleRadian);
-    matr[1][2] = glm::sin(angleRadian);
-    matr[2][2] = glm::cos(angleRadian);
-
-    // Apply transformation
-    m_modelMatrix = matr * m_modelMatrix;
-    this->updatePosition(matr);
-    this->updateUnits(matr);
-
-    // Translate back
-    this->translate(point);
+    this->rotatex_base_values(glm::sin(angleRadian), glm::cos(angleRadian));
 }
 
-void SceneObj::rotatey(float angle, const vec3 &point)
+void SceneObj::rotatey_base(float angle)
 {
-    // Translate origin to the axis point
-    this->translate(-point);
-
-    // Convert angle to radians
     float angleRadian = glm::radians(angle);
-
-    // Make rotation matrix
-    mat4 matr(1.0f);
-    matr[0][0] = glm::cos(angleRadian);
-    matr[2][0] = glm::sin(angleRadian);
-    matr[0][2] = -glm::sin(angleRadian);
-    matr[2][2] = glm::cos(angleRadian);
-
-    // Apply transformation
-    m_modelMatrix = matr * m_modelMatrix;
-    this->updatePosition(matr);
-    this->updateUnits(matr);
-
-    // Translate back
-    this->translate(point);
+    this->rotatey_base_values(glm::sin(angleRadian), glm::cos(angleRadian));
 }
 
-void SceneObj::rotatez(float angle, const vec3 &point)
+void SceneObj::rotatez_base(float angle)
 {
-    // Translate origin to the axis point
-    this->translate(-point);
-
-    // Convert angle to radians
     float angleRadian = glm::radians(angle);
-
-    // Make rotation matrix
-    mat4 matr(1.0f);
-    matr[0][0] = glm::cos(angleRadian);
-    matr[1][0] = -glm::sin(angleRadian);
-    matr[0][1] = glm::sin(angleRadian);
-    matr[1][1] = glm::cos(angleRadian);
-
-    // Apply transformation
-    m_modelMatrix = matr * m_modelMatrix;
-    this->updatePosition(matr);
-    this->updateUnits(matr);
-    
-    // Translate back
-    this->translate(point);
+    this->rotatez_base_values(glm::sin(angleRadian), glm::cos(angleRadian));
 }
 
-void SceneObj::rotateItselfx(float angle)
-{
-    vec3 pos = m_position;
-    this->rotatex(angle, pos);
-}
-
-void SceneObj::rotateItselfy(float angle)
-{
-    vec3 pos = m_position;
-    this->rotatey(angle, pos);
-}
-
-void SceneObj::rotateItselfz(float angle)
-{
-    vec3 pos = m_position;
-    this->rotatez(angle, pos);
-}
-
-void SceneObj::rotateAround(float angle, const vec3 &point, const vec3 &vector)
-{
-    // Translate origin to the axis point
-    this->translate(-point);
-
-    // Compute values for rotation matrices    
-    vec3 unit = glm::normalize(vector);
-    float d = sqrt(unit.y * unit.y + unit.z * unit.z);
-    float cosValuex, sinValuex, sinValuey, cosValuey;
-    if (d > 0) {
-        cosValuex = unit.z / d;
-        sinValuex = unit.y / d;
-        sinValuey = unit.x;
-        cosValuey = d;
-
-        // Rotate to coincide vector with Z axis
-        this->rotatex_util(sinValuex, cosValuex);
-        this->rotatey_util(sinValuey, cosValuey);
-    }
-
-    // Rotate around vector
-    this->rotatez(angle);
-
-    // Rotate back
-    if (d > 0) {
-        this->rotatey_util(-sinValuey, cosValuey);
-        this->rotatex_util(-sinValuex, cosValuex);
-    }
-
-    // Translate origin back
-    this->translate(point);
-}
-
-void SceneObj::scale(float sx, float sy, float sz, const vec3 &point)
-{
-    // Translate origin to the point
-    this->translate(-point);
-    
-    // Make scale matrix
-    mat4 matr(1.0f);
-    matr[0][0] = sx;
-    matr[1][1] = sy;
-    matr[2][2] = sz;
-
-    // Apply transformation
-    m_modelMatrix = matr * m_modelMatrix;
-    this->updatePosition(matr);
-
-    // Translate origin back
-    this->translate(point);
-}
-
-void SceneObj::scaleItself(float sx, float sy, float sz)
-{
-    vec3 pos = m_position;
-    this->scale(sx, sy, sz, m_position);
-}
-
-void SceneObj::setScales(float sx, float sy, float sz)
-{
-    this->scaleItself(sx/m_scales.x, sy / m_scales.y, sz / m_scales.z);
-}
-
-void SceneObj::reflectx()
-{
-    this->scale(-1.0, 1.0, 1.0);
-}
-
-void SceneObj::reflecty()
-{
-    this->scale(1.0, -1.0, 1.0);
-}
-
-void SceneObj::reflectz()
-{
-    this->scale(1.0, 1.0, -1.0);
-}
-
-void SceneObj::reflect(const vec3 &point, const vec3 &normal)
-{
-    // Translate origin to the plane position
-    this->translate(-point);
-
-    // Compute values for rotation matrices    
-    vec3 unit = glm::normalize(normal);
-    float d = sqrt(unit.y * unit.y + unit.z * unit.z);
-    float cosValuex, sinValuex, cosValuey, sinValuey;
-
-    if (d > 0) {
-        cosValuex = unit.z / d;
-        sinValuex = unit.y / d;
-        cosValuey = d;
-        sinValuey = unit.x;
-
-        // Rotate to coincide normal with Z axis
-        this->rotatex_util(sinValuex, cosValuex);
-        this->rotatey_util(sinValuey, cosValuey);
-    }
-
-    // Reflect
-    this->reflectz();
-
-    // Rotate back
-    if (d > 0) {
-        this->rotatey_util(-sinValuey, cosValuey);
-        this->rotatex_util(-sinValuex, cosValuex);
-    }
-
-    // Translate origin back
-    this->translate(point);
-}
-
-void SceneObj::coincidez(const vec3 &vector)
-{
-    // Translate origin to the plane position
-    vec3 point = m_position;
-    this->translate(-point);
-
-    // Compute values for rotation matrices    
-    vec3 unit = glm::normalize(vector);
-    float d = sqrt(unit.y * unit.y + unit.z * unit.z);
-    float cosValuex, sinValuex, cosValuey, sinValuey;
-
-    if (d > 0) {
-        cosValuex = unit.z / d;
-        sinValuex = unit.y / d;
-        cosValuey = d;
-        sinValuey = unit.x;
-
-        // Rotate to coincide vector with Z axis
-        this->rotatex_util(-sinValuex, cosValuex);
-        this->rotatey_util(-sinValuey, cosValuey);
-    }
-
-    // Translate origin back
-    this->translate(point);
-}
-
-void SceneObj::reset()
-{
-    m_modelMatrix = mat4(1.0f), // Identity matrix
-    m_units = mat3(1.0f), // columns of basic unit vectors (1,0,0), (0,1,0) and (0,0,1)
-    m_position = vec3(0.0f, 0.0f, 0.0f);
-    m_scales = vec3(1.0f, 1.0f, 1.0f);
-}
-
-void SceneObj::rotatex_util(float sinValue, float cosValue)
+void SceneObj::rotatex_base_values(float sinValue, float cosValue)
 {
     // Make rotation matrix
     mat4 matr(1.0f);
@@ -315,26 +296,24 @@ void SceneObj::rotatex_util(float sinValue, float cosValue)
 
     // Apply transformation
     m_modelMatrix = matr * m_modelMatrix;
-    this->updatePosition(matr);
-    this->updateUnits(matr);
+    m_normalMatrix = matr * m_normalMatrix;
 }
 
-void SceneObj::rotatey_util(float sinValue, float cosValue)
+void SceneObj::rotatey_base_values(float sinValue, float cosValue)
 {
     // Make rotation matrix
     mat4 matr(1.0f);
     matr[0][0] = cosValue;
-    matr[2][0] = -sinValue;
-    matr[0][2] = sinValue;
+    matr[2][0] = sinValue;
+    matr[0][2] = -sinValue;
     matr[2][2] = cosValue;
 
     // Apply transformation
     m_modelMatrix = matr * m_modelMatrix;
-    this->updatePosition(matr);
-    this->updateUnits(matr);
+    m_normalMatrix = matr * m_normalMatrix;
 }
 
-void SceneObj::rotatez_util(float sinValue, float cosValue)
+void SceneObj::rotatez_base_values(float sinValue, float cosValue)
 {
     // Make rotation matrix
     mat4 matr(1.0f);
@@ -345,21 +324,38 @@ void SceneObj::rotatez_util(float sinValue, float cosValue)
 
     // Apply transformation
     m_modelMatrix = matr * m_modelMatrix;
-    this->updatePosition(matr);
-    this->updateUnits(matr);
+    m_normalMatrix = matr * m_normalMatrix;
 }
 
-void SceneObj::updatePosition(const mat4 &t)
+void SceneObj::scale_base(float sx, float sy, float sz)
 {
-    m_position = t * vec4(m_position, 1.0f);
+    // Make scale matrix
+    mat4 matr(1.0f);
+    matr[0][0] = sx;
+    matr[1][1] = sy;
+    matr[2][2] = sz;
+
+    // Apply transformation
+    m_modelMatrix = matr * m_modelMatrix;
+    m_scaleMatrix = matr * m_scaleMatrix;
 }
 
-void SceneObj::updateUnits(const mat4 &t)
+void SceneObj::coincidez_values(const vec3 &vector, float &sinx, float &cosx, float &siny, float &cosy)
 {
-    mat4 units4(1.0f);
-    units4[0] = vec4(m_units[0], 0.0f);
-    units4[1] = vec4(m_units[1], 0.0f);
-    units4[2] = vec4(m_units[2], 0.0f);
+    vec3 unit = glm::normalize(vector);
 
-    m_units = t * units4;
+    float d = sqrt(unit.y * unit.y + unit.z * unit.z);
+
+    // Values for X rotation
+    if (d > 0) {
+        cosx = unit.z / d;
+        sinx = unit.y / d;
+    } else {
+        cosx = 1;
+        sinx = 0;
+    }
+
+    // Values for Y rotation
+    cosy = d;
+    siny = unit.x;
 }
