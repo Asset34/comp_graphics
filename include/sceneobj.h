@@ -1,12 +1,28 @@
 #ifndef SCENEOBJ_H_
 #define SCENEOBJ_H_
 
+#include <vector>
 #include "glm/glm.hpp"
 
 using glm::vec3;
 using glm::vec4;
 using glm::mat3;
 using glm::mat4;
+
+struct SceneObjData {
+    // Sizes
+    int VertexSize;
+    int VertexNumber;
+    int PolygonNumber;
+
+    // Data
+    std::vector<float> Vertices;
+    std::vector<int> PolygonIndices;
+    std::vector<int> PolygonSizes;
+    std::vector<vec3> PolygonColors;
+
+    mat4 ModelMatrix;
+};
 
 class SceneObj {
 
@@ -47,6 +63,8 @@ public:
     void reflect(const vec3 &point, const vec3 &normal);
 
     void coincideWithZ(const vec3 &vector);
+
+    virtual SceneObjData compileData() const = 0;
 
 protected:
     virtual void transformationCallback();
