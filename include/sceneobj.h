@@ -68,7 +68,7 @@ public:
 
 protected:
     virtual void transformationCallback();
-    virtual const vec3 &selfOrigin() const = 0;
+    virtual const vec3 &selfOrigin() const;
 
 private:
     void translate_base(const vec3 &t);

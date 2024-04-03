@@ -257,6 +257,11 @@ void SceneObj::transformationCallback()
     m_scales = m_scaleMatrix * vec4(SCALES_DEFAULT, 1.0f);
 }
 
+const vec3 &SceneObj::selfOrigin() const
+{
+    return m_origin;
+}
+
 void SceneObj::translate_base(const vec3 &t)
 {
     // Make translation matrix
