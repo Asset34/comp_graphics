@@ -166,6 +166,11 @@ void SceneObj::scale(float sx, float sy, float sz, const vec3 &point)
     this->transformationCallback();
 }
 
+void SceneObj::scale(float s, const vec3 &point)
+{
+    this->scale(s, s, s, point);
+}
+
 void SceneObj::scaleTo(float sx, float sy, float sz, const vec3 &point)
 {
     this->translate_base(-point);
@@ -173,6 +178,11 @@ void SceneObj::scaleTo(float sx, float sy, float sz, const vec3 &point)
     this->translate_base(point);
 
     this->transformationCallback();
+}
+
+void SceneObj::scaleTo(float s, const vec3 &point)
+{
+    this->scaleTo(s, s, s, point);
 }
 
 void SceneObj::scaleItself(float sx, float sy, float sz)
@@ -184,6 +194,11 @@ void SceneObj::scaleItself(float sx, float sy, float sz)
     this->transformationCallback();
 }
 
+void SceneObj::scaleItself(float s)
+{
+    this->scaleItself(s, s, s);
+}
+
 void SceneObj::scaleItselfTo(float sx, float sy, float sz)
 {
     this->translate_base(-this->selfOrigin());
@@ -191,6 +206,11 @@ void SceneObj::scaleItselfTo(float sx, float sy, float sz)
     this->translate_base(this->selfOrigin());
 
     this->transformationCallback();
+}
+
+void SceneObj::scaleItselfTo(float s)
+{
+    this->scaleItselfTo(s, s, s);
 }
 
 void SceneObj::reflectx()

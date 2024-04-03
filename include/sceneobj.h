@@ -53,9 +53,13 @@ public:
     void rotateAround(float angle, const vec3 &point, const vec3 &vector);
 
     void scale(float sx, float sy, float sz, const vec3 &point = {0, 0, 0});
+    void scale(float s, const vec3 &point = {0, 0, 0});
     void scaleTo(float sx, float sy, float sz, const vec3 &point = {0, 0, 0});
+    void scaleTo(float s, const vec3 &point = {0, 0, 0});
     void scaleItself(float sx, float sy, float sz);
+    void scaleItself(float s);
     void scaleItselfTo(float sx, float sy, float sz);
+    void scaleItselfTo(float s);
 
     void reflectx();
     void reflecty();
