@@ -48,12 +48,13 @@ add_executable(lr1
     ${SRC}/shape.cpp
     ${SRC}/line.cpp
     ${SRC}/camera.cpp
-    ${SRC}/scene.cpp
-    ${SRC}/shader.cpp
-    ${SRC}/renderer.cpp
     ${SRC}/uimanager.cpp
     ${SRC}/abstract/renderer.cpp
     ${SRC}/abstract/transformableobj.cpp
+    ${SRC}/shader.cpp
+    # ${SRC}/camera.cpp
+    # ${SRC}/scene.cpp
+    # ${SRC}/renderer.cpp
     ${SRC}/window.cpp
     $<TARGET_OBJECTS:glad>
     $<TARGET_OBJECTS:imgui>
