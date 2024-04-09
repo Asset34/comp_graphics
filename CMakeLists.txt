@@ -51,6 +51,8 @@ add_executable(lr1
     ${SRC}/uimanager.cpp
     ${SRC}/abstract/renderer.cpp
     ${SRC}/abstract/transformableobj.cpp
+    ${SRC}/glrenderer.cpp
+    ${SRC}/glrendererunit.cpp
     ${SRC}/shader.cpp
     # ${SRC}/camera.cpp
     # ${SRC}/scene.cpp
