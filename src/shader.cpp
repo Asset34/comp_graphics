@@ -1,5 +1,8 @@
 #include "shader.h"
 
+#include <fstream>
+#include <sstream>
+#include <iostream>
 #include "glm/gtc/type_ptr.hpp"
 
 Shader::~Shader()

@@ -3,11 +3,7 @@
 
 #include "glad/glad.h"
 #include "glm/glm.hpp"
-
 #include <string>
-#include <fstream>
-#include <sstream>
-#include <iostream>
 
 class Shader {
 public:
