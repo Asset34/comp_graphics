@@ -45,7 +45,6 @@ target_include_directories(imgui PUBLIC ${INCLUDE}/${INCLUDE_LIB}/imgui)
 # Create executavle
 add_executable(lr1
     ${SRC}/main.cpp
-    ${SRC}/shape.cpp
     ${SRC}/line.cpp
     ${SRC}/camera.cpp
     ${SRC}/uimanager.cpp
@@ -54,6 +53,7 @@ add_executable(lr1
     ${SRC}/glrenderer.cpp
     ${SRC}/glrendererunit.cpp
     ${SRC}/shader.cpp
+    ${SRC}/shape.cpp
     # ${SRC}/camera.cpp
     # ${SRC}/scene.cpp
     # ${SRC}/renderer.cpp

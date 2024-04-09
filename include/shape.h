@@ -3,9 +3,11 @@
 
 #include <vector>
 #include <list>
-#include "sceneobj.h"
 
-class Shape : public SceneObj {
+#include "interfaces/renderable.h"
+#include "abstract/transformableobj.h"
+
+class Shape : public TransformableObj, public Renderable {
 public:
     Shape();
     ~Shape();
@@ -13,11 +15,12 @@ public:
     void setVertices(const std::vector<vec3> &vertices);
     void definePolygon(const std::vector<int> &indices, const vec3 &color);
 
-    virtual SceneObjData compileData() const override;
+    RenderData getRenderData() override;
+    glm::mat4 getTransformation() override;
 
 protected:
-    virtual const vec3 &selfOrigin() const override;
-    virtual void transformationCallback() override;
+    const vec3 &selfOrigin() const override;
+    void transformationCallback() override;
 
 private:
     struct Polygon {
