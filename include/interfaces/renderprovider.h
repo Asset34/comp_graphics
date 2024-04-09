@@ -9,9 +9,6 @@ struct RenderProviderData {
     // Types
     typedef glm::vec3 Color;
 
-    // Data
-    std::vector<Renderable> Renderables;
-
     // Matrices
     glm::mat4 ViewMatrix = glm::mat4(1); // Default: Identity Matrix
     glm::mat4 ProjMatrix = glm::mat4(1); // Default: Identity Matrix
@@ -25,7 +22,7 @@ class RenderProvider {
 public:
     virtual RenderProviderData getRenderProviderData() = 0;
     virtual const std::vector<Renderable*> &getRenderables() = 0;
-    virtual const std::vector<int> &getRenderableUpdateVector() = 0;
+    virtual std::vector<int> getRenderableUpdateVector() = 0;
 
     virtual ~RenderProvider() {};
 
