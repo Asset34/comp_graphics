@@ -34,7 +34,7 @@ private:
         void renderPolygons(const RenderData &data);
 
         // Buffers
-        GLuint m_vao, m_vbo, m_ebo;
+        GLuint m_vao, m_vbo;
         GLuint m_eboPolygons, m_eboEdges;
 
         Shader m_shader;
