@@ -2,23 +2,22 @@
 #define SHAPE_H_
 
 #include <vector>
+#include <list>
 #include "sceneobj.h"
 
 class Shape : public SceneObj {
 public:
-    Shape(int size, int polygonsNumber);
+    Shape();
     ~Shape();
 
-    int getSize() const;
-    const vec3 &getVertex(int i) const;
-    int getPolygonsNumber() const;
-    int getPolygonSize(int i) const;
-    int getPolygonsOverallSize() const;
-    const std::vector<int> &getPolygonIndices(int i) const;
-    const vec3 &getPolygonColor(int i) const;
- 
-    void setVertex(int i, const vec3 &vertex);
-    void definePolygon(int i, const std::vector<int> &indices, const vec3 &color);
+    void setVertices(const std::vector<vec3> &vertices);
+    void definePolygon(const std::vector<int> &indices, const vec3 &color);
+
+    virtual SceneObjData compileData() const override;
+
+protected:
+    virtual const vec3 &selfOrigin() const override;
+    virtual void transformationCallback() override;
 
 private:
     struct Polygon {
@@ -26,7 +25,8 @@ private:
         vec3 color;
     };
 
-    int m_polygonsOverallSize;
+    vec3 m_centerValue;
+    vec3 m_center;
 
     std::vector<vec3> m_vertices;
     std::vector<Polygon> m_polygons;
