@@ -8,17 +8,18 @@ struct RenderData {
     // Types
     typedef glm::vec3 Vertex;
     typedef glm::vec3 Color;
-    struct Edge {
-        Vertex begin;
-        Vertex end;
-    };
+    typedef glm::vec2 Edge;
     struct Polygon {
-        std::vector<float> Indices;
+        std::vector<int> Indices;
         Color Color;
     };
 
+    // Sizes
+    static const int VertexSize = 3;
+    static const int EdgeSize = 2;
+
     // Flags
-    bool DrawVertices = false;
+    // bool DrawVertices = false;
     bool DrawEdges    = false;
     bool DrawPolygons = false;
     bool UseModelMatr = false;
@@ -26,10 +27,12 @@ struct RenderData {
     bool UseProjMatr  = false;
 
     // Data
-    std::vector<Vertex>  Vertices;
-    std::vector<Edge>    Edges;
-    std::vector<Polygon> Polygons;
+    std::vector<Vertex> Vertices;
+    std::vector<Edge>   Edges;
+    std::vector<Polygon>Polygons;
 
+    // Visual
+    Color EdgeColor;
 };
 
 class Renderable {
