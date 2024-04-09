@@ -1,5 +1,5 @@
-#ifndef SCENEOBJ_H_
-#define SCENEOBJ_H_
+#ifndef GRAPHICOBJ_H_
+#define GRAPHICOBJ_H_
 
 #include <vector>
 #include "glm/glm.hpp"
@@ -9,26 +9,10 @@ using glm::vec4;
 using glm::mat3;
 using glm::mat4;
 
-struct SceneObjData {
-    // Sizes
-    int VertexSize;
-    int VertexNumber;
-    int PolygonNumber;
-
-    // Data
-    std::vector<float> Vertices;
-    std::vector<int> PolygonIndices;
-    std::vector<int> PolygonSizes;
-    std::vector<vec3> PolygonColors;
-
-    mat4 ModelMatrix;
-};
-
-class SceneObj {
-
+class TransformableObj {
 public:
-    SceneObj();
-    virtual ~SceneObj() = 0;
+    TransformableObj();
+    virtual ~TransformableObj() {};
 
     const mat4 &getModelMatrix() const;
     const mat4 &getNormalMatrix() const;
@@ -68,8 +52,6 @@ public:
 
     void coincideWithZ(const vec3 &vector);
 
-    virtual SceneObjData compileData() const = 0;
-
 protected:
     virtual void transformationCallback();
     virtual const vec3 &selfOrigin() const;
@@ -105,4 +87,4 @@ private:
 
 };
 
-#endif // SCENEOBJ_H_
+#endif // GRAPHICOBJ_H_
