@@ -59,6 +59,7 @@ add_executable(lr1
     # ${SRC}/scene.cpp
     # ${SRC}/renderer.cpp
     ${SRC}/window.cpp
+    ${SRC}/main.cpp
     $<TARGET_OBJECTS:glad>
     $<TARGET_OBJECTS:imgui>
 )
