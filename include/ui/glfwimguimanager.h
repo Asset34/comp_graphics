@@ -10,6 +10,7 @@ public:
     GlfwImguiManager(GLFWwindow *w = nullptr);
     virtual ~GlfwImguiManager();
 
+    virtual void render() override;
     virtual void init(GLFWwindow *w);
 
 protected:

@@ -20,6 +20,13 @@ GlfwImguiManager::~GlfwImguiManager()
     this->destroy();
 }
 
+void GlfwImguiManager::render()
+{
+    this->renderBegin();
+    ImGui::ShowDemoWindow();
+    this->renderEnd();
+}
+
 void GlfwImguiManager::init(GLFWwindow *w)
 {
     if (m_window) {
