@@ -2,6 +2,7 @@
 
 #include "glrenderer.h"
 #include "ui/glfwimguicameramanager.h"
+#include "scenes/scenelr1.h"
 
 Window::Window(const std::string &title, int width, int height)
     :m_title(title),
@@ -25,18 +26,19 @@ Window::Window(const std::string &title, int width, int height)
     glfwSetWindowUserPointer(m_window, this);
 
     // Setup scene
-    // m_scene = new SceneLR1;
-    m_scene = nullptr;
+    BasicScene *scene = new SceneLR1;
+    scene->getCameraController()->setAspectRatio((float) width / height);
+    m_scene = scene;
 
     // Setup renderer
     m_renderer = new GLRenderer;
     m_renderer->init();
-    // m_renderer->attach(m_scene);
+    m_renderer->attach(m_scene);
 
     // Setup UI Manager
-    // m_uiManager.init(m_window);
-    // m_uiManager = nullptr;
-    m_uiManager = new GlfwImguiCameraManager(m_window);
+    GlfwImguiCameraManager *manager = new GlfwImguiCameraManager(m_window);
+    manager->attachController(scene->getCameraController());
+    m_uiManager = manager;
 }
 
 Window::~Window()
