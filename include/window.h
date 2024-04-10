@@ -2,16 +2,14 @@
 #define WINDOW_H_H
 
 #include <string>
-
 #include "glad/glad.h"
 #include "glfw/glfw3.h"
-#include "renderer.h"
-#include "scene.h"
-#include "uimanager.h"
+#include "abstract/scene.h"
+#include "abstract/renderer.h"
 
 class Window {
 public:
-    Window(std::string title, int width, int height);
+    Window(const std::string &title, int width, int height);
     ~Window();
 
     void draw();
@@ -19,21 +17,20 @@ public:
 
 private:
     // Event handlers
-    static void resizeEvent(GLFWwindow* window, int width, int height);
-    static void mouseMovementEvent(GLFWwindow* window, double xpos, double ypos);
-    static void museScrollEvent(GLFWwindow* window, double xoffset, double yoffset);
-
-    Renderer m_renderer;
-    UiManager m_uimanager;
-    Scene m_scene;
+    // static void resizeEvent(GLFWwindow* window, int width, int height);
+    // static void mouseMovementEvent(GLFWwindow* window, double xpos, double ypos);
+    // static void museScrollEvent(GLFWwindow* window, double xoffset, double yoffset);
+    
     GLFWwindow* m_window;
-
     std::string m_title;
     int m_width, m_height;
 
-    bool m_mouseFirstClick;
-    float m_mouseLastx, m_mouseLasty;
-    float m_mouseSensitivity;
+    Renderer *m_renderer;
+    Scene *m_scene;
+
+    // bool m_mouseFirstClick;
+    // float m_mouseLastx, m_mouseLasty;
+    // float m_mouseSensitivity;
 
 };
 
