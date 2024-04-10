@@ -54,6 +54,7 @@ add_executable(lr1
     ${SRC}/glrendererunit.cpp
     ${SRC}/shader.cpp
     ${SRC}/shape.cpp
+    ${SRC}/scenes/scenelr1.cpp
     # ${SRC}/camera.cpp
     # ${SRC}/scene.cpp
     # ${SRC}/renderer.cpp
