@@ -1,15 +1,12 @@
 #include "window.h"
 
-#include <iostream>
-#include "scenes/scenelr1.h"
 #include "glrenderer.h"
+#include "ui/glfwimguicameramanager.h"
 
 Window::Window(const std::string &title, int width, int height)
     :m_title(title),
      m_width(width),
      m_height(height)
-    //  m_mouseFirstClick(true),
-    //  m_mouseSensitivity(1.0f)
 {
     // Init OPENGL context
     glfwInit();
@@ -27,18 +24,19 @@ Window::Window(const std::string &title, int width, int height)
     }
     glfwSetWindowUserPointer(m_window, this);
 
-    // Setup event handlers
-    // glfwSetFramebufferSizeCallback(m_window, resizeEvent);
-    // glfwSetCursorPosCallback(m_window, mouseMovementEvent);
-    // glfwSetScrollCallback(m_window, museScrollEvent);
+    // Setup scene
+    // m_scene = new SceneLR1;
+    m_scene = nullptr;
 
-    // TODO: Setup scene
-    m_scene = new SceneLR1;
-
-    // TODO: Setup renderer
+    // Setup renderer
     m_renderer = new GLRenderer;
     m_renderer->init();
-    m_renderer->attach(m_scene);
+    // m_renderer->attach(m_scene);
+
+    // Setup UI Manager
+    // m_uiManager.init(m_window);
+    // m_uiManager = nullptr;
+    m_uiManager = new GlfwImguiCameraManager(m_window);
 }
 
 Window::~Window()
@@ -47,6 +45,12 @@ Window::~Window()
 
     if (m_scene) delete m_scene;
     if (m_renderer) delete m_renderer;
+    if (m_uiManager) delete m_uiManager;
+}
+
+UiManager *Window::getCurrentUiManager() const
+{
+    return m_uiManager;
 }
 
 void Window::draw()
@@ -56,6 +60,7 @@ void Window::draw()
 
         if (m_scene) m_scene->update();
         if (m_renderer) m_renderer->render();
+        if (m_uiManager) m_uiManager->render();
 
         glfwSwapBuffers(m_window);
     }
@@ -65,52 +70,3 @@ bool Window::shouldClose() const
 {
     return glfwWindowShouldClose(m_window);
 }
-
-// void Window::resizeEvent(GLFWwindow *window, int width, int height)
-// {
-//     Window *w = reinterpret_cast<Window *>(glfwGetWindowUserPointer(window));
-
-//     w->m_scene.setCameraAspectRatio((float) width / height);
-//     glViewport(0, 0, width, height);
-// }
-
-// void Window::mouseMovementEvent(GLFWwindow *window, double xpos, double ypos)
-// {
-//     Window *w = reinterpret_cast<Window *>(glfwGetWindowUserPointer(window));
-
-//     int state = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
-//     if (state == GLFW_PRESS)
-//     {
-//         if (w->m_mouseFirstClick) {
-//             w->m_mouseLastx = xpos;
-//             w->m_mouseLasty = ypos;
-
-//             w->m_mouseFirstClick = false;
-//         }
-
-//         float offsetx = (xpos - w->m_mouseLastx) * w->m_mouseSensitivity;
-//         float offsety = (ypos - w->m_mouseLasty) * w->m_mouseSensitivity;
-        
-//         w->m_mouseLastx = xpos;
-//         w->m_mouseLasty = ypos;
-
-//         w->m_scene.cameraRotateYaw(-offsetx);
-//         w->m_scene.cameraRotatePitch(-offsety);
-        
-//     } else {
-//         w->m_mouseFirstClick = true;
-//     }
-// }
-
-// void Window::museScrollEvent(GLFWwindow *window, double xoffset, double yoffset)
-// {
-//     // std::cout << yoffset << std::endl;
-//     Window *w = reinterpret_cast<Window *>(glfwGetWindowUserPointer(window));
-
-//     if (yoffset > 0) {
-//         w->m_scene.cameraZoomIn();
-
-//     } else {
-//         w->m_scene.cameraZoomOut();
-//     }
-// }

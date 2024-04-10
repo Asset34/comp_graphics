@@ -1,3 +1,4 @@
+#include "window.h"
 #include "ui/glfwimguimanager.h"
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_glfw.h"
@@ -7,6 +8,11 @@ GlfwImguiManager::GlfwImguiManager(GLFWwindow *w)
     : m_window(w)
 {
     this->init();
+
+    // Setup Callbacks
+    glfwSetFramebufferSizeCallback(m_window, onWindowResizeEvent);
+    glfwSetCursorPosCallback(m_window, onMouseMovementEvent);
+    glfwSetScrollCallback(m_window, onMouseScrollEvent);
 }
 
 GlfwImguiManager::~GlfwImguiManager()
@@ -54,4 +60,53 @@ void GlfwImguiManager::destroy()
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
+}
+
+void GlfwImguiManager::onWindowResizeEvent(GLFWwindow *w, int width, int height)
+{
+    GlfwImguiManager *current = GlfwImguiManager::retrieveThis(w);
+
+    if (current) {
+        current->onWindowResize(w, width, height);
+    }
+}
+
+void GlfwImguiManager::onMouseMovementEvent(GLFWwindow *w, double xpos, double ypos)
+{
+    // Forward to Imgui
+    ImGuiIO& io = ImGui::GetIO();
+    io.AddMousePosEvent(xpos, ypos);
+
+    // Forward to mine
+    if (!io.WantCaptureMouse) {
+        GlfwImguiManager *current = GlfwImguiManager::retrieveThis(w);
+
+        if (current) {
+            current->onMouseMovement(w, xpos, ypos);
+        }
+    }
+}
+
+void GlfwImguiManager::onMouseScrollEvent(GLFWwindow *w, double xoffset, double yoffset)
+{
+    // Forward to Imgui
+    ImGuiIO& io = ImGui::GetIO();
+    io.AddMouseWheelEvent(xoffset, yoffset);
+
+    // Forward to mine
+    if (!io.WantCaptureMouse) {
+        GlfwImguiManager *current = GlfwImguiManager::retrieveThis(w);
+
+        if (current) {
+            current->onMouseScroll(w, xoffset, yoffset);
+        }
+    }
+}
+
+GlfwImguiManager *GlfwImguiManager::retrieveThis(GLFWwindow *w)
+{
+    Window *window = reinterpret_cast<Window*>(glfwGetWindowUserPointer(w));
+    GlfwImguiManager *thisPtr = dynamic_cast<GlfwImguiManager*>(window->getCurrentUiManager());
+
+    return thisPtr;
 }
