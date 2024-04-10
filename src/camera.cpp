@@ -100,77 +100,49 @@ void Camera::setZoomLimits(float min, float max)
 
 void Camera::setZoomSensitivity(float value)
 {
-
+    m_zoomSensitivity = value;
 }
 
 void Camera::rotateYaw(float angle)
 {
-    if (m_yaw > m_yawMin && m_yaw < m_yawMax) {
-        // Compute new angle
-        float newYaw = m_yaw + angle;
-        if (newYaw < m_yawMin) {
-            newYaw = m_yawMin;
-        }
-        if (newYaw > m_yawMax) {
-            newYaw = m_yawMax;
-        }
+    float rotationAngle = angle;
+    float newYaw = m_yaw + angle;
 
-        // Rotate
-        float rotationAngle = newYaw - m_yaw;
-        this->rotatey(rotationAngle);
+    if (m_yawLimit) {
+        if (newYaw < m_yawMin) newYaw = m_yawMin;
+        if (newYaw > m_yawMax) newYaw = m_yawMax;
 
-        // Update yaw
-        m_yaw = newYaw;
+        rotationAngle = newYaw - m_yaw;
     }
+
+    m_yaw = newYaw;
+    this->rotatey(rotationAngle);
 }
 
 void Camera::rotatePitch(float angle)
 {
-    if (m_pitch > m_pitchMin && m_pitch < m_pitchMax) {
-        // Compute new angle
-        float newpitch = m_pitch + angle;
-        if (newpitch < m_pitchMin) {
-            newpitch = m_pitchMin;
-        }
-        if (newpitch > m_pitchMax) {
-            newpitch = m_pitchMax;
-        }
+    float rotationAngle = angle;
+    float newPitch = m_pitch + angle;
 
-        // Rotate
-        float rotationAngle = newpitch - m_pitch;
-        this->rotateAround(rotationAngle, {0, 0, 0}, this->getUnitx());
+    if (m_pitchLimit) {
+        if (newPitch < m_pitchMin) newPitch = m_pitchMin;
+        if (newPitch > m_pitchMax) newPitch = m_pitchMax;
 
-        // Update pitch
-        m_pitch = newpitch;
+        rotationAngle = newPitch - m_pitch;
     }
+
+    m_pitch = newPitch;
+    this->rotateAround(rotationAngle, {0, 0, 0}, this->getUnitx());
 }
 
 void Camera::ZoomIn()
 {
-    this->scale(ZOOM_IN_FACTOR);
+    // this->scale(ZOOM_IN_FACTOR);
 }
 
 void Camera::ZoomOut()
 {
-    this->scale(ZOOM_OUT_FACTOR);
-}
-
-void Camera::transformationCallback()
-{
-    TransformableObj::transformationCallback();
-
-    // Update units
-    if (!m_callbackOccured) {
-        m_callbackOccured = true;
-        this->lookAt();
-        m_callbackOccured = false;
-    }
-}
-
-void Camera::lookAt(const vec3 &point)
-{
-    vec3 direction = this->getOrigin() - point;
-    this->coincideWithZ(direction);
+    // this->scale(ZOOM_OUT_FACTOR);
 }
 
 void Camera::computeTop(float fov)

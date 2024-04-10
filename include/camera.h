@@ -14,11 +14,11 @@ public:
 
     void setAspectRatio(float aspectRatio) override;
     void setFov(float fov) override;
-    void setVolume(float hfov, float aspectRatio, float near, float far);
+    void setVolume(float hfov, float aspectRatio, float near, float far) override;
     
-    void setNoProjection();
-    void setOrthoProjection();
-    void setPerspectiveProjection();
+    void setNoProjection() override;
+    void setOrthoProjection() override;
+    void setPerspectiveProjection() override;
 
     void setYawLimits(float min, float max);
     void setPitchLimits(float min, float max);
@@ -30,11 +30,7 @@ public:
     void ZoomIn() override;
     void ZoomOut() override;
 
-protected:
-    virtual void transformationCallback() override;
-
 private:
-    void lookAt(const vec3 &point = {0, 0, 0});
     void computeTop(float fov);
     void computeRight(float aspectRatio);
     void computeProjection();
