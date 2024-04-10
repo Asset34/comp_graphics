@@ -44,19 +44,15 @@ message(STATUS ${INCLUDE}/${INCLUDE_LIB}/imgui)
 
 # Create executavle
 add_executable(lr1
-    ${SRC}/main.cpp
-    ${SRC}/line.cpp
     ${SRC}/abstract/renderer.cpp
     ${SRC}/abstract/transformableobj.cpp
     ${SRC}/glrenderer.cpp
     ${SRC}/glrendererunit.cpp
+    ${SRC}/scenes/basicscene.cpp
+    ${SRC}/ui/glfwimguimanager.cpp
     ${SRC}/shader.cpp
     ${SRC}/shape.cpp
     ${SRC}/camera.cpp
-    ${SRC}/scenes/scenelr1.cpp
-    ${SRC}/scenes/basicscene.cpp
-    # ${SRC}/scene.cpp
-    # ${SRC}/renderer.cpp
     ${SRC}/window.cpp
     ${SRC}/main.cpp
     $<TARGET_OBJECTS:glad>
