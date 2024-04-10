@@ -46,7 +46,6 @@ message(STATUS ${INCLUDE}/${INCLUDE_LIB}/imgui)
 add_executable(lr1
     ${SRC}/main.cpp
     ${SRC}/line.cpp
-    ${SRC}/uimanager.cpp
     ${SRC}/abstract/renderer.cpp
     ${SRC}/abstract/transformableobj.cpp
     ${SRC}/glrenderer.cpp
