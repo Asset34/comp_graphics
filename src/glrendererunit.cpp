@@ -60,8 +60,8 @@ void GLRenderer::GLRendererUnit::render(const RenderProviderData &data)
     else m_shader.setMat4("proj", glm::mat4(1)); // Identity Matrix
 
     // Render
-    if (renderData.DrawEdges) this->renderEdges(renderData);
     if (renderData.DrawPolygons) this->renderPolygons(renderData);
+    if (renderData.DrawEdges) this->renderEdges(renderData);
 
     // Unbind VAO
     glBindVertexArray(0);
@@ -159,9 +159,8 @@ void GLRenderer::GLRendererUnit::renderEdges(const RenderData &data)
 
     // Render
     m_shader.setVec3("color", data.EdgeColor);
-    for (auto e : data.Edges) {
-        glDrawElements(GL_LINES, 2, GL_UNSIGNED_INT, (void*)(0));
-    }
+    int n = data.Edges.size() * data.EdgeSize;
+    glDrawElements(GL_LINES, n, GL_UNSIGNED_INT, (void*)(0));
 
     // Unbind buffer
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
