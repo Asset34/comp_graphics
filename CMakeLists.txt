@@ -50,6 +50,7 @@ add_executable(lr1
     ${SRC}/glrendererunit.cpp
     ${SRC}/scenes/basicscene.cpp
     ${SRC}/ui/glfwimguimanager.cpp
+    ${SRC}/ui/glfwimguicameramanager.cpp
     ${SRC}/shader.cpp
     ${SRC}/shape.cpp
     ${SRC}/camera.cpp
