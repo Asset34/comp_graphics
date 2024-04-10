@@ -7,7 +7,7 @@ GLRenderer::GLRendererUnit::GLRendererUnit(Renderable *r)
 {
     // Init shader
     m_shader.addVertexShader(Shaders::BASIC_VERTEX_SHADER);
-    m_shader.addVertexShader(Shaders::BASIC_FRAGMENT_SHADER);
+    m_shader.addFragmentShader(Shaders::BASIC_FRAGMENT_SHADER);
     m_shader.link();
 
     // Init VAO
