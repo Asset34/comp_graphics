@@ -105,7 +105,7 @@ void GLRenderer::GLRendererUnit::loadEdges(const RenderData &data)
     // Process data
 
     int rawDataSize = data.Edges.size() * data.EdgeSize;
-    float rawData[rawDataSize];
+    unsigned int rawData[rawDataSize];
 
     int i = 0;
     for (auto e : data.Edges) {
@@ -134,7 +134,7 @@ void GLRenderer::GLRendererUnit::loadPolygons(const RenderData &data)
     for (auto p : data.Polygons) {
         rawDataSize += p.Indices.size();
     }
-    float rawData[rawDataSize];
+    unsigned int rawData[rawDataSize];
 
     int i = 0;
     for (auto p : data.Polygons) {
