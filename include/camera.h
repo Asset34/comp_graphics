@@ -23,12 +23,16 @@ public:
     void setYawLimits(float min, float max);
     void setPitchLimits(float min, float max);
     void setZoomLimits(float min, float max);
-    void setZoomSensitivity(float value);
+    void setZoomFactor(float factor);
 
     void rotateYaw(float angle) override;
     void rotatePitch(float angle) override;
     void ZoomIn() override;
     void ZoomOut() override;
+
+    void setZoomLimitsFlag(bool flag);
+    void setYawLimitsFlag(bool flag);
+    void setPitchLimitsFlag(bool flag);
 
 private:
     void computeTop(float fov);
@@ -45,12 +49,18 @@ private:
     mat4 m_projMatrix;
     ProjType m_projType;
 
-    static constexpr const float ZOOM_IN_FACTOR = 0.9;
-    static constexpr const float ZOOM_OUT_FACTOR = 0.9;
+    static constexpr const float ZOOM_FACTOR_DEFAULT = 0.9;
+    static constexpr const float YAW_LIMIT_MIN_DEFAULT = -90;
+    static constexpr const float YAW_LIMIT_MAX_DEFAULT = 90;
+    static constexpr const float PITCH_LIMIT_MIN_DEFAULT = -90;
+    static constexpr const float PITCH_LIMIT_MAX_DEFAULT = 90;
+    static constexpr const float ZOOM_LIMIT_MIN_DEFAULT = 0.1;
+    static constexpr const float ZOOM_LIMIT_MAX_DEFAULT = 10;
 
     // Camera values
     float m_yaw, m_pitch;
-    float m_zoomSensitivity;
+    float m_zoom;
+    float m_zoomFactor;
 
     // Volume
     float m_right, m_top, m_near, m_far;
@@ -61,9 +71,8 @@ private:
     float m_zoomMin, m_zoomMax;
 
     // Flags
-    bool m_yawLimit, m_pitchLimit, m_zoomLimit;
+    bool m_yawLimitFlag, m_pitchLimitFlag, m_zoomLimitFlag;
     bool m_callbackOccured;
-
 
 };
 

@@ -6,10 +6,17 @@ Camera::Camera(float hfov, float aspectRatio, float near, float far)
      m_projType(ProjType::No),
      m_yaw(0),
      m_pitch(0),
-     m_zoomSensitivity(1.0),
-     m_yawLimit(false),
-     m_pitchLimit(false),
-     m_zoomLimit(false),
+     m_zoom(1),
+     m_zoomFactor(ZOOM_FACTOR_DEFAULT),
+     m_yawMin(YAW_LIMIT_MIN_DEFAULT),
+     m_yawMax(YAW_LIMIT_MAX_DEFAULT),
+     m_pitchMin(PITCH_LIMIT_MIN_DEFAULT),
+     m_pitchMax(PITCH_LIMIT_MAX_DEFAULT),
+     m_zoomMin(ZOOM_LIMIT_MIN_DEFAULT),
+     m_zoomMax(ZOOM_LIMIT_MAX_DEFAULT),
+     m_yawLimitFlag(false),
+     m_pitchLimitFlag(false),
+     m_zoomLimitFlag(false),
      m_callbackOccured(false)
 {
     this->setVolume(hfov, aspectRatio, near, far);
@@ -98,9 +105,9 @@ void Camera::setZoomLimits(float min, float max)
     m_zoomMax = max;
 }
 
-void Camera::setZoomSensitivity(float value)
+void Camera::setZoomFactor(float factor)
 {
-    m_zoomSensitivity = value;
+    m_zoomFactor = factor;
 }
 
 void Camera::rotateYaw(float angle)
@@ -108,7 +115,7 @@ void Camera::rotateYaw(float angle)
     float rotationAngle = angle;
     float newYaw = m_yaw + angle;
 
-    if (m_yawLimit) {
+    if (m_yawLimitFlag) {
         if (newYaw < m_yawMin) newYaw = m_yawMin;
         if (newYaw > m_yawMax) newYaw = m_yawMax;
 
@@ -124,7 +131,7 @@ void Camera::rotatePitch(float angle)
     float rotationAngle = angle;
     float newPitch = m_pitch + angle;
 
-    if (m_pitchLimit) {
+    if (m_pitchLimitFlag) {
         if (newPitch < m_pitchMin) newPitch = m_pitchMin;
         if (newPitch > m_pitchMax) newPitch = m_pitchMax;
 
@@ -137,12 +144,47 @@ void Camera::rotatePitch(float angle)
 
 void Camera::ZoomIn()
 {
-    // this->scale(ZOOM_IN_FACTOR);
+    float factor = m_zoomFactor;
+    float newZoom = m_zoom * m_zoomFactor;
+    if (m_zoomLimitFlag) {
+        if (newZoom < m_zoomMin) newZoom = m_zoomMin;
+        if (newZoom > m_zoomMax) newZoom = m_zoomMax;
+
+        factor = newZoom / m_zoom;
+    }
+
+    m_zoom = newZoom;
+    this->scale(factor);
 }
 
 void Camera::ZoomOut()
 {
-    // this->scale(ZOOM_OUT_FACTOR);
+    float factor = 1.0 / m_zoomFactor;
+    float newZoom = m_zoom * factor;
+    if (m_zoomLimitFlag) {
+        if (newZoom < m_zoomMin) newZoom = m_zoomMin;
+        if (newZoom > m_zoomMax) newZoom = m_zoomMax;
+
+        factor = newZoom / m_zoom;
+    }
+
+    m_zoom = newZoom;
+    this->scale(factor);
+}
+
+void Camera::setZoomLimitsFlag(bool flag)
+{
+    m_zoomLimitFlag = flag;
+}
+
+void Camera::setYawLimitsFlag(bool flag)
+{
+    m_yawLimitFlag = flag;
+}
+
+void Camera::setPitchLimitsFlag(bool flag)
+{
+    m_pitchLimitFlag = flag;
 }
 
 void Camera::computeTop(float fov)
