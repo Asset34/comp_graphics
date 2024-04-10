@@ -2,7 +2,8 @@
 
 Shape::Shape()
     : m_centerValue(0),
-      m_center(0)
+      m_center(0),
+      m_edgeColor({0, 0, 0})
 {
 }
 
@@ -23,6 +24,15 @@ void Shape::setVertices(const std::vector<vec3> &vertices)
         sumz += vertices[i].z;
     }
     m_centerValue = vec3(sumx/n, sumy/n, sumz/n);
+}
+
+void Shape::defineEdge(int indexBegin, int indexEnd)
+{
+    Edge e;
+    e.indexBegin = indexBegin;
+    e.indexEnd = indexEnd;
+
+    m_edges.push_back(e);
 }
 
 void Shape::definePolygon(const std::vector<int> &indices, const vec3 &color)
@@ -46,6 +56,12 @@ RenderData Shape::getRenderData()
 
     // Setup Data
     data.Vertices = m_vertices;
+
+    data.Edges.reserve(m_edges.size());
+    for (auto e : m_edges) {
+        data.Edges.push_back({e.indexBegin, e.indexEnd});
+    }
+
     data.Polygons.reserve(m_polygons.size());
     for (auto p : m_polygons) {
         RenderData::Polygon dp;
@@ -54,6 +70,9 @@ RenderData Shape::getRenderData()
 
         data.Polygons.push_back(dp);
     }
+
+    // Setup Visuals
+    data.EdgeColor = m_edgeColor;
 
     return data;
 }
