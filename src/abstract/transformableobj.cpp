@@ -144,9 +144,9 @@ void TransformableObj::rotateAround(float angle, const vec3 &point, const vec3 &
 
     this->translate_base(-point);
     this->rotatex_base_values(sinx, cosx);
-    this->rotatey_base_values(siny, cosy);
-    this->rotatez_base(angle);
     this->rotatey_base_values(-siny, cosy);
+    this->rotatez_base(angle);
+    this->rotatey_base_values(siny, cosy);
     this->rotatex_base_values(-sinx, cosx);
     this->translate_base(point);
 
@@ -253,7 +253,7 @@ void TransformableObj::coincideWithZ(const vec3 &vector)
  
     this->translate_base(-m_origin);
     this->rotatex_base_values(sinx, cosx);
-    this->rotatey_base_values(siny, cosy);
+    this->rotatey_base_values(-siny, cosy);
     this->translate_base(m_origin);
 
     this->transformationCallback();
