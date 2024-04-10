@@ -6,6 +6,7 @@ Camera::Camera(float hfov, float aspectRatio, float near, float far)
      m_projType(ProjType::No),
      m_yaw(0),
      m_pitch(0),
+     m_zoomSensitivity(1.0),
      m_yawLimit(false),
      m_pitchLimit(false),
      m_zoomLimit(false),
@@ -91,11 +92,16 @@ void Camera::setPitchLimits(float min, float max)
     m_pitchMax = max;
 }
 
-// void Camera::setZoomLimits(float min, float max)
-// {
-//     m_zoomMin = min;
-//     m_zoomMax = max;
-// }
+void Camera::setZoomLimits(float min, float max)
+{
+    m_zoomMin = min;
+    m_zoomMax = max;
+}
+
+void Camera::setZoomSensitivity(float value)
+{
+
+}
 
 void Camera::rotateYaw(float angle)
 {
