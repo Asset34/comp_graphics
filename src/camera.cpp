@@ -34,7 +34,7 @@ const mat4 &Camera::getViewMatrix()
     return m_viewMatrix;
 }
 
-const mat4 &Camera::getProjectionMatrix() const
+const mat4 &Camera::getProjMatrix() const
 {
     return m_projMatrix;
 }
@@ -149,14 +149,9 @@ void Camera::ZoomOut()
     this->scale(ZOOM_OUT_FACTOR);
 }
 
-SceneObjData Camera::compileData() const
-{
-    return SceneObjData();
-}
-
 void Camera::transformationCallback()
 {
-    SceneObj::transformationCallback();
+    TransformableObj::transformationCallback();
 
     // Update units
     if (!m_callbackOccured) {

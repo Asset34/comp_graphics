@@ -1,15 +1,15 @@
 #ifndef CAMERA_H_
 #define CAMERA_H_
 
-#include "sceneobj.h"
+#include "abstract/transformableobj.h"
 
-class Camera : public SceneObj {
+class Camera : public TransformableObj {
 public:
     Camera(float hfov = 45.0, float aspectRatio = 1.0, float near = 0.01, float far = 100.0);
     ~Camera();
 
     const mat4 &getViewMatrix();
-    const mat4 &getProjectionMatrix() const;
+    const mat4 &getProjMatrix() const;
 
     void setAspectRatio(float aspectRatio);
     void setFov(float fov);
@@ -28,8 +28,6 @@ public:
 
     void ZoomIn();
     void ZoomOut();
-
-    virtual SceneObjData compileData() const override;
 
 protected:
     virtual void transformationCallback() override;
