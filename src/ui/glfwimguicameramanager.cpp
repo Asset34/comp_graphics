@@ -24,6 +24,7 @@ void GlfwImguiCameraManager::onWindowResize(GLFWwindow *w, int width, int height
     if (!m_controller) return;
     
     m_controller->setAspectRatio((float) width / height);
+    glViewport(0, 0, width, height);
 }
 
 void GlfwImguiCameraManager::onMouseMovement(GLFWwindow *w, double xpos, double ypos)
