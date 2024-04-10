@@ -40,7 +40,7 @@ add_library(imgui OBJECT
 target_include_directories(imgui PUBLIC ${INCLUDE}/${INCLUDE_LIB})
 target_include_directories(imgui PUBLIC ${INCLUDE}/${INCLUDE_LIB}/imgui)
 
-# message(STATUS ${INCLUDE}/${INCLUDE_LIB}/imgui)
+message(STATUS ${INCLUDE}/${INCLUDE_LIB}/imgui)
 
 # Create executavle
 add_executable(lr1
@@ -55,6 +55,7 @@ add_executable(lr1
     ${SRC}/shape.cpp
     ${SRC}/camera.cpp
     ${SRC}/scenes/scenelr1.cpp
+    ${SRC}/scenes/basicscene.cpp
     # ${SRC}/scene.cpp
     # ${SRC}/renderer.cpp
     ${SRC}/window.cpp
