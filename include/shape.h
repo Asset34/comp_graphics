@@ -18,6 +18,12 @@ public:
 
     void setEdgeColor(const vec3 &color);
 
+    void setRenderEdgesFlag(bool value);
+    void setRenderPolygonsFlag(bool value);
+    void setUseModelMatrFlag(bool value);
+    void setUseModelViewFlag(bool value);
+    void setUseModelProjFlag(bool value);
+
     RenderData getRenderData() override;
     glm::mat4 getTransformation() override;
 
@@ -46,6 +52,12 @@ private:
     vec3 m_centerValue;
     vec3 m_center;
 
+    // Flags
+    bool m_renderEdges;
+    bool m_renderPolygons;
+    bool m_useModelMatr;
+    bool m_useViewMatr;
+    bool m_useProjMatr;
 
 };
 

@@ -3,7 +3,12 @@
 Shape::Shape()
     : m_centerValue(0),
       m_center(0),
-      m_edgeColor({0, 0, 0})
+      m_edgeColor({0, 0, 0}),
+      m_renderEdges(false),
+      m_renderPolygons(false),
+      m_useModelMatr(false),
+      m_useViewMatr(false),
+      m_useProjMatr(false)
 {
 }
 
@@ -44,17 +49,49 @@ void Shape::definePolygon(const std::vector<int> &indices, const vec3 &color)
     m_polygons.push_back(p);
 }
 
+void Shape::setEdgeColor(const vec3 &color)
+{
+    m_edgeColor = color;
+}
+
+void Shape::setRenderEdgesFlag(bool value)
+{
+    m_renderEdges = value;
+}
+
+void Shape::setRenderPolygonsFlag(bool value)
+{
+    m_renderPolygons = value;
+}
+
+void Shape::setUseModelMatrFlag(bool value)
+{
+    m_useModelMatr = value;
+}
+
+void Shape::setUseModelViewFlag(bool value)
+{
+    m_useViewMatr = value;
+}
+
+void Shape::setUseModelProjFlag(bool value)
+{
+    m_useProjMatr = value;
+}
+
 RenderData Shape::getRenderData()
 {
     RenderData data;
 
     // Setup Flags
-    data.DrawPolygons = true;
-    data.UseModelMatr = true;
-    data.UseViewMatr = true;
-    data.UseProjMatr = true;
+    data.DrawEdges    = m_renderEdges;
+    data.DrawPolygons = m_renderPolygons;
+    data.UseModelMatr = m_useModelMatr;
+    data.UseViewMatr  = m_useViewMatr;
+    data.UseProjMatr  = m_useProjMatr;
 
     // Setup Data
+
     data.Vertices = m_vertices;
 
     data.Edges.reserve(m_edges.size());
