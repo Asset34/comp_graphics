@@ -23,6 +23,10 @@ void GLRenderer::attach(RenderProvider *rp)
 
 void GLRenderer::updateData()
 {
+    if (!m_provider) {
+        return;
+    }
+
     std::vector<int> v = m_provider->getRenderableUpdateVector();
     for (auto i : v) {
         m_units[i].updateData();
@@ -31,6 +35,10 @@ void GLRenderer::updateData()
 
 void GLRenderer::render()
 {
+    if (!m_provider) {
+        return;
+    }
+
     RenderProviderData data = m_provider->getRenderProviderData();
 
     // Render global
