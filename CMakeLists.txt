@@ -48,9 +48,9 @@ add_executable(lr1
     ${SRC}/abstract/transformableobj.cpp
     ${SRC}/glrenderer.cpp
     ${SRC}/glrendererunit.cpp
-    ${SRC}/scenes/basicscene.cpp
     ${SRC}/ui/glfwimguimanager.cpp
     ${SRC}/ui/glfwimguicameramanager.cpp
+    ${SRC}/scenes/basicscene.cpp
     ${SRC}/shader.cpp
     ${SRC}/shape.cpp
     ${SRC}/camera.cpp

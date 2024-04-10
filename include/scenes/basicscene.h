@@ -2,6 +2,7 @@
 #define BASICSCENE_H_
 
 #include "abstract/scene.h"
+#include "interfaces/cameracontroller.h"
 #include "camera.h"
 
 class BasicScene : public Scene {
@@ -9,15 +10,16 @@ public:
     BasicScene();
     virtual ~BasicScene() {};
     
-    Camera &getCamera();
+    CameraController *getCameraController();
     void setBackgroundColor(const glm::vec3 &color);
     
     virtual RenderProviderData getRenderProviderData() override;
-    const std::vector<Renderable*> &getRenderables() override;
+    virtual const std::vector<Renderable*> &getRenderables() override;
     virtual std::vector<int> getRenderableUpdateVector() override;
 
 protected:
     void addRenderable(Renderable *r);
+    Camera &getCamera();
 
 private:
     static const glm::vec3 DEFAULT_BACKGROUND_COLOR; // {0, 0, 0}

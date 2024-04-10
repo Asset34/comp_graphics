@@ -7,9 +7,9 @@ BasicScene::BasicScene()
 {
 }
 
-Camera &BasicScene::getCamera()
+CameraController *BasicScene::getCameraController()
 {
-    return m_camera;
+    return &m_camera;
 }
 
 void BasicScene::setBackgroundColor(const glm::vec3 &color)
@@ -40,4 +40,9 @@ std::vector<int> BasicScene::getRenderableUpdateVector()
 void BasicScene::addRenderable(Renderable *r)
 {
     m_renderables.push_back(r);
+}
+
+Camera &BasicScene::getCamera()
+{
+    return m_camera;
 }
