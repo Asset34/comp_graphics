@@ -21,8 +21,8 @@ public:
     void setRenderEdgesFlag(bool value);
     void setRenderPolygonsFlag(bool value);
     void setUseModelMatrFlag(bool value);
-    void setUseModelViewFlag(bool value);
-    void setUseModelProjFlag(bool value);
+    void setUseViewMatrFlag(bool value);
+    void setUseProjMatrFlag(bool value);
 
     RenderData getRenderData() override;
     glm::mat4 getTransformation() override;

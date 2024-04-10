@@ -46,7 +46,6 @@ target_include_directories(imgui PUBLIC ${INCLUDE}/${INCLUDE_LIB}/imgui)
 add_executable(lr1
     ${SRC}/main.cpp
     ${SRC}/line.cpp
-    ${SRC}/camera.cpp
     ${SRC}/uimanager.cpp
     ${SRC}/abstract/renderer.cpp
     ${SRC}/abstract/transformableobj.cpp
@@ -54,8 +53,8 @@ add_executable(lr1
     ${SRC}/glrendererunit.cpp
     ${SRC}/shader.cpp
     ${SRC}/shape.cpp
+    ${SRC}/camera.cpp
     ${SRC}/scenes/scenelr1.cpp
-    # ${SRC}/camera.cpp
     # ${SRC}/scene.cpp
     # ${SRC}/renderer.cpp
     ${SRC}/window.cpp

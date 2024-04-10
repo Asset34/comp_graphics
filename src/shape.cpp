@@ -69,12 +69,12 @@ void Shape::setUseModelMatrFlag(bool value)
     m_useModelMatr = value;
 }
 
-void Shape::setUseModelViewFlag(bool value)
+void Shape::setUseViewMatrFlag(bool value)
 {
     m_useViewMatr = value;
 }
 
-void Shape::setUseModelProjFlag(bool value)
+void Shape::setUseProjMatrFlag(bool value)
 {
     m_useProjMatr = value;
 }
