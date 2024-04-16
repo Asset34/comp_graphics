@@ -148,7 +148,7 @@ void Camera::ZoomIn()
     float newZoom = m_zoom * m_zoomFactor;
     if (m_zoomLimitFlag) {
         if (newZoom < m_zoomMin) newZoom = m_zoomMin;
-        if (newZoom > m_zoomMax) newZoom = m_zoomMax;
+        // if (newZoom > m_zoomMax) newZoom = m_zoomMax;
 
         factor = newZoom / m_zoom;
     }
@@ -162,7 +162,7 @@ void Camera::ZoomOut()
     float factor = 1.0 / m_zoomFactor;
     float newZoom = m_zoom * factor;
     if (m_zoomLimitFlag) {
-        if (newZoom < m_zoomMin) newZoom = m_zoomMin;
+        // if (newZoom < m_zoomMin) newZoom = m_zoomMin;
         if (newZoom > m_zoomMax) newZoom = m_zoomMax;
 
         factor = newZoom / m_zoom;
