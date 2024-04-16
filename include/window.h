@@ -4,9 +4,10 @@
 #include <string>
 #include "glad/glad.h"
 #include "glfw/glfw3.h"
-#include "abstract/scene.h"
-#include "abstract/renderer.h"
-#include "abstract/uimanager.h"
+// #include "abstract/scene.h"
+// #include "abstract/renderer.h"
+// #include "abstract/uimanager.h"
+#include "workspace.h"
 
 class Window {
 public:
@@ -23,10 +24,7 @@ private:
     std::string m_title;
     int m_width, m_height;
 
-    Renderer *m_renderer;
-    Scene *m_scene;
-    
-    UiManager *m_uiManager;
+    Workspace m_workspace;
 
 };
 

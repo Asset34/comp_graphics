@@ -3,6 +3,7 @@
 #include "glrenderer.h"
 #include "ui/glfwimguicameramanager.h"
 #include "scenes/scenelr1.h"
+#include "glrenderer.h"
 
 Window::Window(const std::string &title, int width, int height)
     :m_title(title),
@@ -25,45 +26,36 @@ Window::Window(const std::string &title, int width, int height)
     }
     glfwSetWindowUserPointer(m_window, this);
 
-    // Setup scene
+    // Setup workspace
+
     BasicScene *scene = new SceneLR1;
     scene->getCameraController()->setAspectRatio((float) width / height);
-    m_scene = scene;
 
-    // Setup renderer
-    m_renderer = new GLRenderer;
-    m_renderer->init();
-    m_renderer->attach(m_scene);
+    GLRenderer *renderer = new GLRenderer;
+    renderer->init();
+    renderer->attach(scene);
 
-    // Setup UI Manager
     GlfwImguiCameraManager *manager = new GlfwImguiCameraManager(m_window);
     manager->attachController(scene->getCameraController());
-    m_uiManager = manager;
+
+    m_workspace.attach(scene, renderer, manager);
 }
 
 Window::~Window()
 {
     glfwTerminate();
-
-    if (m_scene) delete m_scene;
-    if (m_renderer) delete m_renderer;
-    if (m_uiManager) delete m_uiManager;
 }
 
 UiManager *Window::getCurrentUiManager() const
 {
-    return m_uiManager;
+    return m_workspace.getUiManager();
 }
 
 void Window::draw()
 {
     while (!shouldClose()) {
         glfwPollEvents();
-
-        if (m_scene) m_scene->update();
-        if (m_renderer) m_renderer->render();
-        if (m_uiManager) m_uiManager->render();
-
+        m_workspace.run();
         glfwSwapBuffers(m_window);
     }
 }

@@ -52,6 +52,7 @@ add_executable(lr1
     ${SRC}/ui/glfwimguicameramanager.cpp
     ${SRC}/scenes/basicscene.cpp
     ${SRC}/scenes/scenelr1.cpp
+    ${SRC}/workspace.cpp
     ${SRC}/shader.cpp
     ${SRC}/shape.cpp
     ${SRC}/camera.cpp
