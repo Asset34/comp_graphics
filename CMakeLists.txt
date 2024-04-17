@@ -49,7 +49,7 @@ add_executable(lr1
     ${SRC}/glrenderer.cpp
     ${SRC}/glrendererunit.cpp
     ${SRC}/ui/glfwimguimanager.cpp
-    ${SRC}/ui/glfwimguicameramanager.cpp
+    ${SRC}/ui/glfwimguicontrolmanager.cpp
     ${SRC}/scenes/basicscene.cpp
     ${SRC}/scenes/scenelr1.cpp
     ${SRC}/workspace.cpp

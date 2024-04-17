@@ -1,7 +1,7 @@
 #include "glad/glad.h"
-#include "ui/glfwimguicameramanager.h"
+#include "ui/glfwimguicontrolmanager.h"
 
-GlfwImguiCameraManager::GlfwImguiCameraManager(GLFWwindow *w)
+GlfwImguiControlManager::GlfwImguiControlManager(GLFWwindow *w)
     :GlfwImguiManager(w),
      m_mouseFirstClick(true),
      m_mouseSensitivity(1.0),
@@ -9,16 +9,31 @@ GlfwImguiCameraManager::GlfwImguiCameraManager(GLFWwindow *w)
 {
 }
 
-GlfwImguiCameraManager::~GlfwImguiCameraManager()
+GlfwImguiControlManager::~GlfwImguiControlManager()
 {
 }
 
-void GlfwImguiCameraManager::attachController(CameraController *c)
+void GlfwImguiControlManager::attachController(CameraController *c)
 {
     m_controller = c;
 }
 
-void GlfwImguiCameraManager::onWindowResize(GLFWwindow *w, int width, int height)
+void GlfwImguiControlManager::attachControllable(Controllable *c)
+{
+    m_controllable = c;
+}
+
+CameraController *GlfwImguiControlManager::getCameraController() const
+{
+    return m_controller;
+}
+
+Controllable *GlfwImguiControlManager::getControllable() const
+{
+    return m_controllable;
+}
+
+void GlfwImguiControlManager::onWindowResize(GLFWwindow *w, int width, int height)
 {
     // Check
     if (!m_controller) return;
@@ -27,7 +42,7 @@ void GlfwImguiCameraManager::onWindowResize(GLFWwindow *w, int width, int height
     glViewport(0, 0, width, height);
 }
 
-void GlfwImguiCameraManager::onMouseMovement(GLFWwindow *w, double xpos, double ypos)
+void GlfwImguiControlManager::onMouseMovement(GLFWwindow *w, double xpos, double ypos)
 {
     // Check
     if (!m_controller) return;
@@ -61,7 +76,7 @@ void GlfwImguiCameraManager::onMouseMovement(GLFWwindow *w, double xpos, double 
     }
 }
 
-void GlfwImguiCameraManager::onMouseScroll(GLFWwindow *w, double xoffset, double yoffset)
+void GlfwImguiControlManager::onMouseScroll(GLFWwindow *w, double xoffset, double yoffset)
 {
     // Check
     if (!m_controller) return;
