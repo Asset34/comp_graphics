@@ -11,7 +11,7 @@ struct RenderData {
     typedef glm::vec2 Edge;
     struct Polygon {
         std::vector<int> Indices;
-        Color Color;
+        Color color;
     };
 
     // Sizes

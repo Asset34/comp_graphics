@@ -1,7 +1,7 @@
 #include "window.h"
 
 #include "glrenderer.h"
-#include "ui/Lr1UiManager.h"
+#include "ui/lr1uimanager.h"
 #include "scenes/scenelr1.h"
 #include "glrenderer.h"
 

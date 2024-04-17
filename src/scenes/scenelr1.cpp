@@ -96,6 +96,8 @@ void SceneLR1::control(int controlId)
     break;
     // Rotation Around Line
     case 2:
+        std::cout << m_rotationAngle << " " << m_angle << std::endl;
+
         vec3 unit = m_line.getUnit();
         vec3 point = m_line.getBegin();
 

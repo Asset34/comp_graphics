@@ -45,7 +45,8 @@ void LR1UiManager::render()
     ImGui::SliderFloat3("Shape position", m_shapePos, -100.0f, 100.0f);
     ImGui::SliderFloat3("Line - begin", m_lineBegin, -100.0f, 100.0f);
     ImGui::SliderFloat3("Line - end", m_lineEnd, -100.0f, 100.0f);
-    ImGui::SliderAngle("Test", &m_angle);
+    // ImGui::SliderAngle("Test", &m_angle);
+    ImGui::SliderFloat("Angle", &m_angle, -360.0f, 360.0f, "%.0f deg");
     ImGui::End();
 
     // ImGui::ShowDemoWindow();

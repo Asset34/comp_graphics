@@ -103,7 +103,7 @@ RenderData Shape::getRenderData()
     for (auto p : m_polygons) {
         RenderData::Polygon dp;
         dp.Indices = p.indices;
-        dp.Color = p.color;
+        dp.color = p.color;
 
         data.Polygons.push_back(dp);
     }

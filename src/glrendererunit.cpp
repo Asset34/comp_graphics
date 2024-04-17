@@ -174,7 +174,7 @@ void GLRenderer::GLRendererUnit::renderPolygons(const RenderData &data)
     // Render
     unsigned int offset = 0;
     for (auto p : data.Polygons) {
-        m_shader.setVec3("color", p.Color);
+        m_shader.setVec3("color", p.color);
         glDrawElements(GL_TRIANGLE_FAN, p.Indices.size(), GL_UNSIGNED_INT, (void*)(offset * sizeof(GLint)));
 
         offset += p.Indices.size();
