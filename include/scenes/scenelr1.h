@@ -1,9 +1,8 @@
 #ifndef SCENELR1_H_
 #define SCENELR1_H_
 
-#include <vector>
-#include "shape.h"
 #include "interfaces/controllable.h"
+#include "objects/shape.h"
 #include "scenes/basicscene.h"
 
 class SceneLR1 : public BasicScene, public Controllable {

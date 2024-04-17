@@ -1,4 +1,4 @@
-#include "shape.h"
+#include "objects/shape.h"
 
 Shape::Shape()
     : m_centerValue(0),
