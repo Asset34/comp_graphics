@@ -1,5 +1,7 @@
 #include "scenes/scenelr1.h"
 
+#include <iostream>
+
 SceneLR1::SceneLR1()
 {
     // Setup Shape
@@ -40,6 +42,11 @@ SceneLR1::SceneLR1()
     m_shape.setUseViewMatrFlag(true);
     m_shape.setUseProjMatrFlag(true);
     
+    // Setup Line
+    m_line.setBegin({0, 0, 0});
+    m_line.setEnd({1, 0, 0});
+    m_line.setColor({1, 0, 0});
+
     // Setup camera
     Camera &camera = this->getCamera();
     camera.setPerspectiveProjection();
@@ -50,21 +57,23 @@ SceneLR1::SceneLR1()
 
     // Setup Renderables
     this->addRenderable(&m_shape);
+    this->addRenderable(&m_line);
     
     // Setup scene background color
     this->setBackgroundColor({0.2, 0.2, 0.2});
 
-    m_shapeX = 0;
-    m_shapeY = 0;
-    m_shapeZ = 0;
     m_shapeAnglex = 0;
     m_shapeAngley = 0;
     m_shapeAnglez = 0;
     m_shapeRotatex = 0;
     m_shapeRotatey = 0;
     m_shapeRotatez = 0;
-
-    m_shape.translateTo({-40, 20, 0});
+    m_lineBeginx = 0;
+    m_lineBeginy = 0;
+    m_lineBeginz = 0;
+    m_lineEndx = 1;
+    m_lineEndy = 0;
+    m_lineEndz = 0;
 
     m_changed = true;
 }
@@ -86,10 +95,16 @@ void SceneLR1::control(int controlId)
     case 0:
         m_shape.translate({m_shapeMovex, m_shapeMovey, m_shapeMovez});
     break;
+    // Rotate Shape
     case 1:
         m_shape.rotatex(m_shapeRotatex);
         m_shape.rotatey(m_shapeRotatey);
         m_shape.rotatez(m_shapeRotatez);
+    break;
+    // Set Line Points
+    case 2:
+        m_line.setBegin({m_lineBeginx, m_lineBeginy, m_lineBeginz});
+        m_line.setEnd({m_lineEndx, m_lineEndy, m_lineEndz});
     break;
     }
 
@@ -99,8 +114,14 @@ void SceneLR1::control(int controlId)
     m_shapeRotatex = 0;
     m_shapeRotatey = 0;
     m_shapeRotatez = 0;
+    m_lineBeginx = 0;
+    m_lineBeginy = 0;
+    m_lineBeginz = 0;
+    m_lineEndx = 0;
+    m_lineEndy = 0;
+    m_lineEndz = 0;
     
-    m_changed = true;
+    // m_changed = true;
 }
 
 void SceneLR1::receiveValue(int valueId, float sendValue)
@@ -116,6 +137,7 @@ void SceneLR1::receiveValue(int valueId, float sendValue)
     case 2:
         m_shapeMovez = sendValue;
     break;
+    
     case 3:
         m_shapeAnglex += sendValue;
         m_shapeRotatex = sendValue;
@@ -127,6 +149,25 @@ void SceneLR1::receiveValue(int valueId, float sendValue)
     case 5:
         m_shapeAnglez += sendValue;
         m_shapeRotatez = sendValue;
+    break;
+
+    case 6:
+        m_lineBeginx = sendValue;
+    break;
+    case 7:
+        m_lineBeginy = sendValue;
+    break;
+    case 8:
+        m_lineBeginz = sendValue;
+    break;
+    case 9:
+        m_lineEndx = sendValue;
+    break;
+    case 10:
+        m_lineEndy = sendValue;
+    break;
+    case 11:
+        m_lineEndz = sendValue;
     break;
     }
 }
@@ -144,6 +185,7 @@ void SceneLR1::sendValue(int valueId, float &receiver)
     case 2:
         receiver = m_shape.getOrigin().z;
     break;
+
     case 3:
         receiver = m_shapeAnglex;
     break;
@@ -152,6 +194,25 @@ void SceneLR1::sendValue(int valueId, float &receiver)
     break;
     case 5:
         receiver = m_shapeAnglez;
+    break;
+
+    case 6:
+        receiver = m_lineBeginx;
+    break;
+    case 7:
+        receiver = m_lineBeginy;
+    break;
+    case 8:
+        receiver = m_lineBeginz;
+    break;
+    case 9:
+        receiver = m_lineEndx;
+    break;
+    case 10:
+        receiver = m_lineEndy;
+    break;
+    case 11:
+        receiver = m_lineEndz;
     break;
     }
 }
@@ -164,4 +225,9 @@ bool SceneLR1::changed()
 void SceneLR1::changeAck()
 {
     m_changed = false;
+}
+
+std::vector<int> SceneLR1::getRenderableUpdateVector()
+{
+    return {1}; // Update only line data
 }

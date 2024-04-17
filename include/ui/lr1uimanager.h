@@ -13,7 +13,11 @@ public:
 
 private:
     float m_posx, m_posy, m_posz;
+
     float m_anglex, m_angley, m_anglez;
+
+    float m_lineBeginx, m_lineBeginy, m_lineBeginz;
+    float m_lineEndx, m_lineEndy, m_lineEndz;
 
 };
 

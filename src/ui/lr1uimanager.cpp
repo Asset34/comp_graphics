@@ -43,11 +43,18 @@ void LR1UiManager::render()
     ImGui::SliderFloat("Pos_x", &m_posx, -50.0f, 50.0f);
     ImGui::SliderFloat("Pos_y", &m_posy, -50.0f, 50.0f);
     ImGui::SliderFloat("Pos_z", &m_posz, -50.0f, 50.0f);
-    // ImGui::SliderFloat("Angle_x", c->controlFloat(3), -1.0f, 1.0f);
     ImGui::SliderFloat("Angle_x", &m_anglex, -360.0f, 360.0f);
     ImGui::SliderFloat("Angle_y", &m_angley, -360.0f, 360.0f);
     ImGui::SliderFloat("Angle_z", &m_anglez, -360.0f, 360.0f);
+    ImGui::SliderFloat("Line_begin_x", &m_lineBeginx, -50.0f, 50.0f);
+    ImGui::SliderFloat("Line_begin_y", &m_lineBeginy, -50.0f, 50.0f);
+    ImGui::SliderFloat("Line_begin_z", &m_lineBeginz, -50.0f, 50.0f);
+    ImGui::SliderFloat("Line_end_x", &m_lineEndx, -50.0f, 50.0f);
+    ImGui::SliderFloat("Line_end_y", &m_lineEndy, -50.0f, 50.0f);
+    ImGui::SliderFloat("Line_end_z", &m_lineEndz, -50.0f, 50.0f);
+    ImGui::ShowDemoWindow();
     this->renderEnd();
+
 
     //  Movement control
     float movex = m_posx - posx;
@@ -90,4 +97,13 @@ void LR1UiManager::render()
     if (control) {
         c->control(1);
     }
+
+    // Line control
+    c->receiveValue(6, m_lineBeginx);
+    c->receiveValue(7, m_lineBeginy);
+    c->receiveValue(8, m_lineBeginz);
+    c->receiveValue(9, m_lineEndx);
+    c->receiveValue(10, m_lineEndy);
+    c->receiveValue(11, m_lineEndz);
+    c->control(2);
 }

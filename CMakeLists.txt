@@ -54,6 +54,7 @@ add_executable(lr1
     ${SRC}/scenes/basicscene.cpp
     ${SRC}/scenes/scenelr1.cpp
     ${SRC}/objects/shape.cpp
+    ${SRC}/objects/line.cpp
     ${SRC}/workspace.cpp
     ${SRC}/shader.cpp
     ${SRC}/camera.cpp
