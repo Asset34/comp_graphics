@@ -62,18 +62,11 @@ SceneLR1::SceneLR1()
     // Setup scene background color
     this->setBackgroundColor({0.2, 0.2, 0.2});
 
-    m_shapeAnglex = 0;
-    m_shapeAngley = 0;
-    m_shapeAnglez = 0;
-    m_shapeRotatex = 0;
-    m_shapeRotatey = 0;
-    m_shapeRotatez = 0;
-    m_lineBeginx = 0;
-    m_lineBeginy = 0;
-    m_lineBeginz = 0;
-    m_lineEndx = 1;
-    m_lineEndy = 0;
-    m_lineEndz = 0;
+    m_shapeMove = {0, 0, 0};
+    m_lineBegin = {0, 0, 0};
+    m_lineEnd = {1, 0, 0};
+    m_angle = 0;
+    m_rotationAngle = 0;
 
     m_changed = true;
 }
@@ -93,35 +86,27 @@ void SceneLR1::control(int controlId)
     {
     // Move Shape
     case 0:
-        m_shape.translate({m_shapeMovex, m_shapeMovey, m_shapeMovez});
-    break;
-    // Rotate Shape
-    case 1:
-        m_shape.rotatex(m_shapeRotatex);
-        m_shape.rotatey(m_shapeRotatey);
-        m_shape.rotatez(m_shapeRotatez);
+        m_shape.translate(m_shapeMove);
+        m_shapeMove = {0, 0, 0};
     break;
     // Set Line Points
+    case 1:
+        m_line.setBegin(m_lineBegin);
+        m_line.setEnd(m_lineEnd);
+    break;
+    // Rotation Around Line
     case 2:
-        m_line.setBegin({m_lineBeginx, m_lineBeginy, m_lineBeginz});
-        m_line.setEnd({m_lineEndx, m_lineEndy, m_lineEndz});
+        vec3 unit = m_line.getUnit();
+        vec3 point = m_line.getBegin();
+
+        m_shape.rotateAround(m_rotationAngle, point, unit);
+        m_rotationAngle = 0;
+        // m_angle += m_rotationAngle;
     break;
     }
 
-    m_shapeMovex = 0;
-    m_shapeMovey = 0;
-    m_shapeMovez = 0;
-    m_shapeRotatex = 0;
-    m_shapeRotatey = 0;
-    m_shapeRotatez = 0;
-    m_lineBeginx = 0;
-    m_lineBeginy = 0;
-    m_lineBeginz = 0;
-    m_lineEndx = 0;
-    m_lineEndy = 0;
-    m_lineEndz = 0;
-    
-    // m_changed = true;
+    // m_angle += m_rotationAngle;
+    m_changed = true;
 }
 
 void SceneLR1::receiveValue(int valueId, float sendValue)
@@ -129,45 +114,37 @@ void SceneLR1::receiveValue(int valueId, float sendValue)
     switch (valueId)
     {
     case 0:
-        m_shapeMovex = sendValue;
+        m_shapeMove.x = sendValue;
     break;
     case 1:
-        m_shapeMovey = sendValue;
+        m_shapeMove.y = sendValue;
     break;
     case 2:
-        m_shapeMovez = sendValue;
-    break;
-    
-    case 3:
-        m_shapeAnglex += sendValue;
-        m_shapeRotatex = sendValue;
-    break;
-    case 4:
-        m_shapeAngley += sendValue;
-        m_shapeRotatey = sendValue;
-    break;
-    case 5:
-        m_shapeAnglez += sendValue;
-        m_shapeRotatez = sendValue;
+        m_shapeMove.z = sendValue;
     break;
 
     case 6:
-        m_lineBeginx = sendValue;
+        m_lineBegin.x = sendValue;
     break;
     case 7:
-        m_lineBeginy = sendValue;
+        m_lineBegin.y = sendValue;
     break;
     case 8:
-        m_lineBeginz = sendValue;
+        m_lineBegin.z = sendValue;
     break;
     case 9:
-        m_lineEndx = sendValue;
+        m_lineEnd.x = sendValue;
     break;
     case 10:
-        m_lineEndy = sendValue;
+        m_lineEnd.y = sendValue;
     break;
     case 11:
-        m_lineEndz = sendValue;
+        m_lineEnd.z = sendValue;
+    break;
+
+    case 12:
+        m_rotationAngle = sendValue;
+        m_angle += sendValue;
     break;
     }
 }
@@ -187,32 +164,7 @@ void SceneLR1::sendValue(int valueId, float &receiver)
     break;
 
     case 3:
-        receiver = m_shapeAnglex;
-    break;
-    case 4:
-        receiver = m_shapeAngley;
-    break;
-    case 5:
-        receiver = m_shapeAnglez;
-    break;
-
-    case 6:
-        receiver = m_lineBeginx;
-    break;
-    case 7:
-        receiver = m_lineBeginy;
-    break;
-    case 8:
-        receiver = m_lineBeginz;
-    break;
-    case 9:
-        receiver = m_lineEndx;
-    break;
-    case 10:
-        receiver = m_lineEndy;
-    break;
-    case 11:
-        receiver = m_lineEndz;
+        receiver = m_angle;
     break;
     }
 }

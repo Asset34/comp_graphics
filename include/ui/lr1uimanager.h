@@ -12,12 +12,10 @@ public:
     virtual void render() override;
 
 private:
-    float m_posx, m_posy, m_posz;
-
-    float m_anglex, m_angley, m_anglez;
-
-    float m_lineBeginx, m_lineBeginy, m_lineBeginz;
-    float m_lineEndx, m_lineEndy, m_lineEndz;
+    float m_shapePos[3];
+    float m_lineBegin[3];
+    float m_lineEnd[3];
+    float m_angle;
 
 };
 

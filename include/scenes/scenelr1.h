@@ -27,12 +27,11 @@ private:
 
     bool m_changed;
 
-    float m_shapeMovex, m_shapeMovey, m_shapeMovez;
-    float m_shapeAnglex, m_shapeAngley, m_shapeAnglez;
-    float m_shapeRotatex, m_shapeRotatey, m_shapeRotatez;
-
-    float m_lineBeginx, m_lineBeginy, m_lineBeginz;
-    float m_lineEndx, m_lineEndy, m_lineEndz;
+    vec3 m_shapeMove;
+    vec3 m_lineBegin;
+    vec3 m_lineEnd;
+    float m_rotationAngle;
+    float m_angle;
 
 };
 
