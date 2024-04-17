@@ -29,6 +29,9 @@ UiManager *Workspace::getUiManager() const
 void Workspace::run()
 {
     if (m_scene) m_scene->update();
-    if (m_renderer) m_renderer->render();
+    if (m_renderer) {
+        m_renderer->updateData();
+        m_renderer->render();
+    }
     if (m_uiManager) m_uiManager->render();
 }
