@@ -2,7 +2,7 @@
 #define GLFWIMGUIMANAGER_H_
 
 #include "abstract/uimanager.h"
-#include "scenes/basicscene.h"
+// #include "scenes/scene3d.h"
 #include "glfw/glfw3.h"
 
 class GlfwImguiManager : public UiManager {

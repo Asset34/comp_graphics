@@ -13,7 +13,7 @@ GlfwImguiControlManager::~GlfwImguiControlManager()
 {
 }
 
-void GlfwImguiControlManager::attachController(CameraController *c)
+void GlfwImguiControlManager::attachController(ObservationController3D *c)
 {
     m_controller = c;
 }
@@ -23,7 +23,7 @@ void GlfwImguiControlManager::attachControllable(Controllable *c)
     m_controllable = c;
 }
 
-CameraController *GlfwImguiControlManager::getCameraController() const
+ObservationController3D *GlfwImguiControlManager::getObservationController() const
 {
     return m_controller;
 }
@@ -68,8 +68,8 @@ void GlfwImguiControlManager::onMouseMovement(GLFWwindow *w, double xpos, double
         m_mouseLasty = ypos;
 
         // Control camera rotation
-        m_controller->rotateYaw(-offsetx);
-        m_controller->rotatePitch(-offsety);
+        m_controller->rotateHorizontal(-offsetx);
+        m_controller->rotateVertical(-offsety);
         
     } else {
         m_mouseFirstClick = true;
@@ -82,6 +82,6 @@ void GlfwImguiControlManager::onMouseScroll(GLFWwindow *w, double xoffset, doubl
     if (!m_controller) return;
 
     // Process event
-    if (yoffset > 0) m_controller->ZoomIn();
-    else m_controller->ZoomOut();
+    if (yoffset > 0) m_controller->zoomIn();
+    else m_controller->zoomOut();
 }

@@ -1,16 +1,15 @@
-#ifndef BASICSCENE_H_
-#define BASICSCENE_H_
+#ifndef SCENE3D_H_
+#define SCENE3D_H_
 
 #include "abstract/scene.h"
-#include "interfaces/cameracontroller.h"
-#include "camera.h"
+#include "camera3d.h"
 
-class BasicScene : public Scene {
+class Scene3D : public Scene {
 public:
-    BasicScene();
-    virtual ~BasicScene() {};
+    Scene3D();
+    virtual ~Scene3D() {};
     
-    CameraController *getCameraController();
+    ObservationController3D *getObservationController();
     void setBackgroundColor(const glm::vec3 &color);
     
     virtual RenderProviderData getRenderProviderData() override;
@@ -19,15 +18,15 @@ public:
 
 protected:
     void addRenderable(Renderable *r);
-    Camera &getCamera();
+    Camera3D &getCamera();
 
 private:
     static const glm::vec3 DEFAULT_BACKGROUND_COLOR; // {0, 0, 0}
 
     std::vector<Renderable*> m_renderables;
-    Camera m_camera;
+    Camera3D m_camera;
     glm::vec3 m_backgroundColor;
 
 };
 
-#endif // BASICSCENE_H_
+#endif // SCENE3D_H_

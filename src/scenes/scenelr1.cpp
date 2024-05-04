@@ -1,7 +1,5 @@
 #include "scenes/scenelr1.h"
 
-#include <iostream>
-
 SceneLR1::SceneLR1()
 {
     // Setup Shape
@@ -48,7 +46,7 @@ SceneLR1::SceneLR1()
     m_line.setColor({1, 0, 0});
 
     // Setup camera
-    Camera &camera = this->getCamera();
+    Camera3D &camera = this->getCamera();
     camera.setPerspectiveProjection();
     camera.setVolume(90, 1.0, 0.01, 1000);
     camera.translate({0, 0, 100});
@@ -113,8 +111,6 @@ void SceneLR1::control(int controlId)
     break;
     // Rotation Around Line
     case 2:
-        std::cout << m_rotationAngle << " " << m_angle << std::endl;
-
         vec3 unit = m_line.getUnit();
         vec3 point = m_line.getBegin();
 

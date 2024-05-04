@@ -2,11 +2,11 @@
 #define SCENELR1_H_
 
 #include "interfaces/controllable.h"
-#include "scenes/basicscene.h"
+#include "scenes/scene3d.h"
 #include "objects/shape.h"
 #include "objects/line.h"
 
-class SceneLR1 : public BasicScene, public Controllable {
+class SceneLR1 : public Scene3D, public Controllable {
 public:
     SceneLR1();
     ~SceneLR1();

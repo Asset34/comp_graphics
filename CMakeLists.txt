@@ -49,13 +49,13 @@ add_executable(project
     ${SRC}/ui/glfwimguimanager.cpp
     ${SRC}/ui/glfwimguicontrolmanager.cpp
     ${SRC}/ui/lr1uimanager.cpp
-    ${SRC}/scenes/basicscene.cpp
+    ${SRC}/scenes/scene3d.cpp
     ${SRC}/scenes/scenelr1.cpp
     ${SRC}/objects/shape.cpp
     ${SRC}/objects/line.cpp
     ${SRC}/workspace.cpp
     ${SRC}/shader.cpp
-    ${SRC}/camera.cpp
+    ${SRC}/camera3d.cpp
     ${SRC}/window.cpp
     ${SRC}/main.cpp
     $<TARGET_OBJECTS:glad>

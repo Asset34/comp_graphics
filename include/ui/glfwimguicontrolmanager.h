@@ -2,7 +2,7 @@
 #define GLFWIMGUICONTROLMANAGER_H_
 
 #include "ui/glfwimguimanager.h"
-#include "interfaces/cameracontroller.h"
+#include "interfaces/observationcontroller3d.h"
 #include "interfaces/controllable.h"
 
 class GlfwImguiControlManager : public GlfwImguiManager {
@@ -10,10 +10,10 @@ public:
     GlfwImguiControlManager(GLFWwindow *w = nullptr);
     virtual ~GlfwImguiControlManager();
 
-    void attachController(CameraController *c);
+    void attachController(ObservationController3D *c);
     void attachControllable(Controllable *c);
 
-    CameraController *getCameraController() const;
+    ObservationController3D *getObservationController() const;
     Controllable *getControllable() const;
 
 protected:
@@ -26,7 +26,7 @@ private:
     float m_mouseLastx, m_mouseLasty;
     float m_mouseSensitivity;
 
-    CameraController *m_controller;
+    ObservationController3D *m_controller;
     Controllable *m_controllable;
 
 };

@@ -29,14 +29,14 @@ Window::Window(const std::string &title, int width, int height)
     // Setup workspace
 
     SceneLR1 *scene = new SceneLR1;
-    scene->getCameraController()->setAspectRatio((float) width / height);
+    scene->getObservationController()->setAspectRatio((float) width / height);
 
     GLRenderer *renderer = new GLRenderer;
     renderer->init();
     renderer->attach(scene);
 
     LR1UiManager *manager = new LR1UiManager(m_window);
-    manager->attachController(scene->getCameraController());
+    manager->attachController(scene->getObservationController());
     manager->attachControllable(scene);
 
     m_workspace.attach(scene, renderer, manager);
