@@ -40,8 +40,6 @@ add_library(imgui OBJECT
 target_include_directories(imgui PUBLIC ${INCLUDE}/${INCLUDE_LIB})
 target_include_directories(imgui PUBLIC ${INCLUDE}/${INCLUDE_LIB}/imgui)
 
-message(STATUS ${INCLUDE}/${INCLUDE_LIB}/imgui)
-
 # Create executavle
 add_executable(lr1
     ${SRC}/abstract/renderer.cpp
