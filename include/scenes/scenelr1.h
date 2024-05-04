@@ -33,6 +33,8 @@ private:
     float m_rotationAngle;
     float m_angle;
 
+    bool m_lineFlag;
+
 };
 
 #endif // SCENELR1_H_

@@ -63,12 +63,13 @@ SceneLR1::SceneLR1()
     this->setBackgroundColor({0.2, 0.2, 0.2});
 
     m_shapeMove = {0, 0, 0};
-    m_lineBegin = {0, 0, 0};
-    m_lineEnd = {1, 0, 0};
+    m_lineBegin = {30, -30, 20};
+    m_lineEnd = {30, 30, -20};
     m_angle = 0;
     m_rotationAngle = 0;
 
-    m_changed = true;
+    // m_changed = true;
+    m_lineFlag = false;
 }
 
 SceneLR1::~SceneLR1()
@@ -77,7 +78,7 @@ SceneLR1::~SceneLR1()
 
 void SceneLR1::update()
 {
-    m_changed = true;
+    // m_changed = true;
 }
 
 void SceneLR1::control(int controlId)
@@ -88,11 +89,27 @@ void SceneLR1::control(int controlId)
     case 0:
         m_shape.translate(m_shapeMove);
         m_shapeMove = {0, 0, 0};
+
+        m_angle = 0;
+        m_rotationAngle = 0;
+        // m_changed = true;
     break;
     // Set Line Points
     case 1:
         m_line.setBegin(m_lineBegin);
         m_line.setEnd(m_lineEnd);
+
+        if (m_lineFlag) {
+            m_angle = 0;
+            m_rotationAngle = 0;
+
+
+            m_lineFlag = false;
+        }
+
+        // m_angle = 0;
+        // m_rotationAngle = 0;
+        // m_changed = true;
     break;
     // Rotation Around Line
     case 2:
@@ -103,11 +120,9 @@ void SceneLR1::control(int controlId)
 
         m_shape.rotateAround(m_rotationAngle, point, unit);
         m_rotationAngle = 0;
-        // m_angle += m_rotationAngle;
     break;
     }
 
-    // m_angle += m_rotationAngle;
     m_changed = true;
 }
 
@@ -126,22 +141,34 @@ void SceneLR1::receiveValue(int valueId, float sendValue)
     break;
 
     case 6:
+        if (sendValue != m_lineBegin.x) m_lineFlag = true;
         m_lineBegin.x = sendValue;
+
     break;
     case 7:
+        if (sendValue != m_lineBegin.y) m_lineFlag = true;
         m_lineBegin.y = sendValue;
+
     break;
     case 8:
+        if (sendValue != m_lineBegin.z) m_lineFlag = true;
         m_lineBegin.z = sendValue;
+
     break;
     case 9:
+        if (sendValue != m_lineEnd.x) m_lineFlag = true;
         m_lineEnd.x = sendValue;
+
     break;
     case 10:
+        if (sendValue != m_lineEnd.y) m_lineFlag = true;
         m_lineEnd.y = sendValue;
+
     break;
     case 11:
+        if (sendValue != m_lineEnd.z) m_lineFlag = true;
         m_lineEnd.z = sendValue;
+
     break;
 
     case 12:

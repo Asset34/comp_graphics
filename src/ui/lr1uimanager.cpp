@@ -4,9 +4,24 @@
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
 
+#include <iostream>
+
 LR1UiManager::LR1UiManager(GLFWwindow * w)
     : GlfwImguiControlManager(w)
 {
+    m_lineBegin[0] = 30;
+    m_lineBegin[1] = -30;
+    m_lineBegin[2] = 20;
+
+    m_lineEnd[0] = 30;
+    m_lineEnd[1] = 30;
+    m_lineEnd[2] = -20;
+
+    m_shapePos[0] = 0;
+    m_shapePos[1] = 0;
+    m_shapePos[2] = 0;
+
+    m_angle = 0;
 }
 
 LR1UiManager::~LR1UiManager()
@@ -34,6 +49,9 @@ void LR1UiManager::render()
         m_shapePos[1] = shapePos[1];
         m_shapePos[2] = shapePos[2];
 
+        // std::cout << angle << std::endl;
+
+        // m_angle = 0;
         m_angle = angle;
     }
     c->changeAck();
@@ -45,7 +63,6 @@ void LR1UiManager::render()
     ImGui::SliderFloat3("Shape position", m_shapePos, -100.0f, 100.0f);
     ImGui::SliderFloat3("Line - begin", m_lineBegin, -100.0f, 100.0f);
     ImGui::SliderFloat3("Line - end", m_lineEnd, -100.0f, 100.0f);
-    // ImGui::SliderAngle("Test", &m_angle);
     ImGui::SliderFloat("Angle", &m_angle, -360.0f, 360.0f, "%.0f deg");
     ImGui::End();
 
