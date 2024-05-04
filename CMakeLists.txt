@@ -41,7 +41,7 @@ target_include_directories(imgui PUBLIC ${INCLUDE}/${INCLUDE_LIB})
 target_include_directories(imgui PUBLIC ${INCLUDE}/${INCLUDE_LIB}/imgui)
 
 # Create executavle
-add_executable(lr1
+add_executable(project
     ${SRC}/abstract/renderer.cpp
     ${SRC}/abstract/transformableobj.cpp
     ${SRC}/glrenderer.cpp
@@ -61,7 +61,7 @@ add_executable(lr1
     $<TARGET_OBJECTS:glad>
     $<TARGET_OBJECTS:imgui>
 )
-set_target_properties(lr1 PROPERTIES CXX_STANDARD 11)
-target_link_libraries(lr1 libglfw3)
-target_include_directories(lr1 PUBLIC ${INCLUDE})
-target_include_directories(lr1 PUBLIC ${INCLUDE}/${INCLUDE_LIB})
+set_target_properties(project PROPERTIES CXX_STANDARD 11)
+target_link_libraries(project libglfw3)
+target_include_directories(project PUBLIC ${INCLUDE})
+target_include_directories(project PUBLIC ${INCLUDE}/${INCLUDE_LIB})
