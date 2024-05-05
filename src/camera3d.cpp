@@ -117,6 +117,24 @@ void Camera3D::setZoomFactor(float factor)
     m_zoomFactor = factor;
 }
 
+void Camera3D::translateForward(float d)
+{
+    vec3 dv = -this->getForwardUnit() * d;
+    this->translate(dv);
+
+    // Update View Point
+    m_viewPoint += dv;
+}
+
+void Camera3D::translateSide(float d)
+{
+    vec3 dv = this->getSideUnit() * d;
+    this->translate(dv);
+
+    // Update View Point
+    m_viewPoint += dv;
+}
+
 void Camera3D::rotateHorizontal(float angle)
 {
     float rotationAngle = angle;
@@ -200,6 +218,19 @@ void Camera3D::lookAt(const vec3 &viewPoint)
     this->coincideWithZReverse(unit);
 
     m_viewPoint = viewPoint;
+}
+
+vec3 Camera3D::getForwardUnit() const
+{
+    vec3 unit = this->getUnitz();
+    unit.y = 0;
+
+    return glm::normalize(unit);
+}
+
+vec3 Camera3D::getSideUnit() const
+{
+    return this->getUnitx();
 }
 
 void Camera3D::computeTop(float fov)

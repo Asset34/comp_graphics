@@ -12,6 +12,9 @@ public:
     void attachObservationController(ObservationController3D *c);
     void setMouseSensitivity(float sensitivity);
 
+    void setTranslationSensitivity(float sensitivity);
+    void setRotatonSensitivity(float sensitivity);
+
 protected:
     void onWindowResize(GLFWwindow *w, int width, int height) override;
     void onMouseMovement(GLFWwindow *w, double xpos, double ypos) override;
@@ -22,8 +25,10 @@ private:
     
     bool m_mouseFirstClick;
     float m_mouseLastx, m_mouseLasty;
-    float m_mouseSensitivity;
-    
+
+    float m_translationSensitivity;
+    float m_rotationSensitivity;
+        
 };
 
 #endif // UISCENECONTROLLER3D_H_

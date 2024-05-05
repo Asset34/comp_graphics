@@ -27,6 +27,8 @@ public:
     void setZoomLimits(float min, float max);
     void setZoomFactor(float factor);
 
+    void translateForward(float d) override;
+    void translateSide(float d) override;
     void rotateHorizontal(float angle) override;
     void rotateVertical(float angle) override;
     void zoomIn() override;
