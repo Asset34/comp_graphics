@@ -4,7 +4,7 @@ const vec3 TransformableObj::UNITX_DEFAULT = {1, 0, 0};
 const vec3 TransformableObj::UNITY_DEFAULT = {0, 1, 0};
 const vec3 TransformableObj::UNITZ_DEFAULT = {0, 0, 1};
 const vec3 TransformableObj::ORIGIN_DEFAULT = {0, 0, 0};
-const vec3 TransformableObj::SCALES_DEFAULT = {0, 0, 0};
+const vec3 TransformableObj::SCALES_DEFAULT = {1, 1, 1};
 
 TransformableObj::TransformableObj()
     :m_modelMatrix(1.0f), // Identity matrix
