@@ -4,6 +4,7 @@ Camera3D::Camera3D(float hfov, float aspectRatio, float near, float far)
     :m_viewMatrix(1.0f),
      m_projMatrix(1.0f),
      m_projType(ProjType::No),
+     m_viewPoint({0, 0, 0}),
      m_horizontal(0),
      m_vertical(0),
      m_zoom(1),
@@ -129,7 +130,7 @@ void Camera3D::rotateHorizontal(float angle)
     }
 
     m_horizontal = newHorizontal;
-    this->rotatey(rotationAngle);
+    this->rotatey(rotationAngle, m_viewPoint);
 }
 
 void Camera3D::rotateVertical(float angle)
@@ -145,7 +146,7 @@ void Camera3D::rotateVertical(float angle)
     }
 
     m_vertical = newVertical;
-    this->rotateAround(rotationAngle, {0, 0, 0}, this->getUnitx());
+    this->rotateAround(rotationAngle, m_viewPoint, this->getSideUnit());
 }
 
 void Camera3D::zoomIn()
@@ -159,7 +160,7 @@ void Camera3D::zoomIn()
     }
 
     m_zoom = newZoom;
-    this->scale(factor);
+    this->scale(factor, m_viewPoint);
 }
 
 void Camera3D::zoomOut()
@@ -173,7 +174,7 @@ void Camera3D::zoomOut()
     }
 
     m_zoom = newZoom;
-    this->scale(factor);
+    this->scale(factor, m_viewPoint);
 }
 
 void Camera3D::setZoomLimitsFlag(bool flag)
@@ -189,6 +190,16 @@ void Camera3D::setHorizontalLimitsFlag(bool flag)
 void Camera3D::setVerticalLimitsFlag(bool flag)
 {
     m_verticalLimitFlag = flag;
+}
+
+void Camera3D::lookAt(const vec3 &viewPoint)
+{
+    vec3 unit = this->selfOrigin() - viewPoint;
+    unit = glm::normalize(unit);
+
+    this->coincideWithZReverse(unit);
+
+    m_viewPoint = viewPoint;
 }
 
 void Camera3D::computeTop(float fov)

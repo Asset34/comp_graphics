@@ -52,6 +52,7 @@ public:
     void reflect(const vec3 &point, const vec3 &normal);
 
     void coincideWithZ(const vec3 &vector);
+    void coincideWithZReverse(const vec3 &vector);
 
     void resetAngle();
     void trackAngle(bool value);

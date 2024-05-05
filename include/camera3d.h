@@ -36,6 +36,11 @@ public:
     void setHorizontalLimitsFlag(bool flag);
     void setVerticalLimitsFlag(bool flag);
 
+    void lookAt(const vec3 &viewPoint);
+
+    vec3 getForwardUnit() const;
+    vec3 getSideUnit() const;
+
 private:
     void computeTop(float fov);
     void computeRight(float aspectRatio);
@@ -60,6 +65,7 @@ private:
     static constexpr const float ZOOM_LIMIT_MAX_DEFAULT = 10;
 
     // Camera values
+    vec3 m_viewPoint;
     float m_horizontal, m_vertical;
     float m_zoom;
     float m_zoomFactor;

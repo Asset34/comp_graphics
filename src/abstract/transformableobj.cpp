@@ -269,6 +269,19 @@ void TransformableObj::coincideWithZ(const vec3 &vector)
     this->transformationCallback();
 }
 
+void TransformableObj::coincideWithZReverse(const vec3 &vector)
+{
+    float cosx, sinx, cosy, siny;
+    this->coincidez_values(vector, sinx, cosx, siny, cosy);
+ 
+    this->translate_base(-m_origin);
+    this->rotatey_base_values(siny, cosy);
+    this->rotatex_base_values(-sinx, cosx);
+    this->translate_base(m_origin);
+
+    this->transformationCallback();
+}
+
 void TransformableObj::resetAngle()
 {
     m_angle = 0;
