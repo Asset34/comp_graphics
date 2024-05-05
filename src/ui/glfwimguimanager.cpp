@@ -55,6 +55,11 @@ void GlfwImguiManager::renderEnd()
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
+GLFWwindow *GlfwImguiManager::getWindowPtr() const
+{
+    return m_window;
+}
+
 void GlfwImguiManager::init()
 {
     // Setup Dear ImGui context

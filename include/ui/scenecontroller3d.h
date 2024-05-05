@@ -20,6 +20,8 @@ protected:
 private:
     static const float DEFAULT_SENSITIVITY; // 1.0
 
+    void initObservationObj();
+
     ObservationController3D *m_observationController;
     
     bool m_mouseFirstClick;

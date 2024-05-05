@@ -18,6 +18,7 @@ SceneController3D::~SceneController3D()
 void SceneController3D::attachObservationController(ObservationController3D *c)
 {
     m_observationController = c;
+    this->initObservationObj();
 }
 
 void SceneController3D::setMouseSensitivity(float sensitivity)
@@ -76,4 +77,12 @@ void SceneController3D::onMouseScroll(GLFWwindow *w, double xoffset, double yoff
     // Process event
     if (yoffset > 0) m_observationController->zoomIn();
     else m_observationController->zoomOut();
+}
+
+void SceneController3D::initObservationObj()
+{
+    // Init aspect ration
+    int width, height;
+    glfwGetWindowSize(this->getWindowPtr(), &width, &height);
+    m_observationController->setAspectRatio((float) width / height);
 }

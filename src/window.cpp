@@ -29,7 +29,6 @@ Window::Window(const std::string &title, int width, int height)
     // Setup workspace
 
     SceneLR1 *scene = new SceneLR1;
-    scene->getObservationController()->setAspectRatio((float) width / height);
 
     GLRenderer *renderer = new GLRenderer;
     renderer->init();

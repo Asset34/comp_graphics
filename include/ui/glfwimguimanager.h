@@ -22,6 +22,8 @@ protected:
     virtual void onMouseMovement(GLFWwindow *w, double xpos, double ypos) = 0;
     virtual void onMouseScroll(GLFWwindow *w, double xoffset, double yoffset) = 0;
 
+    GLFWwindow *getWindowPtr() const;
+
 private:
     void init();
     void destroy();
