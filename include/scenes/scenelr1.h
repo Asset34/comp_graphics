@@ -12,14 +12,12 @@ public:
     ~SceneLR1();
 
     void update() override;
-
-    void control(int controlId) override;
-    void receiveValue(int valueId, float sendValue) override;
-    void sendValue(int valueId, float &receiver) override;
-    bool changed() override;
-    void changeAck() override;
-
     std::vector<int> getRenderableUpdateVector() override;
+
+    void control(int cmd) override;
+    bool updated() override;
+    void updateAck() override;
+    std::list<int> getUpdateList() override;
 
 private:
     Shape m_shape;

@@ -33,5 +33,5 @@ void Workspace::run()
         m_renderer->updateData();
         m_renderer->render();
     }
-    if (m_uiManager) m_uiManager->render();
+    if (m_uiManager) m_uiManager->manage();
 }

@@ -1,7 +1,7 @@
 #include "window.h"
 
 #include "glrenderer.h"
-#include "ui/lr1uimanager.h"
+#include "ui/lr1controller.h"
 #include "scenes/scenelr1.h"
 #include "glrenderer.h"
 
@@ -35,11 +35,11 @@ Window::Window(const std::string &title, int width, int height)
     renderer->init();
     renderer->attach(scene);
 
-    LR1UiManager *manager = new LR1UiManager(m_window);
-    manager->attachController(scene->getObservationController());
-    manager->attachControllable(scene);
+    Lr1Controller *uiManager = new Lr1Controller(m_window);
+    uiManager->attachControllable(scene);
+    uiManager->attachObservationController(scene->getObservationController());
 
-    m_workspace.attach(scene, renderer, manager);
+    m_workspace.attach(scene, renderer, uiManager);
 }
 
 Window::~Window()

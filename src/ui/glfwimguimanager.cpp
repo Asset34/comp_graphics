@@ -20,11 +20,9 @@ GlfwImguiManager::~GlfwImguiManager()
     this->destroy();
 }
 
-void GlfwImguiManager::render()
+void GlfwImguiManager::manage()
 {
-    this->renderBegin();
-    ImGui::ShowDemoWindow();
-    this->renderEnd();
+    this->render();
 }
 
 void GlfwImguiManager::init(GLFWwindow *w)
@@ -35,6 +33,13 @@ void GlfwImguiManager::init(GLFWwindow *w)
     }
 
     if (w) this->init();
+}
+
+void GlfwImguiManager::render()
+{
+    this->renderBegin();
+    ImGui::ShowDemoWindow();
+    this->renderEnd();
 }
 
 void GlfwImguiManager::renderBegin()

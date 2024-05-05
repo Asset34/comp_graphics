@@ -47,8 +47,11 @@ add_executable(project
     ${SRC}/glrenderer.cpp
     ${SRC}/glrendererunit.cpp
     ${SRC}/ui/glfwimguimanager.cpp
-    ${SRC}/ui/glfwimguicontrolmanager.cpp
-    ${SRC}/ui/lr1uimanager.cpp
+    ${SRC}/ui/uicontroller.cpp
+    ${SRC}/ui/scenecontroller3d.cpp
+    # ${SRC}/ui/glfwimguicontrolmanager.cpp
+    # ${SRC}/ui/lr1uimanager.cpp
+    ${SRC}/ui/lr1controller.cpp
     ${SRC}/scenes/scene3d.cpp
     ${SRC}/scenes/scenelr1.cpp
     ${SRC}/objects/shape.cpp

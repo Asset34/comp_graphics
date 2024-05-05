@@ -76,135 +76,27 @@ SceneLR1::~SceneLR1()
 
 void SceneLR1::update()
 {
-    // m_changed = true;
-}
-
-void SceneLR1::control(int controlId)
-{
-    switch (controlId)
-    {
-    // Move Shape
-    case 0:
-        m_shape.translate(m_shapeMove);
-        m_shapeMove = {0, 0, 0};
-
-        m_angle = 0;
-        m_rotationAngle = 0;
-        // m_changed = true;
-    break;
-    // Set Line Points
-    case 1:
-        m_line.setBegin(m_lineBegin);
-        m_line.setEnd(m_lineEnd);
-
-        if (m_lineFlag) {
-            m_angle = 0;
-            m_rotationAngle = 0;
-
-
-            m_lineFlag = false;
-        }
-
-        // m_angle = 0;
-        // m_rotationAngle = 0;
-        // m_changed = true;
-    break;
-    // Rotation Around Line
-    case 2:
-        vec3 unit = m_line.getUnit();
-        vec3 point = m_line.getBegin();
-
-        m_shape.rotateAround(m_rotationAngle, point, unit);
-        m_rotationAngle = 0;
-    break;
-    }
-
-    m_changed = true;
-}
-
-void SceneLR1::receiveValue(int valueId, float sendValue)
-{
-    switch (valueId)
-    {
-    case 0:
-        m_shapeMove.x = sendValue;
-    break;
-    case 1:
-        m_shapeMove.y = sendValue;
-    break;
-    case 2:
-        m_shapeMove.z = sendValue;
-    break;
-
-    case 6:
-        if (sendValue != m_lineBegin.x) m_lineFlag = true;
-        m_lineBegin.x = sendValue;
-
-    break;
-    case 7:
-        if (sendValue != m_lineBegin.y) m_lineFlag = true;
-        m_lineBegin.y = sendValue;
-
-    break;
-    case 8:
-        if (sendValue != m_lineBegin.z) m_lineFlag = true;
-        m_lineBegin.z = sendValue;
-
-    break;
-    case 9:
-        if (sendValue != m_lineEnd.x) m_lineFlag = true;
-        m_lineEnd.x = sendValue;
-
-    break;
-    case 10:
-        if (sendValue != m_lineEnd.y) m_lineFlag = true;
-        m_lineEnd.y = sendValue;
-
-    break;
-    case 11:
-        if (sendValue != m_lineEnd.z) m_lineFlag = true;
-        m_lineEnd.z = sendValue;
-
-    break;
-
-    case 12:
-        m_rotationAngle = sendValue;
-        m_angle += sendValue;
-    break;
-    }
-}
-
-void SceneLR1::sendValue(int valueId, float &receiver)
-{
-    switch (valueId)
-    {
-    case 0:
-        receiver = m_shape.getOrigin().x;
-    break;
-    case 1:
-        receiver = m_shape.getOrigin().y;
-    break;
-    case 2:
-        receiver = m_shape.getOrigin().z;
-    break;
-
-    case 3:
-        receiver = m_angle;
-    break;
-    }
-}
-
-bool SceneLR1::changed()
-{
-    return m_changed;
-}
-
-void SceneLR1::changeAck()
-{
-    m_changed = false;
 }
 
 std::vector<int> SceneLR1::getRenderableUpdateVector()
 {
     return {1}; // Update only line data
+}
+
+void SceneLR1::control(int cmd)
+{
+}
+
+bool SceneLR1::updated()
+{
+    return false;
+}
+
+void SceneLR1::updateAck()
+{
+}
+
+std::list<int> SceneLR1::getUpdateList()
+{
+    return std::list<int>();
 }

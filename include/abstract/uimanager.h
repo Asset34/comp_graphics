@@ -4,7 +4,7 @@
 class UiManager {
 public:
     virtual ~UiManager() {};
-    virtual void render() = 0;
+    virtual void manage() = 0;
 
 };
 
