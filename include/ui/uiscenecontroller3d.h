@@ -18,8 +18,6 @@ protected:
     void onMouseScroll(GLFWwindow *w, double xoffset, double yoffset) override;
 
 private:
-    static const float DEFAULT_SENSITIVITY; // 1.0
-
     ObservationController3D *m_observationController;
     
     bool m_mouseFirstClick;

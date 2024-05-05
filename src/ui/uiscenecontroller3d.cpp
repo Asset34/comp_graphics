@@ -1,13 +1,11 @@
 #include "glad/glad.h"
 #include "ui/uiscenecontroller3d.h"
 
-const float UiSceneController3D::DEFAULT_SENSITIVITY = 1.0;
-
 UiSceneController3D::UiSceneController3D(GLFWwindow * w)
     : UiSceneController(w),
       m_observationController(nullptr),
       m_mouseFirstClick(true),
-      m_mouseSensitivity(DEFAULT_SENSITIVITY)
+      m_mouseSensitivity(1.0)
 {
 }
 
