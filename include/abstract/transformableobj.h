@@ -73,7 +73,7 @@ private:
     static const vec3 UNITY_DEFAULT;  // {0, 1, 0}
     static const vec3 UNITZ_DEFAULT;  // {0, 0, 1}
     static const vec3 ORIGIN_DEFAULT; // {0, 0, 0}
-    static const vec3 SCALES_DEFAULT; // {0, 0, 0}
+    static const vec3 SCALES_DEFAULT; // {1, 1, 1}
 
     // Transformation matrices
     mat4 m_modelMatrix;
