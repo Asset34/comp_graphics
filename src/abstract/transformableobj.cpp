@@ -81,6 +81,8 @@ void TransformableObj::translateTo(const vec3 &pos)
 void TransformableObj::translateItselfTo(const vec3 &pos)
 {
     this->translate_base(pos - this->selfOrigin());
+
+    this->transformationCallback();
 }
 
 void TransformableObj::rotatex(float angle, const vec3 &point)
