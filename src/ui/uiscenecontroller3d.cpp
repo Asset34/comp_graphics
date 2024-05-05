@@ -96,3 +96,14 @@ void UiSceneController3D::onMouseScroll(GLFWwindow *w, double xoffset, double yo
     if (yoffset > 0) m_observationController->zoomIn();
     else m_observationController->zoomOut();
 }
+
+void UiSceneController3D::onKey(GLFWwindow *w, int key, int scancode, int action, int mods)
+{
+    // Check
+    if (!m_observationController) return;
+
+    // Process event
+    if (key == GLFW_KEY_HOME && action == GLFW_PRESS) {
+        m_observationController->home();
+    }
+}

@@ -3,6 +3,7 @@
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
+#include "imgui/imgui_impl_glfw.h"
 
 GlfwImguiManager::GlfwImguiManager(GLFWwindow *w)
     : m_window(w)
@@ -13,6 +14,7 @@ GlfwImguiManager::GlfwImguiManager(GLFWwindow *w)
     glfwSetFramebufferSizeCallback(m_window, onWindowResizeEvent);
     glfwSetCursorPosCallback(m_window, onMouseMovementEvent);
     glfwSetScrollCallback(m_window, onMouseScrollEvent);
+    glfwSetKeyCallback(m_window, onKeyEvent);
 }
 
 GlfwImguiManager::~GlfwImguiManager()
@@ -116,6 +118,22 @@ void GlfwImguiManager::onMouseScrollEvent(GLFWwindow *w, double xoffset, double 
 
         if (current) {
             current->onMouseScroll(w, xoffset, yoffset);
+        }
+    }
+}
+
+void GlfwImguiManager::onKeyEvent(GLFWwindow *w, int key, int scancode, int action, int mods)
+{
+    // Forward to Imgui
+    ImGuiIO& io = ImGui::GetIO();
+    ImGui_ImplGlfw_KeyCallback(w, key, scancode, action, mods);
+
+    // Forward to mine
+    if (!io.WantCaptureKeyboard) {
+        GlfwImguiManager *current = GlfwImguiManager::retrieveThis(w);
+
+        if (current) {
+            current->onKey(w, key, scancode, action, mods);
         }
     }
 }

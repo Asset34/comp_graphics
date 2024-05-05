@@ -13,6 +13,7 @@ public:
     const mat4 &getProjMatrix() const;
 
     void home() override;
+    void setHome();
 
     void setAspectRatio(float aspectRatio) override;
     void setFov(float fov);
@@ -66,6 +67,7 @@ private:
 
     // Camera values
     vec3 m_viewPoint;
+    vec3 m_viewPointHome;
     float m_horizontal, m_vertical;
     float m_zoom;
     float m_zoomFactor;

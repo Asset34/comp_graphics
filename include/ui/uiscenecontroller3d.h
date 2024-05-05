@@ -19,6 +19,7 @@ protected:
     void onWindowResize(GLFWwindow *w, int width, int height) override;
     void onMouseMovement(GLFWwindow *w, double xpos, double ypos) override;
     void onMouseScroll(GLFWwindow *w, double xoffset, double yoffset) override;
+    void onKey(GLFWwindow *w, int key, int scancode, int action, int mods) override;
 
 private:
     ObservationController3D *m_observationController;

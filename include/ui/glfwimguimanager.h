@@ -21,6 +21,7 @@ protected:
     virtual void onWindowResize(GLFWwindow *w, int width, int height) = 0;
     virtual void onMouseMovement(GLFWwindow *w, double xpos, double ypos) = 0;
     virtual void onMouseScroll(GLFWwindow *w, double xoffset, double yoffset) = 0;
+    virtual void onKey(GLFWwindow *w, int key, int scancode, int action, int mods) = 0;
 
     GLFWwindow *getWindowPtr() const;
 
@@ -32,6 +33,7 @@ private:
     static void onWindowResizeEvent(GLFWwindow *w, int width, int height);
     static void onMouseMovementEvent(GLFWwindow *w, double xpos, double ypos);
     static void onMouseScrollEvent(GLFWwindow *w, double xoffset, double yoffset);
+    static void onKeyEvent(GLFWwindow *w, int key, int scancode, int action, int mods);
 
     static GlfwImguiManager *retrieveThis(GLFWwindow *window);
 

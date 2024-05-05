@@ -5,6 +5,7 @@ Camera3D::Camera3D(float hfov, float aspectRatio, float near, float far)
      m_projMatrix(1.0f),
      m_projType(ProjType::No),
      m_viewPoint({0, 0, 0}),
+     m_viewPointHome({0, 0, 0}),
      m_horizontal(0),
      m_vertical(0),
      m_zoom(1),
@@ -49,9 +50,13 @@ const mat4 &Camera3D::getProjMatrix() const
 
 void Camera3D::home()
 {
-     m_horizontal = 0;
-     m_vertical = 0;
-     m_zoom = 1;
+    this->translate(m_viewPointHome - m_viewPoint);
+    m_viewPoint = m_viewPointHome;
+}
+
+void Camera3D::setHome()
+{
+    m_viewPointHome = m_viewPoint;
 }
 
 void Camera3D::setAspectRatio(float aspectRatio)

@@ -56,6 +56,7 @@ SceneLR1::SceneLR1()
     camera.translate({0, 0, 100});
     camera.setZoomLimits(0.3, 5);
     camera.setZoomLimitsFlag(true);
+    camera.setHome();
 
     // Setup Renderables
     this->addRenderable(&m_shape);
