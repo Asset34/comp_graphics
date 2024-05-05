@@ -1,7 +1,7 @@
 #include "ui/lr1controller.h"
 
 Lr1Controller::Lr1Controller(GLFWwindow * w)
-    : SceneController3D(w)
+    : UiSceneController3D(w)
 {
 }
 

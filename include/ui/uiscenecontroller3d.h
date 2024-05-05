@@ -1,13 +1,13 @@
-#ifndef SCENECONTROLLER_H_
-#define SCENECONTROLLER_H_
+#ifndef UISCENECONTROLLER3D_H_
+#define UISCENECONTROLLER3D_H_
 
-#include "uicontroller.h"
+#include "uiscenecontroller.h"
 #include "interfaces/observationcontroller3d.h"
 
-class SceneController3D : public UiController {
+class UiSceneController3D : public UiSceneController {
 public:
-    SceneController3D(GLFWwindow *w = nullptr);
-    virtual ~SceneController3D();
+    UiSceneController3D(GLFWwindow *w = nullptr);
+    virtual ~UiSceneController3D();
 
     void attachObservationController(ObservationController3D *c);
     void setMouseSensitivity(float sensitivity);
@@ -20,8 +20,6 @@ protected:
 private:
     static const float DEFAULT_SENSITIVITY; // 1.0
 
-    void initObservationObj();
-
     ObservationController3D *m_observationController;
     
     bool m_mouseFirstClick;
@@ -30,4 +28,4 @@ private:
     
 };
 
-#endif // SCENECONTROLLER_H_
+#endif // UISCENECONTROLLER3D_H_

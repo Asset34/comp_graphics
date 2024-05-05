@@ -1,44 +1,49 @@
 #include "glad/glad.h"
-#include "ui/scenecontroller3d.h"
+#include "ui/uiscenecontroller3d.h"
 
-const float SceneController3D::DEFAULT_SENSITIVITY = 1.0;
+const float UiSceneController3D::DEFAULT_SENSITIVITY = 1.0;
 
-SceneController3D::SceneController3D(GLFWwindow * w)
-    : UiController(w),
+UiSceneController3D::UiSceneController3D(GLFWwindow * w)
+    : UiSceneController(w),
       m_observationController(nullptr),
       m_mouseFirstClick(true),
       m_mouseSensitivity(DEFAULT_SENSITIVITY)
 {
 }
 
-SceneController3D::~SceneController3D()
+UiSceneController3D::~UiSceneController3D()
 {
 }
 
-void SceneController3D::attachObservationController(ObservationController3D *c)
+void UiSceneController3D::attachObservationController(ObservationController3D *c)
 {
     m_observationController = c;
-    this->initObservationObj();
+    m_observationController->setAspectRatio(this->getAspectRatio());
 }
 
-void SceneController3D::setMouseSensitivity(float sensitivity)
+void UiSceneController3D::setMouseSensitivity(float sensitivity)
 {
     m_mouseSensitivity = sensitivity;
 }
 
-void SceneController3D::onWindowResize(GLFWwindow *w, int width, int height)
+void UiSceneController3D::onWindowResize(GLFWwindow *w, int width, int height)
 {
     // Check
     if (!m_observationController) return;
-    
-    m_observationController->setAspectRatio((float) width / height);
-    glViewport(0, 0, width, height);
+
+    this->updateArea();
+    m_observationController->setAspectRatio(this->getAspectRatio());
 }
 
-void SceneController3D::onMouseMovement(GLFWwindow *w, double xpos, double ypos)
+void UiSceneController3D::onMouseMovement(GLFWwindow *w, double xpos, double ypos)
 {
     // Check
     if (!m_observationController) return;
+
+    // Area check
+    Area area = this->getArea();
+    if (xpos < area.x || xpos > (area.x + area.width)) return;
+    if (ypos < area.y || ypos > (area.y + area.height)) return;
 
     // Process event
     int state = glfwGetMouseButton(w, GLFW_MOUSE_BUTTON_RIGHT);
@@ -69,7 +74,7 @@ void SceneController3D::onMouseMovement(GLFWwindow *w, double xpos, double ypos)
     }
 }
 
-void SceneController3D::onMouseScroll(GLFWwindow *w, double xoffset, double yoffset)
+void UiSceneController3D::onMouseScroll(GLFWwindow *w, double xoffset, double yoffset)
 {
     // Check
     if (!m_observationController) return;
@@ -77,12 +82,4 @@ void SceneController3D::onMouseScroll(GLFWwindow *w, double xoffset, double yoff
     // Process event
     if (yoffset > 0) m_observationController->zoomIn();
     else m_observationController->zoomOut();
-}
-
-void SceneController3D::initObservationObj()
-{
-    // Init aspect ration
-    int width, height;
-    glfwGetWindowSize(this->getWindowPtr(), &width, &height);
-    m_observationController->setAspectRatio((float) width / height);
 }
