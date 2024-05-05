@@ -35,6 +35,7 @@ public:
     void rotateItselfy(float angle);
     void rotateItselfz(float angle);
     void rotateAround(float angle, const vec3 &point, const vec3 &vector);
+    void rotateAroundTo(float angle, const vec3 &point, const vec3 &vector);
 
     void scale(float sx, float sy, float sz, const vec3 &point = {0, 0, 0});
     void scale(float s, const vec3 &point = {0, 0, 0});
@@ -52,6 +53,10 @@ public:
 
     void coincideWithZ(const vec3 &vector);
 
+    void resetAngle();
+    void trackAngle(bool value);
+    float getAngle() const;
+
 protected:
     virtual void transformationCallback();
     virtual const vec3 &selfOrigin() const;
@@ -64,6 +69,7 @@ private:
     void rotatex_base_values(float sinValue, float cosValue);
     void rotatey_base_values(float sinValue, float cosValue);
     void rotatez_base_values(float sinValue, float cosValue);
+    void rotateAround_base(float angle, const vec3 &point, const vec3 &vector);
     void scale_base(float sx, float sy, float sz);
 
     void coincidez_values(const vec3 &vector, float &sinx, float &cosx, float &siny, float &cosy);
@@ -84,6 +90,10 @@ private:
     vec3 m_unitx, m_unity, m_unitz;
     vec3 m_origin;
     vec3 m_scales;
+
+    // Tracking values
+    float m_angle;
+    bool m_angleTrack;
 
 };
 

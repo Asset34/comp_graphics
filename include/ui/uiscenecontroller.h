@@ -32,6 +32,8 @@ protected:
     virtual void updateFromControllable() = 0;
     virtual void control() = 0;
 
+    Controllable *getControllable() const;
+
 private:
     Controllable *m_controllable;
 

@@ -40,9 +40,13 @@ SceneLR1::SceneLR1()
     m_shape.setUseViewMatrFlag(true);
     m_shape.setUseProjMatrFlag(true);
     
+    m_shape.trackAngle(true);
+    
+    m_shape.translate({-10, 20, 0});
+
     // Setup Line
-    m_line.setBegin({0, 0, 0});
-    m_line.setEnd({1, 0, 0});
+    m_line.setBegin({-50, -25, 20});
+    m_line.setEnd({50, 25, -20});
     m_line.setColor({1, 0, 0});
 
     // Setup camera
@@ -60,14 +64,12 @@ SceneLR1::SceneLR1()
     // Setup scene background color
     this->setBackgroundColor({0.2, 0.2, 0.2});
 
-    m_shapeMove = {0, 0, 0};
-    m_lineBegin = {30, -30, 20};
-    m_lineEnd = {30, 30, -20};
-    m_angle = 0;
+    // Init control values
+    m_shapePos = m_shape.getOrigin();
+    m_lineBeginPos = m_line.getBegin();
+    m_lineEndPos = m_line.getEnd();
     m_rotationAngle = 0;
-
-    // m_changed = true;
-    m_lineFlag = false;
+    m_updated = false;
 }
 
 SceneLR1::~SceneLR1()
@@ -83,20 +85,116 @@ std::vector<int> SceneLR1::getRenderableUpdateVector()
     return {1}; // Update only line data
 }
 
+void SceneLR1::set(int vid, float value)
+{
+    switch (vid)
+    {
+    case VID_ROTATION_ANGLE:
+        m_rotationAngle = value;    
+    break;
+    }
+}
+
+void SceneLR1::set(int vid, const float values[])
+{
+    switch (vid)
+    {
+    case VID_SHAPE_POS:
+        m_shapePos.x = values[0];
+        m_shapePos.y = values[1];
+        m_shapePos.z = values[2];
+    break;
+    case VID_LINE_BEGIN_POS:
+        m_lineBeginPos.x = values[0];
+        m_lineBeginPos.y = values[1];
+        m_lineBeginPos.z = values[2];
+    break;
+    case VID_LINE_END_POS:
+        m_lineEndPos.x = values[0];
+        m_lineEndPos.y = values[1];
+        m_lineEndPos.z = values[2];
+    break;
+    }
+}
+
+void SceneLR1::get(int vid, float &receiver)
+{
+    switch (vid)
+    {
+    case VID_ROTATION_ANGLE:
+        receiver = m_shape.getAngle();
+    break;
+    }
+}
+
+void SceneLR1::get(int vid, float receiver[])
+{
+    switch (vid)
+    {
+    case VID_SHAPE_POS:
+        receiver[0] = m_shape.getOrigin().x;
+        receiver[1] = m_shape.getOrigin().y;
+        receiver[2] = m_shape.getOrigin().z;
+    break;
+    case VID_LINE_BEGIN_POS:
+        receiver[0] = m_line.getBegin().x;
+        receiver[1] = m_line.getBegin().y;
+        receiver[2] = m_line.getBegin().z;
+    break;
+    case VID_LINE_END_POS:
+        receiver[0] = m_line.getEnd().x;
+        receiver[1] = m_line.getEnd().y;
+        receiver[2] = m_line.getEnd().z;
+    break;
+    }
+}
+
 void SceneLR1::control(int cmd)
 {
+    switch (cmd)
+    {
+    case CMD_SHAPE_SET:
+        m_shape.translateItselfTo(m_shapePos);
+        m_shape.resetAngle();
+
+        m_updated = true;
+        m_updateList.push_back(VID_ROTATION_ANGLE);
+    break;
+    case CMD_LINE_BEGIN_SET:
+        m_line.setBegin(m_lineBeginPos);
+        m_shape.resetAngle();
+
+        m_updated = true;
+        m_updateList.push_back(VID_ROTATION_ANGLE);
+    break;
+    case CMD_LINE_END_SET:
+        m_line.setEnd(m_lineEndPos);
+        m_shape.resetAngle();
+
+        m_updated = true;
+        m_updateList.push_back(VID_ROTATION_ANGLE);
+    break;
+    case CMD_ROTATE:
+        m_shape.rotateAroundTo(m_rotationAngle, m_line.getBegin(), m_line.getUnit());
+
+        m_updated = true;
+        m_updateList.push_back(VID_SHAPE_POS);
+    break;
+    }
 }
 
 bool SceneLR1::updated()
 {
-    return false;
+    return m_updated;
 }
 
 void SceneLR1::updateAck()
 {
+    m_updated = false;
+    m_updateList.clear();
 }
 
 std::list<int> SceneLR1::getUpdateList()
 {
-    return std::list<int>();
+    return m_updateList;
 }

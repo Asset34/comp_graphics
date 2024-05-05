@@ -1,8 +1,6 @@
 #include "glad/glad.h"
 #include "ui/uiscenecontroller.h"
 
-#include <iostream>
-
 UiSceneController::UiSceneController(GLFWwindow * w)
     : GlfwImguiManager(w),
       m_marginLeft(0),
@@ -75,4 +73,9 @@ void UiSceneController::updateArea()
 void UiSceneController::onWindowResize(GLFWwindow *w, int width, int height)
 {
     this->updateArea();
+}
+
+Controllable *UiSceneController::getControllable() const
+{
+    return m_controllable;
 }

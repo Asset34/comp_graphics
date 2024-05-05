@@ -14,7 +14,9 @@ TransformableObj::TransformableObj()
      m_unity(UNITY_DEFAULT),
      m_unitz(UNITZ_DEFAULT),
      m_origin(ORIGIN_DEFAULT),
-     m_scales(SCALES_DEFAULT)
+     m_scales(SCALES_DEFAULT),
+     m_angle(0),
+     m_angleTrack(false)
 {
 }
 
@@ -141,18 +143,24 @@ void TransformableObj::rotateItselfz(float angle)
 
 void TransformableObj::rotateAround(float angle, const vec3 &point, const vec3 &vector)
 {
-    float sinx, cosx, siny, cosy;
-    this->coincidez_values(vector, sinx, cosx, siny, cosy);
-
-    this->translate_base(-point);
-    this->rotatex_base_values(sinx, cosx);
-    this->rotatey_base_values(-siny, cosy);
-    this->rotatez_base(angle);
-    this->rotatey_base_values(siny, cosy);
-    this->rotatex_base_values(-sinx, cosx);
-    this->translate_base(point);
+    this->rotateAround_base(angle, point, vector);
 
     this->transformationCallback();
+
+    // Update tracked angle
+    if (m_angleTrack) {
+        m_angle += angle;
+    }
+}
+
+void TransformableObj::rotateAroundTo(float angle, const vec3 &point, const vec3 &vector)
+{
+    this->rotateAround_base(angle - m_angle, point, vector);
+
+    this->transformationCallback();
+
+    // Update tracke angle
+    m_angle = angle;
 }
 
 void TransformableObj::scale(float sx, float sy, float sz, const vec3 &point)
@@ -261,6 +269,21 @@ void TransformableObj::coincideWithZ(const vec3 &vector)
     this->transformationCallback();
 }
 
+void TransformableObj::resetAngle()
+{
+    m_angle = 0;
+}
+
+void TransformableObj::trackAngle(bool value)
+{
+    m_angleTrack = value;
+}
+
+float TransformableObj::getAngle() const
+{
+    return m_angle;
+}
+
 void TransformableObj::transformationCallback()
 {
     // Update origin
@@ -348,6 +371,20 @@ void TransformableObj::rotatez_base_values(float sinValue, float cosValue)
     // Apply transformation
     m_modelMatrix = matr * m_modelMatrix;
     m_normalMatrix = matr * m_normalMatrix;
+}
+
+void TransformableObj::rotateAround_base(float angle, const vec3 &point, const vec3 &vector)
+{
+    float sinx, cosx, siny, cosy;
+    this->coincidez_values(vector, sinx, cosx, siny, cosy);
+
+    this->translate_base(-point);
+    this->rotatex_base_values(sinx, cosx);
+    this->rotatey_base_values(-siny, cosy);
+    this->rotatez_base(angle);
+    this->rotatey_base_values(siny, cosy);
+    this->rotatex_base_values(-sinx, cosx);
+    this->translate_base(point);
 }
 
 void TransformableObj::scale_base(float sx, float sy, float sz)
