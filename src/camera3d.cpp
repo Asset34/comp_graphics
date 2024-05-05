@@ -210,16 +210,6 @@ void Camera3D::setVerticalLimitsFlag(bool flag)
     m_verticalLimitFlag = flag;
 }
 
-void Camera3D::lookAt(const vec3 &viewPoint)
-{
-    vec3 unit = this->selfOrigin() - viewPoint;
-    unit = glm::normalize(unit);
-
-    this->coincideWithZReverse(unit);
-
-    m_viewPoint = viewPoint;
-}
-
 vec3 Camera3D::getForwardUnit() const
 {
     vec3 unit = this->getUnitz();

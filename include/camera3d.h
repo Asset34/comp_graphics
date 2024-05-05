@@ -38,8 +38,6 @@ public:
     void setHorizontalLimitsFlag(bool flag);
     void setVerticalLimitsFlag(bool flag);
 
-    void lookAt(const vec3 &viewPoint);
-
     vec3 getForwardUnit() const;
     vec3 getSideUnit() const;
 
