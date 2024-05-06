@@ -9,6 +9,9 @@ AxisXYZ::AxisXYZ()
       m_axisx({1, 0, 0}),
       m_axisy({0, 1, 0}),
       m_axisz({0, 0, 1}),
+      m_colorx(COLOR_X),
+      m_colory(COLOR_Y),
+      m_colorz(COLOR_Z),
       m_width(1.0)
 {
 }
@@ -27,6 +30,21 @@ void AxisXYZ::setSize(float size)
 void AxisXYZ::setWidth(float width)
 {
     m_width = width;
+}
+
+void AxisXYZ::setColorX(const vec3 &color)
+{
+    m_colorx = color;
+}
+
+void AxisXYZ::setColorY(const vec3 &color)
+{
+    m_colory = color;
+}
+
+void AxisXYZ::setColorZ(const vec3 &color)
+{
+    m_colorz = color;
 }
 
 RenderData AxisXYZ::getRenderData()
@@ -49,9 +67,9 @@ RenderData AxisXYZ::getRenderData()
     data.VertexData.push_back(m_axisz);
 
     data.Edges.reserve(3);
-    data.Edges.push_back({0, 1, COLOR_X});
-    data.Edges.push_back({0, 2, COLOR_Y});
-    data.Edges.push_back({0, 3, COLOR_Z});
+    data.Edges.push_back({0, 1, m_colorx});
+    data.Edges.push_back({0, 2, m_colory});
+    data.Edges.push_back({0, 3, m_colorz});
 
     // Setup Misc Visual values
     data.EdgeWidth = m_width;

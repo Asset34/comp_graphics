@@ -35,7 +35,7 @@ Window::Window(const std::string &title, int width, int height)
     renderer->attach(scene);
 
     UiLr1Controller *uiManager = new UiLr1Controller(m_window);
-    uiManager->setAreaMargins(400);
+    uiManager->setAreaMargins(0, 400, 0, 0);
     uiManager->attachControllable(scene);
     uiManager->attachObservationController(scene->getObservationController());
 

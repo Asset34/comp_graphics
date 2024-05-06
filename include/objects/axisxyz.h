@@ -15,6 +15,10 @@ public:
     void setSize(float size);
     void setWidth(float width);
 
+    void setColorX(const vec3 &color);
+    void setColorY(const vec3 &color);
+    void setColorZ(const vec3 &color);
+
     RenderData getRenderData() override;
     glm::mat4 getTransformation() override;
 
@@ -28,6 +32,9 @@ private:
     static const vec3 COLOR_Z;
 
     // Visuals
+    vec3 m_colorx;
+    vec3 m_colory;
+    vec3 m_colorz;
     float m_width;
 
 };

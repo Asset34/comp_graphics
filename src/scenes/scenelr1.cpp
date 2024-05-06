@@ -51,33 +51,31 @@ SceneLR1::SceneLR1()
     m_shape.setUseModelMatrFlag(true);
     m_shape.setUseViewMatrFlag(true);
     m_shape.setUseProjMatrFlag(true);
-    
-    m_shape.setGlobalPolygonColor({0.0, 0.0, 1.0});
     m_shape.setUseGlobalPolygonColor(true);
-
-    m_shape.setGlobalEdgeColor({0.0, 0.0, 0.25});
     m_shape.setUseGlobalEdgeColor(true);
-
-    m_shape.setGlobalVertexColor({1.0, 0.0, 0.0});
     m_shape.setUseGlobalVertexColor(true);
+    
+    m_shape.setGlobalPolygonColor({0.1, 0.2, 0.6});
+    m_shape.setGlobalEdgeColor({0.05, 0.1, 0.3});
+    m_shape.setEdgeWidth(4);
 
-    m_shape.setEdgeWidth(3);
-    // m_shape.setVertexSize(7);
+    m_shape.translate({-20, 30, 0});
 
     m_shape.trackAngle(true);
-    
-    m_shape.translate({-10, 20, 0});
 
     // Setup Line
-    m_line.setBegin({-50, -25, 20});
+    m_line.setBegin({-40, 50, -70});
     m_line.setEnd({50, 25, -20});
-    m_line.setColor({1, 0, 0});
-    m_line.setEndsColor({1, 1, 0});
-    m_line.setWidth(4);
-    m_line.setEndsSize(10);
+    m_line.setColor({0.75, 0, 0});
+    m_line.setEndsColor({1, 1, 1});
+    m_line.setWidth(3);
+    m_line.setEndsSize(5);
 
     // Setup Axis XYZ
-    m_axisXYZ.setSize(20);
+    m_axisXYZ.setSize(15);
+    m_axisXYZ.setColorX({0.95, 0.3, 0.4});
+    m_axisXYZ.setColorY({0.5, 0.8, 0.25});
+    m_axisXYZ.setColorZ({0.3, 0.55, 0.9});
     m_axisXYZ.setWidth(3);
     m_axisXYZ.translate({0, 1, 0});
 
@@ -94,8 +92,8 @@ SceneLR1::SceneLR1()
     camera.setZoomLimits(0.3, 50);
     camera.setZoomLimitsFlag(true);
     camera.translate({0, 0, 100});
-    camera.rotateHorizontal(-30);
-    camera.rotateVertical(-30);
+    camera.rotateHorizontal(40);
+    camera.rotateVertical(-40);
     camera.setHome();
 
     // Setup Renderables
