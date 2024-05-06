@@ -1,6 +1,8 @@
 #include "glad/glad.h"
 #include "ui/uiscenecontroller3d.h"
 
+#include <iostream>
+
 UiSceneController3D::UiSceneController3D(GLFWwindow * w)
     : UiSceneController(w),
       m_observationController(nullptr),
@@ -44,10 +46,18 @@ void UiSceneController3D::onMouseMovement(GLFWwindow *w, double xpos, double ypo
     // Check
     if (!m_observationController) return;
 
+    // std::cout << "##########################" << std::endl;
+    // std::cout << "MOUSE_POS: " << xpos << " " << ypos << std::endl;
+    // std::cout << "AREA: " << area.x << " " << area.y << " " << area.width << " " << area.height << std::endl;
+    // std::cout << std::endl;
+
     // Area check
     Area area = this->getArea();
+    int windowWidth, windowHeight;
+    glfwGetWindowSize(this->getWindowPtr(), &windowWidth, &windowHeight);
     if (xpos < area.x || xpos > (area.x + area.width)) return;
-    if (ypos < area.y || ypos > (area.y + area.height)) return;
+    if (ypos < (windowHeight - area.y - area.height) ||
+        ypos > (windowHeight - area.y)) return;
 
     // Get buttons
     int mouseRightButton = glfwGetMouseButton(w, GLFW_MOUSE_BUTTON_RIGHT);
