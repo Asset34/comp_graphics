@@ -1,8 +1,8 @@
-#include "objects/line.h"
+#include "objects/line3d.h"
 
-const vec3 Line::COLOR_DEFAULT = {0, 0, 0};
+const vec3 Line3D::COLOR_DEFAULT = {0, 0, 0};
 
-Line::Line(const vec3 &b, const vec3 &e)
+Line3D::Line3D(const vec3 &b, const vec3 &e)
     : m_begin(b),
       m_end(e),
       m_color(COLOR_DEFAULT),
@@ -13,60 +13,60 @@ Line::Line(const vec3 &b, const vec3 &e)
     this->updateCenter();
 }
 
-Line::~Line()
+Line3D::~Line3D()
 {
 }
 
-void Line::setBegin(const vec3 &p)
+void Line3D::setBegin(const vec3 &p)
 {
     m_begin = p;
 
     this->updateCenter();
 }
 
-void Line::setEnd(const vec3 &p)
+void Line3D::setEnd(const vec3 &p)
 {
     m_end = p;
 
     this->updateCenter();
 }
 
-const vec3 &Line::getBegin() const
+const vec3 &Line3D::getBegin() const
 {
     return m_begin;
 }
 
-const vec3 &Line::getEnd() const
+const vec3 &Line3D::getEnd() const
 {
     return m_end;
 }
 
-vec3 Line::getUnit() const
+vec3 Line3D::getUnit() const
 {
     return glm::normalize(m_end - m_begin);
 }
 
-void Line::setColor(const vec3 &color)
+void Line3D::setColor(const vec3 &color)
 {
     m_color = color;
 }
 
-void Line::setEndsColor(const vec3 &color)
+void Line3D::setEndsColor(const vec3 &color)
 {
     m_endsColor = color;
 }
 
-void Line::setWidth(float width)
+void Line3D::setWidth(float width)
 {
     m_width = width;
 }
 
-void Line::setEndsSize(float size)
+void Line3D::setEndsSize(float size)
 {
     m_endsSize = size;
 }
 
-RenderData Line::getRenderData()
+RenderData Line3D::getRenderData()
 {
     RenderData data;
 
@@ -101,12 +101,12 @@ RenderData Line::getRenderData()
     return data;
 }
 
-glm::mat4 Line::getTransformation()
+glm::mat4 Line3D::getTransformation()
 {
     return this->getModelMatrix();
 }
 
-void Line::transformationCallback()
+void Line3D::transformationCallback()
 {
     TransformableObj3D::transformationCallback();
 
@@ -118,12 +118,12 @@ void Line::transformationCallback()
     this->updateCenter();
 }
 
-const vec3 &Line::selfOrigin() const
+const vec3 &Line3D::selfOrigin() const
 {
     return m_center;
 }
 
-void Line::updateCenter()
+void Line3D::updateCenter()
 {
     vec3 dp = m_end + m_begin;
     m_center = {dp.x / 2.0, dp.y / 2.0, dp.z / 2.0};

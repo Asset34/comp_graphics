@@ -4,7 +4,7 @@
 #include "interfaces/controllable.h"
 #include "scenes/scene3d.h"
 #include "objects/shape.h"
-#include "objects/line.h"
+#include "objects/line3d.h"
 
 #include <list>
 #include <vector>
@@ -46,7 +46,7 @@ private:
     };
 
     Shape m_shape;
-    Line m_line;
+    Line3D m_line;
     
     // Control values
     vec3 m_shapePos;

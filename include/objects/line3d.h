@@ -4,10 +4,10 @@
 #include "interfaces/renderable.h"
 #include "abstract/transformableobj3d.h"
 
-class Line : public TransformableObj3D, public Renderable {
+class Line3D : public TransformableObj3D, public Renderable {
 public:
-    Line(const vec3 &b = {0, 0, 0}, const vec3 &e = {0, 0, 0});
-    ~Line();
+    Line3D(const vec3 &b = {0, 0, 0}, const vec3 &e = {0, 0, 0});
+    ~Line3D();
 
     void setBegin(const vec3 &p);
     void setEnd(const vec3 &p);
