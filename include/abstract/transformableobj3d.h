@@ -1,5 +1,5 @@
-#ifndef GRAPHICOBJ_H_
-#define GRAPHICOBJ_H_
+#ifndef TRANSFORMABLECOBJ3D_H_
+#define TRANSFORMABLECOBJ3D_H_
 
 #include <vector>
 #include "glm/glm.hpp"
@@ -98,4 +98,4 @@ private:
 
 };
 
-#endif // GRAPHICOBJ_H_
+#endif // TRANSFORMABLECOBJ3D_H_
