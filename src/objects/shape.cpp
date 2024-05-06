@@ -16,7 +16,9 @@ Shape::Shape()
       m_useProjMatr(true),
       m_useGlobalVertexColor(false),
       m_useGlobalEdgeColor(false),
-      m_useGlobalPolygonColor(false)
+      m_useGlobalPolygonColor(false),
+      m_edgeWidth(1.0),
+      m_vertexSize(1.0)
 {
 }
 
@@ -127,6 +129,16 @@ void Shape::setUseGlobalPolygonColor(bool value)
     m_useGlobalPolygonColor = value;
 }
 
+void Shape::setEdgeWidth(float width)
+{
+    m_edgeWidth = width;
+}
+
+void Shape::setVertexSize(float size)
+{
+    m_vertexSize = size;
+}
+
 RenderData Shape::getRenderData()
 {
     RenderData data;
@@ -180,6 +192,10 @@ RenderData Shape::getRenderData()
     data.GlobalVertexColor = m_globalVertexColor;
     data.GlobalEdgeColor = m_globalEdgeColor;
     data.GlobalPolygonColor = m_globalPolygonColor;
+
+    // Setup Misc Visual values
+    data.EdgeWidth = m_edgeWidth;
+    data.VertexSize = m_vertexSize;
 
     return data;
 }

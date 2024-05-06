@@ -58,8 +58,11 @@ SceneLR1::SceneLR1()
     m_shape.setGlobalEdgeColor({0.0, 0.0, 0.25});
     m_shape.setUseGlobalEdgeColor(true);
 
-    m_shape.setGlobalVertexColor({0.0, 0.0, 0.0});
+    m_shape.setGlobalVertexColor({1.0, 0.0, 0.0});
     m_shape.setUseGlobalVertexColor(true);
+
+    m_shape.setEdgeWidth(3);
+    // m_shape.setVertexSize(7);
 
     m_shape.trackAngle(true);
     
@@ -69,6 +72,9 @@ SceneLR1::SceneLR1()
     m_line.setBegin({-50, -25, 20});
     m_line.setEnd({50, 25, -20});
     m_line.setColor({1, 0, 0});
+    m_line.setEndsColor({1, 1, 0});
+    m_line.setWidth(4);
+    m_line.setEndsSize(10);
 
     // Setup camera
     Camera3D &camera = this->getCamera();

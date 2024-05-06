@@ -22,7 +22,7 @@ struct RenderData {
     };
 
     // Sizes
-    static const int VertexSize = 3;
+    static const int VertexDataSize = 3;
     static const int EdgeIndexSize = 2;
     static const int VertexIndexSize = 1;
 
@@ -47,6 +47,10 @@ struct RenderData {
     Color GlobalVertexColor;
     Color GlobalEdgeColor;
     Color GlobalPolygonColor;
+
+    // Misc Visuals
+    float EdgeWidth = 1.0;
+    float VertexSize = 1.0;
 
 };
 

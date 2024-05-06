@@ -1,9 +1,14 @@
 #include "objects/line.h"
 
+const vec3 Line::COLOR_DEFAULT = {0, 0, 0};
+
 Line::Line(const vec3 &b, const vec3 &e)
     : m_begin(b),
       m_end(e),
-      m_color({0, 0, 0})
+      m_color(COLOR_DEFAULT),
+      m_endsColor(COLOR_DEFAULT),
+      m_width(1.0),
+      m_endsSize(1.0)
 {
     this->updateCenter();
 }
@@ -46,9 +51,19 @@ void Line::setColor(const vec3 &color)
     m_color = color;
 }
 
-const vec3 &Line::getColor() const
+void Line::setEndsColor(const vec3 &color)
 {
-    return m_color;
+    m_endsColor = color;
+}
+
+void Line::setWidth(float width)
+{
+    m_width = width;
+}
+
+void Line::setEndsSize(float size)
+{
+    m_endsSize = size;
 }
 
 RenderData Line::getRenderData()
@@ -56,11 +71,11 @@ RenderData Line::getRenderData()
     RenderData data;
 
     // Setup Flags
+    data.DrawVertices = true;
     data.DrawEdges    = true;
-    data.DrawPolygons = false;
-    data.UseModelMatr = false;
     data.UseViewMatr  = true;
     data.UseProjMatr  = true;
+    data.UseGlobalVertexColor = true;
     data.UseGlobalEdgeColor = true;
 
     // Setup Data
@@ -71,8 +86,17 @@ RenderData Line::getRenderData()
 
     data.Edges.push_back({0, 1});
 
-    // Setup Visuals
+    data.Vertices.reserve(2);
+    data.Vertices.push_back({0});
+    data.Vertices.push_back({1});
+
+    // Setup Globals
     data.GlobalEdgeColor = m_color;
+    data.GlobalVertexColor = m_endsColor;
+
+    // Setup Visuals
+    data.EdgeWidth = m_width;
+    data.VertexSize = m_endsSize;
 
     return data;
 }

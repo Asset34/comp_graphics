@@ -76,7 +76,7 @@ void GLRenderer::GLRendererUnit::loadVertexData(const RenderData &data)
 
     // Process data
 
-    int rawDataSize = data.VertexData.size() * data.VertexSize;
+    int rawDataSize = data.VertexData.size() * data.VertexDataSize;
     float rawData[rawDataSize];
 
     int i = 0;
@@ -85,7 +85,7 @@ void GLRenderer::GLRendererUnit::loadVertexData(const RenderData &data)
         rawData[i + 1] = v.y;
         rawData[i + 2] = v.z;
 
-        i += data.VertexSize;
+        i += data.VertexDataSize;
     }
 
     // Load buffer
@@ -183,6 +183,9 @@ void GLRenderer::GLRendererUnit::renderVertices(const RenderData &data)
     // Bind index buffer
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_eboVertices);
 
+    // Setup visuals
+    glPointSize(data.VertexSize);
+
     // Render
     if (data.UseGlobalVertexColor) {
         m_shader.setVec3("color", data.GlobalVertexColor);
@@ -193,7 +196,7 @@ void GLRenderer::GLRendererUnit::renderVertices(const RenderData &data)
         unsigned int offset = 0;
         for (auto v : data.Vertices) {
             m_shader.setVec3("color", v.color);
-            glDrawElements(GL_LINES, data.VertexIndexSize, GL_UNSIGNED_INT, (void*)(offset * sizeof(GLint)));
+            glDrawElements(GL_POINTS, data.VertexIndexSize, GL_UNSIGNED_INT, (void*)(offset * sizeof(GLint)));
             offset += data.VertexIndexSize;
         }
     }
@@ -206,6 +209,9 @@ void GLRenderer::GLRendererUnit::renderEdges(const RenderData &data)
 {
     // Bind index buffer
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_eboEdges);
+
+    // Setup visuals
+    glLineWidth(data.EdgeWidth);
 
     // Render
     if (data.UseGlobalEdgeColor) {

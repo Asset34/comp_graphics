@@ -31,6 +31,9 @@ public:
     void setUseGlobalEdgeColor(bool value);
     void setUseGlobalPolygonColor(bool value);
 
+    void setEdgeWidth(float width);
+    void setVertexSize(float size);
+
     RenderData getRenderData() override;
     glm::mat4 getTransformation() override;
 
@@ -39,7 +42,7 @@ protected:
     void transformationCallback() override;
 
 private:
-    // Default vales
+    // Default values
     static const vec3 COLOR_DEFAULT; // BLACK
 
     // Types
@@ -81,6 +84,10 @@ private:
     bool m_useGlobalVertexColor;
     bool m_useGlobalEdgeColor;
     bool m_useGlobalPolygonColor;
+
+    // Misc Visuals
+    float m_edgeWidth;
+    float m_vertexSize;
 
 };
 
