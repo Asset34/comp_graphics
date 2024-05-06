@@ -55,6 +55,7 @@ add_executable(project
     ${SRC}/scenes/scenelr1.cpp
     ${SRC}/objects/shape.cpp
     ${SRC}/objects/line.cpp
+    ${SRC}/objects/plane.cpp
     ${SRC}/objects/axisxyz.cpp
     ${SRC}/workspace.cpp
     ${SRC}/shader.cpp

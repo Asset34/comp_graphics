@@ -6,6 +6,7 @@
 #include "objects/shape.h"
 #include "objects/line.h"
 #include "objects/axisxyz.h"
+#include "objects/plane.h"
 
 #include <list>
 #include <vector>
@@ -46,6 +47,7 @@ private:
     Shape m_shape;
     Line m_line;
     AxisXYZ m_axisXYZ;
+    Plane m_plane;
     
     // Control values
     vec3 m_shapePos;

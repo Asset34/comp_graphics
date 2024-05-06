@@ -77,25 +77,35 @@ SceneLR1::SceneLR1()
     m_line.setEndsSize(10);
 
     // Setup Axis XYZ
-    m_axisXYZ.setSize(50);
+    m_axisXYZ.setSize(20);
     m_axisXYZ.setWidth(3);
+    m_axisXYZ.translate({0, 1, 0});
+
+    // Setup Plane
+    m_plane.setColor({0.3, 0.3, 0.3});
+    m_plane.setGridThickness(2);
+    m_plane.defineGrid(20, 10, 10);
+    m_plane.setNormal({0, 1, 0});
 
     // Setup camera
     Camera3D &camera = this->getCamera();
     camera.setPerspectiveProjection();
-    camera.setVolume(90, 1.0, 0.01, 1000);
-    camera.translate({0, 0, 100});
+    camera.setVolume(90, 1.0, 0.01, 10000);
     camera.setZoomLimits(0.3, 50);
     camera.setZoomLimitsFlag(true);
+    camera.translate({0, 0, 100});
+    camera.rotateHorizontal(-30);
+    camera.rotateVertical(-30);
     camera.setHome();
 
     // Setup Renderables
     this->addRenderable(&m_shape);
     this->addRenderable(&m_line);
     this->addRenderable(&m_axisXYZ);
+    this->addRenderable(&m_plane);
     
     // Setup scene background color
-    this->setBackgroundColor({0.5, 0.5, 0.5});
+    this->setBackgroundColor({0.25, 0.25, 0.25});
 
     // Init control values
     m_shapePos = m_shape.getOrigin();
