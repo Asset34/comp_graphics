@@ -57,15 +57,18 @@ const vec3 &TransformableObj3D::getScales() const
 
 void TransformableObj3D::reset()
 {
-    m_modelMatrix = mat4(1.0f), // Identity matrix
-    m_normalMatrix = mat4(1.0f), // Identity matrix
-    m_scaleMatrix = mat4(1.0f), // Identity matrix
+    m_modelMatrix = mat4(1.0f); // Identity matrix
+    m_normalMatrix = mat4(1.0f); // Identity matrix
+    m_scaleMatrix = mat4(1.0f); // Identity matrix
 
     m_unitx = UNITX_DEFAULT;
     m_unity = UNITY_DEFAULT;
     m_unitz = UNITZ_DEFAULT;
     m_origin = ORIGIN_DEFAULT;
     m_scales = SCALES_DEFAULT;
+
+    m_angle = 0;
+    m_angleTrack = false;
 }
 
 void TransformableObj3D::translate(const vec3 &t)
