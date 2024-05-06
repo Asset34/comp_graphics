@@ -1,8 +1,8 @@
-#include "objects/shape.h"
+#include "objects/shape3d.h"
 
-const vec3 Shape::COLOR_DEFAULT = {0, 0, 0};
+const vec3 Shape3D::COLOR_DEFAULT = {0, 0, 0};
 
-Shape::Shape()
+Shape3D::Shape3D()
     : m_centerValue(0),
       m_center(0),
       m_globalVertexColor(COLOR_DEFAULT),
@@ -22,11 +22,11 @@ Shape::Shape()
 {
 }
 
-Shape::~Shape()
+Shape3D::~Shape3D()
 {
 }
 
-void Shape::setVertexData(const std::vector<vec3> &vertexData)
+void Shape3D::setVertexData(const std::vector<vec3> &vertexData)
 {
     m_vertexData = vertexData;
 
@@ -41,7 +41,7 @@ void Shape::setVertexData(const std::vector<vec3> &vertexData)
     m_centerValue = vec3(sumx/n, sumy/n, sumz/n);
 }
 
-void Shape::defineVertex(int index, const vec3 &color)
+void Shape3D::defineVertex(int index, const vec3 &color)
 {
     Vertex v;
     v.index = index;
@@ -50,7 +50,7 @@ void Shape::defineVertex(int index, const vec3 &color)
     m_vertices.push_back(v);
 }
 
-void Shape::defineEdge(int indexBegin, int indexEnd, const vec3 &color)
+void Shape3D::defineEdge(int indexBegin, int indexEnd, const vec3 &color)
 {
     Edge e;
     e.indexBegin = indexBegin;
@@ -60,7 +60,7 @@ void Shape::defineEdge(int indexBegin, int indexEnd, const vec3 &color)
     m_edges.push_back(e);
 }
 
-void Shape::definePolygon(const std::vector<int> &indices, const vec3 &color)
+void Shape3D::definePolygon(const std::vector<int> &indices, const vec3 &color)
 {
     Polygon p;
     p.indices = indices;
@@ -69,77 +69,77 @@ void Shape::definePolygon(const std::vector<int> &indices, const vec3 &color)
     m_polygons.push_back(p);
 }
 
-void Shape::setGlobalVertexColor(const vec3 &color)
+void Shape3D::setGlobalVertexColor(const vec3 &color)
 {
     m_globalVertexColor = color;
 }
 
-void Shape::setGlobalEdgeColor(const vec3 &color)
+void Shape3D::setGlobalEdgeColor(const vec3 &color)
 {
     m_globalEdgeColor = color;
 }
 
-void Shape::setGlobalPolygonColor(const vec3 &color)
+void Shape3D::setGlobalPolygonColor(const vec3 &color)
 {
     m_globalPolygonColor = color;
 }
 
-void Shape::setRenderVerticesFlag(bool value)
+void Shape3D::setRenderVerticesFlag(bool value)
 {
     m_renderVertices = value;
 }
 
-void Shape::setRenderEdgesFlag(bool value)
+void Shape3D::setRenderEdgesFlag(bool value)
 {
     m_renderEdges = value;
 }
 
-void Shape::setRenderPolygonsFlag(bool value)
+void Shape3D::setRenderPolygonsFlag(bool value)
 {
     m_renderPolygons = value;
 }
 
-void Shape::setUseModelMatrFlag(bool value)
+void Shape3D::setUseModelMatrFlag(bool value)
 {
     m_useModelMatr = value;
 }
 
-void Shape::setUseViewMatrFlag(bool value)
+void Shape3D::setUseViewMatrFlag(bool value)
 {
     m_useViewMatr = value;
 }
 
-void Shape::setUseProjMatrFlag(bool value)
+void Shape3D::setUseProjMatrFlag(bool value)
 {
     m_useProjMatr = value;
 }
 
-void Shape::setUseGlobalVertexColor(bool value)
+void Shape3D::setUseGlobalVertexColor(bool value)
 {
     m_useGlobalVertexColor = value;
 }
 
-void Shape::setUseGlobalEdgeColor(bool value)
+void Shape3D::setUseGlobalEdgeColor(bool value)
 {
     m_useGlobalEdgeColor = value;
 }
 
-void Shape::setUseGlobalPolygonColor(bool value)
+void Shape3D::setUseGlobalPolygonColor(bool value)
 {
     m_useGlobalPolygonColor = value;
 }
 
-void Shape::setEdgeWidth(float width)
+void Shape3D::setEdgeWidth(float width)
 {
     m_edgeWidth = width;
 }
 
-void Shape::setVertexSize(float size)
+void Shape3D::setVertexSize(float size)
 {
     m_vertexSize = size;
 }
 
-RenderData Shape::getRenderData()
+RenderData Shape3D::getRenderData()
 {
     RenderData data;
 
@@ -200,17 +200,17 @@ RenderData Shape::getRenderData()
     return data;
 }
 
-glm::mat4 Shape::getTransformation()
+glm::mat4 Shape3D::getTransformation()
 {
     return this->getModelMatrix();
 }
 
-const vec3 &Shape::selfOrigin() const
+const vec3 &Shape3D::selfOrigin() const
 {
     return m_center;
 }
 
-void Shape::transformationCallback()
+void Shape3D::transformationCallback()
 {
     TransformableObj3D::transformationCallback();
 

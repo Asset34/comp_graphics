@@ -3,7 +3,7 @@
 
 #include "interfaces/controllable.h"
 #include "scenes/scene3d.h"
-#include "objects/shape.h"
+#include "objects/shape3d.h"
 #include "objects/line3d.h"
 
 #include <list>
@@ -45,7 +45,7 @@ private:
         VID_ROTATION_ANGLE = 3
     };
 
-    Shape m_shape;
+    Shape3D m_shape;
     Line3D m_line;
     
     // Control values

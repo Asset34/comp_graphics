@@ -7,10 +7,10 @@
 #include "interfaces/renderable.h"
 #include "abstract/transformableobj3d.h"
 
-class Shape : public TransformableObj3D, public Renderable {
+class Shape3D : public TransformableObj3D, public Renderable {
 public:
-    Shape();
-    ~Shape();
+    Shape3D();
+    ~Shape3D();
 
     void setVertexData(const std::vector<vec3> &vertexData);
     void defineVertex(int index, const vec3 &color);
