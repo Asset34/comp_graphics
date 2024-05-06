@@ -211,7 +211,7 @@ void TransformableObj3D::scaleItself(float s)
 void TransformableObj3D::scaleItselfTo(float sx, float sy, float sz)
 {
     this->translate_base(-this->selfOrigin());
-    this->scale_base(sx / m_scales.x, sy / m_scales.x, sz / m_scales.x);
+    this->scale_base(sx / m_scales.x, sy / m_scales.y, sz / m_scales.z);
     this->translate_base(this->selfOrigin());
 
     this->transformationCallback();
