@@ -1,11 +1,11 @@
 #ifndef PLANE_H_
 #define PLANE_H_
 
-#include "abstract/transformableobj.h"
+#include "abstract/transformableobj3d.h"
 #include "interfaces/renderable.h"
 #include <vector>
 
-class Plane : public TransformableObj, public Renderable {
+class Plane : public TransformableObj3D, public Renderable {
 public:
     Plane(const vec3 &point = {0, 0, 0}, const vec3 &normal = {0, 0, 1});
     virtual ~Plane();

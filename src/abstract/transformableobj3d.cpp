@@ -1,12 +1,12 @@
-#include "abstract/transformableobj.h"
+#include "abstract/transformableobj3d.h"
 
-const vec3 TransformableObj::UNITX_DEFAULT = {1, 0, 0};
-const vec3 TransformableObj::UNITY_DEFAULT = {0, 1, 0};
-const vec3 TransformableObj::UNITZ_DEFAULT = {0, 0, 1};
-const vec3 TransformableObj::ORIGIN_DEFAULT = {0, 0, 0};
-const vec3 TransformableObj::SCALES_DEFAULT = {1, 1, 1};
+const vec3 TransformableObj3D::UNITX_DEFAULT = {1, 0, 0};
+const vec3 TransformableObj3D::UNITY_DEFAULT = {0, 1, 0};
+const vec3 TransformableObj3D::UNITZ_DEFAULT = {0, 0, 1};
+const vec3 TransformableObj3D::ORIGIN_DEFAULT = {0, 0, 0};
+const vec3 TransformableObj3D::SCALES_DEFAULT = {1, 1, 1};
 
-TransformableObj::TransformableObj()
+TransformableObj3D::TransformableObj3D()
     :m_modelMatrix(1.0f), // Identity matrix
      m_normalMatrix(1.0f), // Identity matrix
      m_scaleMatrix(1.0f), // Identity matrix
@@ -20,42 +20,42 @@ TransformableObj::TransformableObj()
 {
 }
 
-const mat4 &TransformableObj::getModelMatrix() const
+const mat4 &TransformableObj3D::getModelMatrix() const
 {
     return m_modelMatrix;
 }
 
-const mat4 &TransformableObj::getNormalMatrix() const
+const mat4 &TransformableObj3D::getNormalMatrix() const
 {
     return m_normalMatrix;
 }
 
-const vec3 &TransformableObj::getUnitx() const
+const vec3 &TransformableObj3D::getUnitx() const
 {
     return m_unitx;
 }
 
-const vec3 &TransformableObj::getUnity() const
+const vec3 &TransformableObj3D::getUnity() const
 {
     return m_unity;
 }
 
-const vec3 &TransformableObj::getUnitz() const
+const vec3 &TransformableObj3D::getUnitz() const
 {
     return m_unitz;
 }
 
-const vec3 &TransformableObj::getOrigin() const
+const vec3 &TransformableObj3D::getOrigin() const
 {
     return m_origin;
 }
 
-const vec3 &TransformableObj::getScales() const
+const vec3 &TransformableObj3D::getScales() const
 {
     return m_scales;
 }
 
-void TransformableObj::reset()
+void TransformableObj3D::reset()
 {
     m_modelMatrix = mat4(1.0f), // Identity matrix
     m_normalMatrix = mat4(1.0f), // Identity matrix
@@ -68,26 +68,26 @@ void TransformableObj::reset()
     m_scales = SCALES_DEFAULT;
 }
 
-void TransformableObj::translate(const vec3 &t)
+void TransformableObj3D::translate(const vec3 &t)
 {
     this->translate_base(t);
     this->transformationCallback();
 }
 
-void TransformableObj::translateTo(const vec3 &pos)
+void TransformableObj3D::translateTo(const vec3 &pos)
 {
     this->translate_base(pos - m_origin);
     this->transformationCallback();
 }
 
-void TransformableObj::translateItselfTo(const vec3 &pos)
+void TransformableObj3D::translateItselfTo(const vec3 &pos)
 {
     this->translate_base(pos - this->selfOrigin());
 
     this->transformationCallback();
 }
 
-void TransformableObj::rotatex(float angle, const vec3 &point)
+void TransformableObj3D::rotatex(float angle, const vec3 &point)
 {
     this->translate_base(-point);
     this->rotatex_base(angle);
@@ -96,7 +96,7 @@ void TransformableObj::rotatex(float angle, const vec3 &point)
     this->transformationCallback();
 }
 
-void TransformableObj::rotatey(float angle, const vec3 &point)
+void TransformableObj3D::rotatey(float angle, const vec3 &point)
 {
     this->translate_base(-point);
     this->rotatey_base(angle);
@@ -105,7 +105,7 @@ void TransformableObj::rotatey(float angle, const vec3 &point)
     this->transformationCallback();
 }
 
-void TransformableObj::rotatez(float angle, const vec3 &point)
+void TransformableObj3D::rotatez(float angle, const vec3 &point)
 {
     this->translate_base(-point);
     this->rotatez_base(angle);
@@ -114,7 +114,7 @@ void TransformableObj::rotatez(float angle, const vec3 &point)
     this->transformationCallback();
 }
 
-void TransformableObj::rotateItselfx(float angle)
+void TransformableObj3D::rotateItselfx(float angle)
 {
     this->translate_base(-this->selfOrigin());
     this->rotatex_base(angle);
@@ -123,7 +123,7 @@ void TransformableObj::rotateItselfx(float angle)
     this->transformationCallback();
 }
 
-void TransformableObj::rotateItselfy(float angle)
+void TransformableObj3D::rotateItselfy(float angle)
 {
     this->translate_base(-this->selfOrigin());
     this->rotatey_base(angle);
@@ -132,7 +132,7 @@ void TransformableObj::rotateItselfy(float angle)
     this->transformationCallback();
 }
 
-void TransformableObj::rotateItselfz(float angle)
+void TransformableObj3D::rotateItselfz(float angle)
 {
     this->translate_base(-this->selfOrigin());
     this->rotatez_base(angle);
@@ -141,7 +141,7 @@ void TransformableObj::rotateItselfz(float angle)
     this->transformationCallback();
 }
 
-void TransformableObj::rotateAround(float angle, const vec3 &point, const vec3 &vector)
+void TransformableObj3D::rotateAround(float angle, const vec3 &point, const vec3 &vector)
 {
     this->rotateAround_base(angle, point, vector);
 
@@ -153,7 +153,7 @@ void TransformableObj::rotateAround(float angle, const vec3 &point, const vec3 &
     }
 }
 
-void TransformableObj::rotateAroundTo(float angle, const vec3 &point, const vec3 &vector)
+void TransformableObj3D::rotateAroundTo(float angle, const vec3 &point, const vec3 &vector)
 {
     this->rotateAround_base(angle - m_angle, point, vector);
 
@@ -163,7 +163,7 @@ void TransformableObj::rotateAroundTo(float angle, const vec3 &point, const vec3
     m_angle = angle;
 }
 
-void TransformableObj::scale(float sx, float sy, float sz, const vec3 &point)
+void TransformableObj3D::scale(float sx, float sy, float sz, const vec3 &point)
 {
     this->translate_base(-point);
     this->scale_base(sx, sy, sz);
@@ -172,12 +172,12 @@ void TransformableObj::scale(float sx, float sy, float sz, const vec3 &point)
     this->transformationCallback();
 }
 
-void TransformableObj::scale(float s, const vec3 &point)
+void TransformableObj3D::scale(float s, const vec3 &point)
 {
     this->scale(s, s, s, point);
 }
 
-void TransformableObj::scaleTo(float sx, float sy, float sz, const vec3 &point)
+void TransformableObj3D::scaleTo(float sx, float sy, float sz, const vec3 &point)
 {
     this->translate_base(-point);
     this->scale_base(sx / m_scales.x, sy / m_scales.y, sz / m_scales.z);
@@ -186,12 +186,12 @@ void TransformableObj::scaleTo(float sx, float sy, float sz, const vec3 &point)
     this->transformationCallback();
 }
 
-void TransformableObj::scaleTo(float s, const vec3 &point)
+void TransformableObj3D::scaleTo(float s, const vec3 &point)
 {
     this->scaleTo(s, s, s, point);
 }
 
-void TransformableObj::scaleItself(float sx, float sy, float sz)
+void TransformableObj3D::scaleItself(float sx, float sy, float sz)
 {
     this->translate_base(-this->selfOrigin());
     this->scale_base(sx, sy, sz);
@@ -200,12 +200,12 @@ void TransformableObj::scaleItself(float sx, float sy, float sz)
     this->transformationCallback();
 }
 
-void TransformableObj::scaleItself(float s)
+void TransformableObj3D::scaleItself(float s)
 {
     this->scaleItself(s, s, s);
 }
 
-void TransformableObj::scaleItselfTo(float sx, float sy, float sz)
+void TransformableObj3D::scaleItselfTo(float sx, float sy, float sz)
 {
     this->translate_base(-this->selfOrigin());
     this->scale_base(sx / m_scales.x, sy / m_scales.x, sz / m_scales.x);
@@ -214,33 +214,33 @@ void TransformableObj::scaleItselfTo(float sx, float sy, float sz)
     this->transformationCallback();
 }
 
-void TransformableObj::scaleItselfTo(float s)
+void TransformableObj3D::scaleItselfTo(float s)
 {
     this->scaleItselfTo(s, s, s);
 }
 
-void TransformableObj::reflectx()
+void TransformableObj3D::reflectx()
 {
     this->scale_base(-1.0, 1.0, 1.0);
 
     this->transformationCallback();
 }
 
-void TransformableObj::reflecty()
+void TransformableObj3D::reflecty()
 {
     this->scale_base(1.0, -1.0, 1.0);
 
     this->transformationCallback();
 }
 
-void TransformableObj::reflectz()
+void TransformableObj3D::reflectz()
 {
     this->scale_base(1.0, 1.0, -1.0);
 
     this->transformationCallback();
 }
 
-void TransformableObj::reflect(const vec3 &point, const vec3 &normal)
+void TransformableObj3D::reflect(const vec3 &point, const vec3 &normal)
 {
     float cosx, sinx, cosy, siny;
     this->coincidez_values(normal, sinx, cosx, siny, cosy);
@@ -256,7 +256,7 @@ void TransformableObj::reflect(const vec3 &point, const vec3 &normal)
     this->transformationCallback();
 }
 
-void TransformableObj::coincideWithZ(const vec3 &vector)
+void TransformableObj3D::coincideWithZ(const vec3 &vector)
 {
     float cosx, sinx, cosy, siny;
     this->coincidez_values(vector, sinx, cosx, siny, cosy);
@@ -269,7 +269,7 @@ void TransformableObj::coincideWithZ(const vec3 &vector)
     this->transformationCallback();
 }
 
-void TransformableObj::coincideWithZReverse(const vec3 &vector)
+void TransformableObj3D::coincideWithZReverse(const vec3 &vector)
 {
     float cosx, sinx, cosy, siny;
     this->coincidez_values(vector, sinx, cosx, siny, cosy);
@@ -282,22 +282,22 @@ void TransformableObj::coincideWithZReverse(const vec3 &vector)
     this->transformationCallback();
 }
 
-void TransformableObj::resetAngle()
+void TransformableObj3D::resetAngle()
 {
     m_angle = 0;
 }
 
-void TransformableObj::trackAngle(bool value)
+void TransformableObj3D::trackAngle(bool value)
 {
     m_angleTrack = value;
 }
 
-float TransformableObj::getAngle() const
+float TransformableObj3D::getAngle() const
 {
     return m_angle;
 }
 
-void TransformableObj::transformationCallback()
+void TransformableObj3D::transformationCallback()
 {
     // Update origin
     m_origin = m_modelMatrix * vec4(ORIGIN_DEFAULT, 1.0f);
@@ -311,12 +311,12 @@ void TransformableObj::transformationCallback()
     m_scales = m_scaleMatrix * vec4(SCALES_DEFAULT, 1.0f);
 }
 
-const vec3 &TransformableObj::selfOrigin() const
+const vec3 &TransformableObj3D::selfOrigin() const
 {
     return m_origin;
 }
 
-void TransformableObj::translate_base(const vec3 &t)
+void TransformableObj3D::translate_base(const vec3 &t)
 {
     // Make translation matrix
     mat4 matr(1.0f);
@@ -326,25 +326,25 @@ void TransformableObj::translate_base(const vec3 &t)
     m_modelMatrix = matr * m_modelMatrix;
 }
 
-void TransformableObj::rotatex_base(float angle)
+void TransformableObj3D::rotatex_base(float angle)
 {
     float angleRadian = glm::radians(angle);
     this->rotatex_base_values(glm::sin(angleRadian), glm::cos(angleRadian));
 }
 
-void TransformableObj::rotatey_base(float angle)
+void TransformableObj3D::rotatey_base(float angle)
 {
     float angleRadian = glm::radians(angle);
     this->rotatey_base_values(glm::sin(angleRadian), glm::cos(angleRadian));
 }
 
-void TransformableObj::rotatez_base(float angle)
+void TransformableObj3D::rotatez_base(float angle)
 {
     float angleRadian = glm::radians(angle);
     this->rotatez_base_values(glm::sin(angleRadian), glm::cos(angleRadian));
 }
 
-void TransformableObj::rotatex_base_values(float sinValue, float cosValue)
+void TransformableObj3D::rotatex_base_values(float sinValue, float cosValue)
 {
     // Make rotation matrix
     mat4 matr(1.0f);
@@ -358,7 +358,7 @@ void TransformableObj::rotatex_base_values(float sinValue, float cosValue)
     m_normalMatrix = matr * m_normalMatrix;
 }
 
-void TransformableObj::rotatey_base_values(float sinValue, float cosValue)
+void TransformableObj3D::rotatey_base_values(float sinValue, float cosValue)
 {
     // Make rotation matrix
     mat4 matr(1.0f);
@@ -372,7 +372,7 @@ void TransformableObj::rotatey_base_values(float sinValue, float cosValue)
     m_normalMatrix = matr * m_normalMatrix;
 }
 
-void TransformableObj::rotatez_base_values(float sinValue, float cosValue)
+void TransformableObj3D::rotatez_base_values(float sinValue, float cosValue)
 {
     // Make rotation matrix
     mat4 matr(1.0f);
@@ -386,7 +386,7 @@ void TransformableObj::rotatez_base_values(float sinValue, float cosValue)
     m_normalMatrix = matr * m_normalMatrix;
 }
 
-void TransformableObj::rotateAround_base(float angle, const vec3 &point, const vec3 &vector)
+void TransformableObj3D::rotateAround_base(float angle, const vec3 &point, const vec3 &vector)
 {
     float sinx, cosx, siny, cosy;
     this->coincidez_values(vector, sinx, cosx, siny, cosy);
@@ -400,7 +400,7 @@ void TransformableObj::rotateAround_base(float angle, const vec3 &point, const v
     this->translate_base(point);
 }
 
-void TransformableObj::scale_base(float sx, float sy, float sz)
+void TransformableObj3D::scale_base(float sx, float sy, float sz)
 {
     // Make scale matrix
     mat4 matr(1.0f);
@@ -413,7 +413,7 @@ void TransformableObj::scale_base(float sx, float sy, float sz)
     m_scaleMatrix = matr * m_scaleMatrix;
 }
 
-void TransformableObj::coincidez_values(const vec3 &vector, float &sinx, float &cosx, float &siny, float &cosy)
+void TransformableObj3D::coincidez_values(const vec3 &vector, float &sinx, float &cosx, float &siny, float &cosy)
 {
     vec3 unit = glm::normalize(vector);
 

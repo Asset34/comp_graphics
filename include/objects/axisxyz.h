@@ -1,13 +1,13 @@
 #ifndef AXISXYZ_H_
 #define AXISXYZ_H_
 
-#include "abstract/transformableobj.h"
+#include "abstract/transformableobj3d.h"
 #include "interfaces/renderable.h"
 #include <vector>
 
 using glm::vec3;
 
-class AxisXYZ : public TransformableObj,  public Renderable {
+class AxisXYZ : public TransformableObj3D,  public Renderable {
 public:
     AxisXYZ();
     virtual ~AxisXYZ();

@@ -9,10 +9,10 @@ using glm::vec4;
 using glm::mat3;
 using glm::mat4;
 
-class TransformableObj {
+class TransformableObj3D {
 public:
-    TransformableObj();
-    virtual ~TransformableObj() {};
+    TransformableObj3D();
+    virtual ~TransformableObj3D() {};
 
     const mat4 &getModelMatrix() const;
     const mat4 &getNormalMatrix() const;

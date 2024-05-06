@@ -212,7 +212,7 @@ const vec3 &Shape::selfOrigin() const
 
 void Shape::transformationCallback()
 {
-    TransformableObj::transformationCallback();
+    TransformableObj3D::transformationCallback();
 
     // Update center
     m_center = this->getModelMatrix() * vec4(m_centerValue, 1);

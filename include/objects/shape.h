@@ -5,9 +5,9 @@
 #include <list>
 
 #include "interfaces/renderable.h"
-#include "abstract/transformableobj.h"
+#include "abstract/transformableobj3d.h"
 
-class Shape : public TransformableObj, public Renderable {
+class Shape : public TransformableObj3D, public Renderable {
 public:
     Shape();
     ~Shape();

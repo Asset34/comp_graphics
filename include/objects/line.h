@@ -2,9 +2,9 @@
 #define LINE_H_
 
 #include "interfaces/renderable.h"
-#include "abstract/transformableobj.h"
+#include "abstract/transformableobj3d.h"
 
-class Line : public TransformableObj, public Renderable {
+class Line : public TransformableObj3D, public Renderable {
 public:
     Line(const vec3 &b = {0, 0, 0}, const vec3 &e = {0, 0, 0});
     ~Line();

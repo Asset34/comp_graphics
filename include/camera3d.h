@@ -1,10 +1,10 @@
 #ifndef CAMERA3D_H_
 #define CAMERA3D_H_
 
-#include "abstract/transformableobj.h"
+#include "abstract/transformableobj3D.h"
 #include "interfaces/observationcontroller3d.h"
 
-class Camera3D : public TransformableObj, public ObservationController3D {
+class Camera3D : public TransformableObj3D, public ObservationController3D {
 public:
     Camera3D(float hfov = 45.0, float aspectRatio = 1.0, float near = 0.01, float far = 100.0);
     ~Camera3D();

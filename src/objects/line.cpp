@@ -108,7 +108,7 @@ glm::mat4 Line::getTransformation()
 
 void Line::transformationCallback()
 {
-    TransformableObj::transformationCallback();
+    TransformableObj3D::transformationCallback();
 
     // Update points
     m_begin = this->getModelMatrix() * vec4(m_begin, 1);
