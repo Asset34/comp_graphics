@@ -26,16 +26,18 @@ private:
         void render(const RenderProviderData &data);
 
     private:
+        void loadVertexData(const RenderData &data);
         void loadVertices(const RenderData &data);
         void loadEdges(const RenderData &data);
         void loadPolygons(const RenderData &data);
 
+        void renderVertices(const RenderData &data);
         void renderEdges(const RenderData &data);
         void renderPolygons(const RenderData &data);
 
         // Buffers
         GLuint m_vao, m_vbo;
-        GLuint m_eboPolygons, m_eboEdges;
+        GLuint m_eboVertices, m_eboPolygons, m_eboEdges;
 
         Shader m_shader;
 

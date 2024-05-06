@@ -61,17 +61,18 @@ RenderData Line::getRenderData()
     data.UseModelMatr = false;
     data.UseViewMatr  = true;
     data.UseProjMatr  = true;
+    data.UseGlobalEdgeColor = true;
 
     // Setup Data
 
-    data.Vertices.reserve(2);
-    data.Vertices.push_back(m_begin);
-    data.Vertices.push_back(m_end);
+    data.VertexData.reserve(2);
+    data.VertexData.push_back(m_begin);
+    data.VertexData.push_back(m_end);
 
     data.Edges.push_back({0, 1});
 
     // Setup Visuals
-    data.EdgeColor = m_color;
+    data.GlobalEdgeColor = m_color;
 
     return data;
 }
