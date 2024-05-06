@@ -28,6 +28,9 @@ public:
     std::list<int> getUpdateList() override;
 
 private:
+    void buildShape();
+    void buildLine();
+
     enum Commands {
         CMD_SHAPE_SET = 0,
         CMD_LINE_BEGIN_SET = 1,

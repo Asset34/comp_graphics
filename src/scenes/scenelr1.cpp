@@ -2,75 +2,13 @@
 
 SceneLR1::SceneLR1()
 {
-    // Setup Shape
+    // Build objects
+    this->buildShape();
+    this->buildLine();
 
-    m_shape.setVertexData({
-        { -10,  10,  10 },
-        { -10, -10,  10 },
-        {  10, -10,  10 },
-        {  10,  10,  10 },
-        { -10,  10, -10 },
-        { -10, -10, -10 },
-        {  10, -10, -10 },
-        {  10,  10, -10 }
-    });
-
-    m_shape.defineVertex(0, {1.0, 0.0, 0.0});
-    m_shape.defineVertex(1, {1.0, 0.0, 0.0});
-    m_shape.defineVertex(2, {1.0, 0.0, 0.0});
-    m_shape.defineVertex(3, {1.0, 0.0, 0.0});
-    m_shape.defineVertex(4, {0.0, 0.0, 1.0});
-    m_shape.defineVertex(5, {0.0, 0.0, 1.0});
-    m_shape.defineVertex(6, {0.0, 0.0, 1.0});
-    m_shape.defineVertex(7, {0.0, 0.0, 1.0});
-
-    m_shape.definePolygon({0, 1, 2, 3}, {1.0, 0.0, 0.0});
-    m_shape.definePolygon({4, 5, 6, 7}, {0.0, 1.0, 0.0});
-    m_shape.definePolygon({0, 4, 7, 3}, {0.0, 0.0, 1.0});
-    m_shape.definePolygon({1, 5, 6, 2}, {1.0, 0.0, 1.0});
-    m_shape.definePolygon({3, 7, 6, 2}, {1.0, 1.0, 0.0});
-    m_shape.definePolygon({0, 4, 5, 1}, {0.0, 1.0, 1.0});
-
-    m_shape.defineEdge(0, 1, {1.0, 1.0, 1.0});
-    m_shape.defineEdge(1, 2, {1.0, 1.0, 1.0});
-    m_shape.defineEdge(2, 3, {1.0, 1.0, 1.0});
-    m_shape.defineEdge(3, 0, {1.0, 1.0, 1.0});
-    m_shape.defineEdge(4, 5, {1.0, 1.0, 1.0});
-    m_shape.defineEdge(5, 6, {1.0, 1.0, 1.0});
-    m_shape.defineEdge(6, 7, {1.0, 0.0, 0.0});
-    m_shape.defineEdge(7, 4, {1.0, 0.0, 0.0});
-    m_shape.defineEdge(0, 4, {1.0, 0.0, 0.0});
-    m_shape.defineEdge(1, 5, {1.0, 0.0, 0.0});
-    m_shape.defineEdge(2, 6, {1.0, 0.0, 0.0});
-    m_shape.defineEdge(3, 7, {1.0, 0.0, 0.0});
-
-    // m_shape.setRenderVerticesFlag(true);
-    m_shape.setRenderEdgesFlag(true);
-    m_shape.setRenderPolygonsFlag(true);
-
-    m_shape.setUseModelMatrFlag(true);
-    m_shape.setUseViewMatrFlag(true);
-    m_shape.setUseProjMatrFlag(true);
-    m_shape.setUseGlobalPolygonColor(true);
-    m_shape.setUseGlobalEdgeColor(true);
-    m_shape.setUseGlobalVertexColor(true);
-    
-    m_shape.setGlobalPolygonColor({0.1, 0.2, 0.6});
-    m_shape.setGlobalEdgeColor({0.05, 0.1, 0.3});
-    m_shape.setEdgeWidth(4);
-
+    // Init objects
     m_shape.translate({-20, 30, 0});
-
     m_shape.trackAngle(true);
-
-    // Setup Line
-    m_line.setBegin({-40, 50, -70});
-    m_line.setEnd({50, 25, -20});
-    m_line.setColor({0.75, 0, 0});
-    m_line.setEndsColor({1, 1, 1});
-    m_line.setWidth(3);
-    m_line.setEndsSize(5);
-
 
     // Add renderable objects
     this->addRenderable(&m_shape);
@@ -209,4 +147,78 @@ void SceneLR1::updateAck()
 std::list<int> SceneLR1::getUpdateList()
 {
     return m_updateList;
+}
+
+void SceneLR1::buildShape()
+{
+    m_shape.setVertexData({
+        { -10,  10,  10 },
+        { -10, -10,  10 },
+        {  10, -10,  10 },
+        {  10,  10,  10 },
+        { -10,  10, -10 },
+        { -10, -10, -10 },
+        {  10, -10, -10 },
+        {  10,  10, -10 }
+    });
+
+    // Define vertices
+    m_shape.defineVertex(0, {1.0, 0.0, 0.0});
+    m_shape.defineVertex(1, {1.0, 0.0, 0.0});
+    m_shape.defineVertex(2, {1.0, 0.0, 0.0});
+    m_shape.defineVertex(3, {1.0, 0.0, 0.0});
+    m_shape.defineVertex(4, {0.0, 0.0, 1.0});
+    m_shape.defineVertex(5, {0.0, 0.0, 1.0});
+    m_shape.defineVertex(6, {0.0, 0.0, 1.0});
+    m_shape.defineVertex(7, {0.0, 0.0, 1.0});
+
+    // Define polygons
+    m_shape.definePolygon({0, 1, 2, 3}, {1.0, 0.0, 0.0});
+    m_shape.definePolygon({4, 5, 6, 7}, {0.0, 1.0, 0.0});
+    m_shape.definePolygon({0, 4, 7, 3}, {0.0, 0.0, 1.0});
+    m_shape.definePolygon({1, 5, 6, 2}, {1.0, 0.0, 1.0});
+    m_shape.definePolygon({3, 7, 6, 2}, {1.0, 1.0, 0.0});
+    m_shape.definePolygon({0, 4, 5, 1}, {0.0, 1.0, 1.0});
+
+    // Define edges
+    m_shape.defineEdge(0, 1, {1.0, 1.0, 1.0});
+    m_shape.defineEdge(1, 2, {1.0, 1.0, 1.0});
+    m_shape.defineEdge(2, 3, {1.0, 1.0, 1.0});
+    m_shape.defineEdge(3, 0, {1.0, 1.0, 1.0});
+    m_shape.defineEdge(4, 5, {1.0, 1.0, 1.0});
+    m_shape.defineEdge(5, 6, {1.0, 1.0, 1.0});
+    m_shape.defineEdge(6, 7, {1.0, 0.0, 0.0});
+    m_shape.defineEdge(7, 4, {1.0, 0.0, 0.0});
+    m_shape.defineEdge(0, 4, {1.0, 0.0, 0.0});
+    m_shape.defineEdge(1, 5, {1.0, 0.0, 0.0});
+    m_shape.defineEdge(2, 6, {1.0, 0.0, 0.0});
+    m_shape.defineEdge(3, 7, {1.0, 0.0, 0.0});
+
+    // Set Flags
+    m_shape.setRenderEdgesFlag(true);
+    m_shape.setRenderPolygonsFlag(true);
+    m_shape.setUseModelMatrFlag(true);
+    m_shape.setUseViewMatrFlag(true);
+    m_shape.setUseProjMatrFlag(true);
+    m_shape.setUseGlobalPolygonColor(true);
+    m_shape.setUseGlobalEdgeColor(true);
+    m_shape.setUseGlobalVertexColor(true);
+    
+    // Setu Visuals
+    m_shape.setGlobalPolygonColor({0.1, 0.2, 0.6});
+    m_shape.setGlobalEdgeColor({0.05, 0.1, 0.3});
+    m_shape.setEdgeWidth(4);
+}
+
+void SceneLR1::buildLine()
+{
+    // Set Data
+    m_line.setBegin({-40, 50, -70});
+    m_line.setEnd({50, 25, -20});
+
+    // Set Visuals
+    m_line.setColor({0.75, 0, 0});
+    m_line.setEndsColor({1, 1, 1});
+    m_line.setWidth(3);
+    m_line.setEndsSize(5);
 }
