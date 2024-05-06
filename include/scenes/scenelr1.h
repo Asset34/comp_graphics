@@ -5,6 +5,7 @@
 #include "scenes/scene3d.h"
 #include "objects/shape.h"
 #include "objects/line.h"
+#include "objects/axisxyz.h"
 
 #include <list>
 #include <vector>
@@ -44,6 +45,7 @@ private:
 
     Shape m_shape;
     Line m_line;
+    AxisXYZ m_axisXYZ;
     
     // Control values
     vec3 m_shapePos;

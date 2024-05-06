@@ -76,18 +76,23 @@ SceneLR1::SceneLR1()
     m_line.setWidth(4);
     m_line.setEndsSize(10);
 
+    // Setup Axis XYZ
+    m_axisXYZ.setSize(50);
+    m_axisXYZ.setWidth(3);
+
     // Setup camera
     Camera3D &camera = this->getCamera();
     camera.setPerspectiveProjection();
     camera.setVolume(90, 1.0, 0.01, 1000);
     camera.translate({0, 0, 100});
-    camera.setZoomLimits(0.3, 5);
+    camera.setZoomLimits(0.3, 50);
     camera.setZoomLimitsFlag(true);
     camera.setHome();
 
     // Setup Renderables
     this->addRenderable(&m_shape);
     this->addRenderable(&m_line);
+    this->addRenderable(&m_axisXYZ);
     
     // Setup scene background color
     this->setBackgroundColor({0.5, 0.5, 0.5});
