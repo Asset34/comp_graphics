@@ -3,6 +3,8 @@
 
 #include "abstract/scene.h"
 #include "camera3d.h"
+#include "objects/axisxyz.h"
+#include "objects/plane.h"
 
 class Scene3D : public Scene {
 public:
@@ -18,13 +20,17 @@ public:
 
 protected:
     void addRenderable(Renderable *r);
+
     Camera3D &getCamera();
+    AxisXYZ &getXYZ();
+    Plane &getGrid();
 
 private:
-    static const glm::vec3 DEFAULT_BACKGROUND_COLOR; // {0, 0, 0}
+    Camera3D m_camera;
+    AxisXYZ m_xyz;
+    Plane m_grid;
 
     std::vector<Renderable*> m_renderables;
-    Camera3D m_camera;
     glm::vec3 m_backgroundColor;
 
 };
