@@ -44,6 +44,7 @@ target_include_directories(imgui PUBLIC ${INCLUDE}/${INCLUDE_LIB}/imgui)
 add_executable(project
     ${SRC}/abstract/renderer.cpp
     ${SRC}/abstract/transformableobj3d.cpp
+    ${SRC}/abstract/transformableobj2d.cpp
     ${SRC}/glrenderer.cpp
     ${SRC}/glrendererunit.cpp
     ${SRC}/ui/glfwimguimanager.cpp
