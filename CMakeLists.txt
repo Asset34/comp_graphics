@@ -61,6 +61,7 @@ add_executable(project
     ${SRC}/workspace.cpp
     ${SRC}/shader.cpp
     ${SRC}/camera3d.cpp
+    ${SRC}/camera2d.cpp
     ${SRC}/window.cpp
     ${SRC}/main.cpp
     $<TARGET_OBJECTS:glad>
