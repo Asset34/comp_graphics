@@ -1,7 +1,7 @@
 #ifndef CAMERA3D_H_
 #define CAMERA3D_H_
 
-#include "abstract/transformableobj3D.h"
+#include "abstract/transformableobj3d.h"
 #include "interfaces/observationcontroller3d.h"
 
 class Camera3D : public TransformableObj3D, public ObservationController3D {
