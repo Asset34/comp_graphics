@@ -8,8 +8,8 @@ public:
     virtual void home() = 0;
 
     virtual void setAspectRatio(float aspectRatio) = 0;
-    virtual void translateForward(float d) = 0;
-    virtual void translateSide(float d) = 0;
+    virtual void translateForward(float relativeDf) = 0;
+    virtual void translateSide(float relativeDs) = 0;
     virtual void rotateHorizontal(float angle) = 0;
     virtual void rotateVertical(float angle) = 0;
     virtual void zoomIn() = 0;

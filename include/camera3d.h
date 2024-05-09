@@ -28,8 +28,8 @@ public:
     void setZoomLimits(float min, float max);
     void setZoomFactor(float factor);
 
-    void translateForward(float d) override;
-    void translateSide(float d) override;
+    void translateForward(float relativeDd) override;
+    void translateSide(float relativeDs) override;
     void rotateHorizontal(float angle) override;
     void rotateVertical(float angle) override;
     void zoomIn() override;
@@ -39,8 +39,18 @@ public:
     void setHorizontalLimitsFlag(bool flag);
     void setVerticalLimitsFlag(bool flag);
 
+    const vec3 &getViewPoint() const;
+
     vec3 getForwardUnit() const;
     vec3 getSideUnit() const;
+    vec3 getViewUnit() const;
+
+    float getViewDistance() const;
+    float getViewWidth() const;
+    float getViewHeight() const;
+
+protected:
+    void transformationCallback() override;
 
 private:
     void computeTop(float fov);
@@ -68,6 +78,7 @@ private:
     // Camera values
     vec3 m_viewPoint;
     vec3 m_viewPointHome;
+    float m_viewDistance;
     float m_horizontal, m_vertical;
     float m_zoom;
     float m_zoomFactor;

@@ -5,7 +5,7 @@ UiSceneController3D::UiSceneController3D(GLFWwindow * w)
     : UiSceneController(w),
       m_observationController(nullptr),
       m_mouseFirstClick(true),
-      m_translationSensitivity(0.25),
+      m_translationSensitivity(1),
       m_rotationSensitivity(0.5)
 {
 }
@@ -74,15 +74,17 @@ void UiSceneController3D::onMouseMovement(GLFWwindow *w, double xpos, double ypo
         // Adjust offsets
         float offsetx = xpos - m_mouseLastx;
         float offsety = ypos - m_mouseLasty;
-        
+
         // Remember last position
         m_mouseLastx = xpos;
         m_mouseLasty = ypos;
 
         if (key == GLFW_PRESS) {
-            // Control camera translation
-            m_observationController->translateSide(-offsetx * m_translationSensitivity);
-            m_observationController->translateForward(offsety * m_translationSensitivity);
+            float relativeOffsetx = offsetx / windowWidth;
+            float relativeOffsety = offsety / windowHeight;
+
+            m_observationController->translateSide(-relativeOffsetx * m_translationSensitivity);
+            m_observationController->translateForward(relativeOffsety * m_translationSensitivity);
         } else {
             // Control camera rotation
             m_observationController->rotateHorizontal(-offsetx * m_rotationSensitivity);

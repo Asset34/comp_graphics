@@ -6,6 +6,7 @@ Camera3D::Camera3D(float hfov, float aspectRatio, float near, float far)
      m_projType(ProjType::No),
      m_viewPoint({0, 0, 0}),
      m_viewPointHome({0, 0, 0}),
+     m_viewDistance(0.0),
      m_horizontal(0),
      m_vertical(0),
      m_zoom(1),
@@ -122,22 +123,20 @@ void Camera3D::setZoomFactor(float factor)
     m_zoomFactor = factor;
 }
 
-void Camera3D::translateForward(float d)
+void Camera3D::translateForward(float relativeDf)
 {
-    vec3 dv = -this->getForwardUnit() * d;
-    this->translate(dv);
-
-    // Update View Point
+    float ds = relativeDf * this->getViewHeight();
+    vec3 dv = ds * this->getForwardUnit();
     m_viewPoint += dv;
+    this->translate(dv);
 }
 
-void Camera3D::translateSide(float d)
+void Camera3D::translateSide(float relativeDs)
 {
-    vec3 dv = this->getSideUnit() * d;
-    this->translate(dv);
-
-    // Update View Point
+    float ds = relativeDs * this->getViewWidth();
+    vec3 dv = ds * this->getSideUnit();
     m_viewPoint += dv;
+    this->translate(dv);
 }
 
 void Camera3D::rotateHorizontal(float angle)
@@ -215,9 +214,14 @@ void Camera3D::setVerticalLimitsFlag(bool flag)
     m_verticalLimitFlag = flag;
 }
 
+const vec3 &Camera3D::getViewPoint() const
+{
+    return m_viewPoint;
+}
+
 vec3 Camera3D::getForwardUnit() const
 {
-    vec3 unit = this->getUnitz();
+    vec3 unit = this->getViewUnit();
     unit.y = 0;
 
     return glm::normalize(unit);
@@ -226,6 +230,35 @@ vec3 Camera3D::getForwardUnit() const
 vec3 Camera3D::getSideUnit() const
 {
     return this->getUnitx();
+}
+
+vec3 Camera3D::getViewUnit() const
+{
+    return -this->getUnitz();
+}
+
+float Camera3D::getViewDistance() const
+{
+    return m_viewDistance;
+}
+
+float Camera3D::getViewWidth() const
+{
+    return 2 * m_right * m_viewDistance / m_near;
+}
+
+float Camera3D::getViewHeight() const
+{
+    return 2 * m_top * m_viewDistance / m_near;
+}
+
+void Camera3D::transformationCallback()
+{
+    TransformableObj3D::transformationCallback();
+
+    // Update view distance
+    vec4 temp = this->getViewMatrix() * vec4(this->getViewPoint(), 1);
+    m_viewDistance = -temp.z;
 }
 
 void Camera3D::computeTop(float fov)
