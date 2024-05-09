@@ -10,7 +10,6 @@ public:
     virtual ~UiSceneController3D();
 
     void attachObservationController(ObservationController3D *c);
-    void setMouseSensitivity(float sensitivity);
 
     void setTranslationSensitivity(float sensitivity);
     void setRotatonSensitivity(float sensitivity);
