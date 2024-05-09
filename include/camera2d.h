@@ -24,8 +24,8 @@ public:
 
     void setArea(float height, float aspectRatio) override;
     void setAspectRatio(float aspectRatio) override;
-    void movex(float dx) override;
-    void movey(float dy) override;
+    void movex(float relativeDx) override;
+    void movey(float relativeDy) override;
     void zoomIn() override;
     void zoomOut() override;
 

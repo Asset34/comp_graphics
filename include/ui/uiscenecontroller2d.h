@@ -10,7 +10,6 @@ public:
     virtual ~UiSceneController2D();
 
     void attachObservationController(ObservationController2D *c);
-    void setSensitivity(float sensitivity);
 
 protected:
     void onWindowResize(GLFWwindow *w, int width, int height) override;
@@ -23,8 +22,6 @@ private:
     
     bool m_mouseFirstClick;
     float m_mouseLastx, m_mouseLasty;
-
-    float m_sensitivity;
         
 };
 

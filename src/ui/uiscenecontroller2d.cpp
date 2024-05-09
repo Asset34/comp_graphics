@@ -1,10 +1,11 @@
 #include "ui/uiscenecontroller2d.h"
 
+#include <iostream>
+
 UiSceneController2D::UiSceneController2D(GLFWwindow * w)
     : UiSceneController(w),
       m_observationController(nullptr),
-      m_mouseFirstClick(true),
-      m_sensitivity(0.1)
+      m_mouseFirstClick(true)
 {
 }
 
@@ -16,11 +17,6 @@ void UiSceneController2D::attachObservationController(ObservationController2D *c
 {
     m_observationController = c;
     m_observationController->setAspectRatio(this->getAspectRatio());
-}
-
-void UiSceneController2D::setSensitivity(float sensitivity)
-{
-    m_sensitivity = sensitivity;
 }
 
 void UiSceneController2D::onWindowResize(GLFWwindow *w, int width, int height)
@@ -64,16 +60,16 @@ void UiSceneController2D::onMouseMovement(GLFWwindow *w, double xpos, double ypo
     // Perform actions
     if (mouseRightButton == GLFW_PRESS) {
         // Adjust offsets
-        float offsetx = xpos - m_mouseLastx;
-        float offsety = ypos - m_mouseLasty;
-        
+        float relativeOffsetx = (xpos - m_mouseLastx) / windowWidth;
+        float relativeOffsety = (ypos - m_mouseLasty) / windowHeight;
+
         // Remember last position
         m_mouseLastx = xpos;
         m_mouseLasty = ypos;
 
-            // Control camera translation
-        m_observationController->movex(-offsetx * m_sensitivity);
-        m_observationController->movey(offsety * m_sensitivity);
+        // Control camera translation
+        m_observationController->movex(-relativeOffsetx);
+        m_observationController->movey(relativeOffsety);
     }
 }
 

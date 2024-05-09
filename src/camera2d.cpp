@@ -81,13 +81,15 @@ void Camera2D::setAspectRatio(float aspectRatio)
     this->computeClipMatrix();
 }
 
-void Camera2D::movex(float dx)
+void Camera2D::movex(float relativeDx)
 {
+    float dx = m_width * relativeDx;
     this->translate({dx, 0});
 }
 
-void Camera2D::movey(float dy)
+void Camera2D::movey(float relativeDy)
 {
+    float dy = m_height * relativeDy;
     this->translate({0, dy});
 }
 
