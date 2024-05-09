@@ -7,7 +7,7 @@ public:
 
     virtual void home() = 0;
     
-    virtual void setArea(float width, float height) = 0;
+    virtual void setArea(float width, float aspectRatio) = 0;
     virtual void setAspectRatio(float aspectRatio) = 0;
     virtual void movex(float dx) = 0;
     virtual void movey(float dy) = 0;
