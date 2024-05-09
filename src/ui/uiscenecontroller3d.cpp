@@ -35,7 +35,8 @@ void UiSceneController3D::onWindowResize(GLFWwindow *w, int width, int height)
     // Check
     if (!m_observationController) return;
 
-    this->updateArea();
+    UiSceneController::onWindowResize(w, width, height);
+
     m_observationController->setAspectRatio(this->getAspectRatio());
 }
 
