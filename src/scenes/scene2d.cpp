@@ -10,6 +10,9 @@ Scene2D::Scene2D()
 
     // Add default renderable objects
     m_renderables.push_back(&m_xy);
+
+    // Setup default background color
+    m_backgroundColor = {0.25, 0.25, 0.25};
 }
 
 ObservationController2D *Scene2D::getObservationController()
