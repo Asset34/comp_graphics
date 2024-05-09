@@ -60,6 +60,7 @@ add_executable(project
     ${SRC}/objects/line3d.cpp
     ${SRC}/objects/plane.cpp
     ${SRC}/objects/axisxyz.cpp
+    ${SRC}/objects/axisxy.cpp
     ${SRC}/workspace.cpp
     ${SRC}/shader.cpp
     ${SRC}/camera3d.cpp

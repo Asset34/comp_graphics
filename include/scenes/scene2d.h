@@ -3,6 +3,8 @@
 
 #include "abstract/scene.h"
 #include "camera2d.h"
+#include "objects/axisxy.h"
+
 
 class Scene2D : public Scene {
 public:
@@ -23,6 +25,7 @@ protected:
 
 private:
     Camera2D m_camera;
+    AxisXY m_xy;
 
     std::vector<Renderable*> m_renderables;
     glm::vec3 m_backgroundColor;
