@@ -69,11 +69,15 @@ void Camera2D::setArea(float height, float aspectRatio)
 {
     m_height = height;
     this->setAspectRatio(aspectRatio);
+
+    this->computeClipMatrix();
 }
 
 void Camera2D::setAspectRatio(float aspectRatio)
 {
     m_width = m_height * aspectRatio;
+
+    this->computeClipMatrix();
 }
 
 void Camera2D::movex(float dx)
@@ -116,6 +120,6 @@ void Camera2D::zoomOut()
 
 void Camera2D::computeClipMatrix()
 {
-    m_clipMatrix[0][0] = 1.0 / m_width;
-    m_clipMatrix[1][1] = 1.0 / m_height;
+    m_clipMatrix[0][0] = 2.0 / m_width;
+    m_clipMatrix[1][1] = 2.0 / m_height;
 }
