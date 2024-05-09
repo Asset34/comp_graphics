@@ -40,6 +40,7 @@ private:
     mat4 m_clipMatrix;
 
     // Camera values
+    float m_aspectRatio;
     float m_width, m_height;
 
     // Zoom values

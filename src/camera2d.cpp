@@ -75,6 +75,7 @@ void Camera2D::setArea(float height, float aspectRatio)
 
 void Camera2D::setAspectRatio(float aspectRatio)
 {
+    m_aspectRatio = aspectRatio;
     m_width = m_height * aspectRatio;
 
     this->computeClipMatrix();
@@ -93,7 +94,7 @@ void Camera2D::movey(float dy)
 void Camera2D::zoomIn()
 {
     float factor = m_zoomFactor;
-    float newZoom = m_zoom * m_zoomFactor;
+    float newZoom = m_zoom * factor;
     if (m_zoomLimitFlag) {
         if (newZoom < m_zoomMin) newZoom = m_zoomMin;
 
@@ -101,7 +102,8 @@ void Camera2D::zoomIn()
     }
 
     m_zoom = newZoom;
-    this->scale(factor, this->getOrigin());
+    m_height *= factor;
+    this->setAspectRatio(m_aspectRatio);
 }
 
 void Camera2D::zoomOut()
@@ -115,7 +117,8 @@ void Camera2D::zoomOut()
     }
 
     m_zoom = newZoom;
-    this->scale(factor, this->getOrigin());
+    m_height *= factor;
+    this->setAspectRatio(m_aspectRatio);
 }
 
 void Camera2D::computeClipMatrix()
