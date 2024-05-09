@@ -15,7 +15,7 @@ UiSceneController2D::~UiSceneController2D()
 void UiSceneController2D::attachObservationController(ObservationController2D *c)
 {
     m_observationController = c;
-    m_observationController->setSizes(this->getArea().width, this->getArea().height);
+    m_observationController->setArea(this->getArea().width, this->getAspectRatio());
 }
 
 void UiSceneController2D::setSensitivity(float sensitivity)
@@ -30,7 +30,7 @@ void UiSceneController2D::onWindowResize(GLFWwindow *w, int width, int height)
 
     UiSceneController::onWindowResize(w, width, height);
 
-    m_observationController->setSizes(this->getArea().width, this->getArea().height);
+    m_observationController->setArea(this->getArea().width, this->getAspectRatio());
 }
 
 void UiSceneController2D::onMouseMovement(GLFWwindow *w, double xpos, double ypos)

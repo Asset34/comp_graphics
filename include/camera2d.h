@@ -9,7 +9,7 @@ using glm::vec4;
 
 class Camera2D : public TransformableObj2D, public ObservationController2D {
 public:
-    Camera2D(float width, float height);
+    Camera2D(float height = 100, float aspectRatio = 1.0);
     ~Camera2D();
 
     const mat4 &getViewMatrix();
@@ -22,7 +22,8 @@ public:
     void setZoomLimits(float min, float max);
     void setZoomFactor(float factor);
 
-    void setSizes(float width, float height) override;
+    void setArea(float height, float aspectRatio) override;
+    void setAspectRatio(float aspectRatio) override;
     void movex(float dx) override;
     void movey(float dy) override;
     void zoomIn() override;

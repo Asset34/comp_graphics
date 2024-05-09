@@ -1,10 +1,8 @@
 #include "camera2d.h"
 
-Camera2D::Camera2D(float width, float height)
+Camera2D::Camera2D(float height, float aspectRatio)
     : m_viewMatrix(1.0f),
       m_clipMatrix(1.0f),
-      m_width(width),
-      m_height(height),
       m_zoom(1.0),
       m_zoomFactor(ZOOM_FACTOR_DEFAULT),
       m_zoomMin(ZOOM_LIMIT_MIN_DEFAULT),
@@ -12,6 +10,7 @@ Camera2D::Camera2D(float width, float height)
       m_zoomLimitFlag(false),
       m_originHome({0, 0})
 {
+    this->setArea(height, aspectRatio);
     this->computeClipMatrix();
 }
 
@@ -66,12 +65,15 @@ void Camera2D::setZoomFactor(float factor)
     m_zoomFactor = factor;
 }
 
-void Camera2D::setSizes(float width, float height)
+void Camera2D::setArea(float height, float aspectRatio)
 {
-    m_width = width;
     m_height = height;
+    this->setAspectRatio(aspectRatio);
+}
 
-    this->computeClipMatrix();
+void Camera2D::setAspectRatio(float aspectRatio)
+{
+    m_width = m_height * aspectRatio;
 }
 
 void Camera2D::movex(float dx)
