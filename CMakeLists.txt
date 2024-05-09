@@ -54,6 +54,7 @@ add_executable(project
     ${SRC}/ui/uiscenecontroller2d.cpp
     ${SRC}/ui/uilr1controller.cpp
     ${SRC}/scenes/scene3d.cpp
+    ${SRC}/scenes/scene2d.cpp
     ${SRC}/scenes/scenelr1.cpp
     ${SRC}/objects/shape3d.cpp
     ${SRC}/objects/line3d.cpp
