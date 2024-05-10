@@ -51,14 +51,15 @@ RenderData AxisXY::getRenderData()
 
     // Setup data
 
-    data.VertexData.reserve(3);
-    data.VertexData.push_back({m_center, 0});
-    data.VertexData.push_back({m_axisx, 0});
-    data.VertexData.push_back({m_axisy, 0});
+    data.VertexData.reserve(4);
+    data.VertexData.push_back({-m_axisx, m_center.y});
+    data.VertexData.push_back({m_axisx, m_center.y});
+    data.VertexData.push_back({-m_axisy, m_center.x});
+    data.VertexData.push_back({m_axisy, m_center.x});
 
     data.Edges.reserve(2);
     data.Edges.push_back({0, 1, m_colorx});
-    data.Edges.push_back({0, 2, m_colory});
+    data.Edges.push_back({2, 3, m_colory});
 
     // Setup Misc Visual values
     data.EdgeWidth = m_width;
