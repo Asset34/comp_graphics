@@ -83,16 +83,12 @@ void UiLr1Controller::control()
     }
 }
 
-void UiLr1Controller::render()
+void UiLr1Controller::renderUi()
 {
-    this->renderBegin();
-
     ImGui::Begin("Shape");
     m_shapeChanged |= ImGui::SliderFloat3("Position", m_shapePos, -200, 200);
     m_lineBeginChanged |= ImGui::SliderFloat3("Line (x1)", m_lineBegin, -200, 200);
     m_lineEndChanged |= ImGui::SliderFloat3("Line (x2)", m_lineEnd, -200, 200);
     m_rotationAngleChanged |= ImGui::SliderFloat("Rotation Angle", &m_rotationAngle, -360.0, 360.0, "%.0f deg");
     ImGui::End();
-
-    this->renderEnd();
 }

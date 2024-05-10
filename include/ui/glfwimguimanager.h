@@ -12,8 +12,11 @@ public:
     virtual void manage() override;
     void init(GLFWwindow *w);
 
+    void setPipelinePosition(bool begin, bool end);
+
 protected:
-    virtual void render();
+    void render();
+    virtual void renderUi();
     
     void renderBegin();
     void renderEnd();
@@ -37,9 +40,10 @@ private:
 
     static GlfwImguiManager *retrieveThis(GLFWwindow *window);
 
-    GLFWwindow *m_window;
+    bool m_pipelineBegin;
+    bool m_pipelineEnd;
 
-    
+    GLFWwindow *m_window;
 
 };
 

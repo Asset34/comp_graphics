@@ -13,7 +13,7 @@ protected:
     void updateFromControllable() override;
     void control() override;
 
-    void render() override;
+    void renderUi() override;
 
 private:
     enum Commands {
