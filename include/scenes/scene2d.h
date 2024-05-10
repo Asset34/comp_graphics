@@ -20,6 +20,7 @@ public:
 
 protected:
     void addRenderable(Renderable *r);
+    int getNextRenderableUpdateVectorIndex();
 
     Camera2D &getCamera();
 

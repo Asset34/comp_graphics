@@ -50,6 +50,10 @@ void Scene2D::addRenderable(Renderable *r)
     m_renderables.push_back(r);
 }
 
+int Scene2D::getNextRenderableUpdateVectorIndex()
+{
+    return 1;
+}
 Camera2D &Scene2D::getCamera()
 {
     return m_camera;

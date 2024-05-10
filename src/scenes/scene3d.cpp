@@ -69,6 +69,10 @@ void Scene3D::addRenderable(Renderable *r)
     m_renderables.push_back(r);
 }
 
+int Scene3D::getNextRenderableUpdateVectorIndex()
+{
+    return 2;
+}
 Camera3D &Scene3D::getCamera()
 {
     return m_camera;

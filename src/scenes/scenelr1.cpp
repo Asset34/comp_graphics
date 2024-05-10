@@ -32,7 +32,10 @@ void SceneLR1::update()
 
 std::vector<int> SceneLR1::getRenderableUpdateVector()
 {
-    return {3}; // Update only line data
+    std::vector<int> vector = Scene3D::getRenderableUpdateVector();
+    vector.push_back(this->getNextRenderableUpdateVectorIndex() + 1); // Update only line data
+
+    return vector;
 }
 
 void SceneLR1::set(int vid, float value)
