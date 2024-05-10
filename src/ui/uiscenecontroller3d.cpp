@@ -1,8 +1,8 @@
 #include "glad/glad.h"
 #include "ui/uiscenecontroller3d.h"
 
-UiSceneController3D::UiSceneController3D(GLFWwindow * w)
-    : UiSceneController(w),
+UiSceneController3D::UiSceneController3D(GLFWwindow * w, bool manageContext)
+    : UiSceneController(w, manageContext),
       m_observationController(nullptr),
       m_mouseFirstClick(true),
       m_translationSensitivity(1),

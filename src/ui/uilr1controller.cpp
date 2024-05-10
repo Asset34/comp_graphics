@@ -4,8 +4,8 @@
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
 
-UiLr1Controller::UiLr1Controller(GLFWwindow * w)
-    : UiSceneController3D(w),
+UiLr1Controller::UiLr1Controller(GLFWwindow * w, bool manageContext)
+    : UiSceneController3D(w, manageContext),
       m_shapeChanged(false),
       m_lineBeginChanged(false),
       m_lineEndChanged(false),

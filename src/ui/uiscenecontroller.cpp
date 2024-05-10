@@ -1,8 +1,8 @@
 #include "glad/glad.h"
 #include "ui/uiscenecontroller.h"
 
-UiSceneController::UiSceneController(GLFWwindow * w)
-    : GlfwImguiManager(w),
+UiSceneController::UiSceneController(GLFWwindow *w, bool manageContext)
+    : GlfwImguiManager(w, manageContext),
       m_marginLeft(0),
       m_marginTop(0),
       m_marginRight(0),

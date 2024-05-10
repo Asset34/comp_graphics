@@ -1,13 +1,20 @@
 #include "glrenderer.h"
 
+bool GLRenderer::m_initialized = false;
+
 GLRenderer::~GLRenderer()
 {
 }
 
-void GLRenderer::init()
-{
+void GLRenderer::init() {
+    if (m_initialized) {
+        return;
+    }
+
     gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
     glEnable(GL_DEPTH_TEST);
+
+    m_initialized = true;
 }
 
 void GLRenderer::attach(RenderProvider *rp)
@@ -35,7 +42,7 @@ void GLRenderer::updateData()
 
 void GLRenderer::render()
 {
-    if (!m_provider) {
+    if (!m_provider && !m_initialized) {
         return;
     }
 

@@ -21,11 +21,6 @@ void Workspace::attach(Scene *scene, Renderer *renderer, UiManager *manager)
     m_uiManager = manager;
 }
 
-UiManager *Workspace::getUiManager() const
-{
-    return m_uiManager;
-}
-
 void Workspace::run()
 {
     if (m_scene) m_scene->update();
@@ -34,4 +29,14 @@ void Workspace::run()
         m_renderer->render();
     }
     if (m_uiManager) m_uiManager->manage();
+}
+
+void Workspace::update()
+{
+    m_uiManager->update();
+}
+
+UiManager *Workspace::getUiManager() const
+{
+    return m_uiManager;
 }

@@ -5,7 +5,7 @@
 
 class UiLr1Controller : public UiSceneController3D {
 public:
-    UiLr1Controller(GLFWwindow *w = nullptr);
+    UiLr1Controller(GLFWwindow *w = nullptr, bool manageContext = false);
     ~UiLr1Controller();
 
 protected:

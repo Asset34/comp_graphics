@@ -6,7 +6,7 @@
 
 class UiSceneController2D : public UiSceneController {
 public:
-    UiSceneController2D(GLFWwindow *w = nullptr);
+    UiSceneController2D(GLFWwindow *w = nullptr, bool manageContext = false);
     virtual ~UiSceneController2D();
 
     void attachObservationController(ObservationController2D *c);

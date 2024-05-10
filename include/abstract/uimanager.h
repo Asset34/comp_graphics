@@ -5,6 +5,7 @@ class UiManager {
 public:
     virtual ~UiManager() {};
     virtual void manage() = 0;
+    virtual void update() = 0;
 
 };
 

@@ -1,9 +1,7 @@
 #include "ui/uiscenecontroller2d.h"
 
-#include <iostream>
-
-UiSceneController2D::UiSceneController2D(GLFWwindow * w)
-    : UiSceneController(w),
+UiSceneController2D::UiSceneController2D(GLFWwindow * w, bool manageContext)
+    : UiSceneController(w, manageContext),
       m_observationController(nullptr),
       m_mouseFirstClick(true)
 {

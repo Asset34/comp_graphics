@@ -11,12 +11,16 @@ class GLRenderer : public Renderer {
 public:
     ~GLRenderer();
 
-    void init() override;
+    static void init();
+
+    // void init() override;
     void attach(RenderProvider *rp);
     void updateData() override;
     void render() override;
 
 private:
+    static bool m_initialized;
+
     class GLRendererUnit {
     public:
         GLRendererUnit(Renderable *r);

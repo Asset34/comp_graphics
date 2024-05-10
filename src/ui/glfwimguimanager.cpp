@@ -5,12 +5,20 @@
 #include "imgui/imgui_impl_opengl3.h"
 #include "imgui/imgui_impl_glfw.h"
 
-GlfwImguiManager::GlfwImguiManager(GLFWwindow *w)
-    : m_window(w)
+bool GlfwImguiManager::m_contextManagerAssigned = false;
+bool GlfwImguiManager::m_contextInitialized = false;
+bool GlfwImguiManager::m_preRenderingHandled = false;
+bool GlfwImguiManager::m_postRenderingHandled = true;
+int GlfwImguiManager::m_preRenderingHandlers = 0;
+int GlfwImguiManager::m_postRenderingHandlers = 0;
+
+GlfwImguiManager::GlfwImguiManager(GLFWwindow *w, bool manageContext)
+    : m_window(nullptr),
+      m_manageContext(false),
+      m_handlePreRendering(false),
+      m_handlePostRendering(false)
 {
-    if (m_window) {
-        this->init();
-    }
+    this->init(w, manageContext);
 
     // Setup Callbacks
     glfwSetFramebufferSizeCallback(m_window, onWindowResizeEvent);
@@ -21,7 +29,9 @@ GlfwImguiManager::GlfwImguiManager(GLFWwindow *w)
 
 GlfwImguiManager::~GlfwImguiManager()
 {
-    this->destroy();
+    if (m_manageContext && m_contextInitialized) {
+        this->destroyContext();
+    }
 }
 
 void GlfwImguiManager::manage()
@@ -29,42 +39,96 @@ void GlfwImguiManager::manage()
     this->render();
 }
 
-void GlfwImguiManager::init(GLFWwindow *w)
+void GlfwImguiManager::update()
 {
-    if (m_window) {
-        this->destroy();
-        m_window = w;
+    int windowWidth, windowHeight;
+    glfwGetWindowSize(this->getWindowPtr(), &windowWidth, &windowHeight);
+
+    this->onWindowResize(m_window, windowWidth, windowHeight);
+}
+
+void GlfwImguiManager::init(GLFWwindow *w, bool manageContext)
+{
+    // Destroy previous context
+    if (m_manageContext && m_contextInitialized) {
+        this->destroyContext();
     }
 
-    if (m_window) this->init();
+    // Init context
+    m_window = w;
+    m_manageContext = manageContext;
+    if(m_manageContext) {
+        this->initContext();
+    }
+
+    this->initLogic();
+}
+
+void GlfwImguiManager::manageContext()
+{
+    if (!m_contextManagerAssigned) {
+        m_manageContext = true;
+        m_contextManagerAssigned = true;
+    }
+}
+
+void GlfwImguiManager::stopManagingContext()
+{
+    m_manageContext = false;
+    m_contextManagerAssigned = false;
+}
+
+void GlfwImguiManager::handlePreRendering()
+{
+    m_handlePreRendering = true;
+    m_preRenderingHandlers++;
+}
+
+void GlfwImguiManager::stopHandingPreRendering()
+{
+    m_handlePreRendering = false;
+    m_preRenderingHandlers--;
+}
+
+void GlfwImguiManager::handlePostRendering()
+{
+    m_handlePostRendering = true;
+    m_postRenderingHandlers++;
+}
+
+void GlfwImguiManager::stopHandingPostRendering()
+{
+    m_handlePostRendering = false;
+    m_postRenderingHandlers--;
 }
 
 void GlfwImguiManager::render()
 {
-    this->renderBegin();
+    if (!m_contextInitialized) {
+        return;
+    }
+
+    // Begin
+    if (m_handlePreRendering && !m_preRenderingHandled) {
+        this->preRendering();
+    }
+
+    if (m_preRenderingHandled) {
+        this->renderUi();
+    }
+    
+    // End
+    if (m_handlePostRendering && !m_postRenderingHandled) {
+        this->postRendering();
+    }
+}
+
+void GlfwImguiManager::renderUi()
+{
     ImGui::ShowDemoWindow();
-    this->renderEnd();
 }
 
-void GlfwImguiManager::renderBegin()
-{
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame();
-}
-
-void GlfwImguiManager::renderEnd()
-{
-    ImGui::Render();
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-}
-
-GLFWwindow *GlfwImguiManager::getWindowPtr() const
-{
-    return m_window;
-}
-
-void GlfwImguiManager::init()
+void GlfwImguiManager::initContext()
 {
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
@@ -74,13 +138,41 @@ void GlfwImguiManager::init()
     // Setup Platform/Renderer backends
     ImGui_ImplGlfw_InitForOpenGL(m_window, true);
     ImGui_ImplOpenGL3_Init();
+
+    m_contextInitialized = true;
 }
 
-void GlfwImguiManager::destroy()
+void GlfwImguiManager::destroyContext()
 {
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
+
+    m_contextInitialized = false;
+}
+
+void GlfwImguiManager::preRendering()
+{
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
+
+    m_postRenderingHandled = false;
+    m_preRenderingHandled = true;
+}
+
+void GlfwImguiManager::postRendering()
+{
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+    m_postRenderingHandled = true;
+    m_preRenderingHandled = false;
+}
+
+GLFWwindow *GlfwImguiManager::getWindowPtr() const
+{
+    return m_window;
 }
 
 void GlfwImguiManager::onWindowResizeEvent(GLFWwindow *w, int width, int height)

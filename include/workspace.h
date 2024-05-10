@@ -9,8 +9,11 @@ public:
     ~Workspace();
 
     void attach(Scene *scene, Renderer *renderer, UiManager *manager);
-    UiManager *getUiManager() const;
     void run();
+    void update();
+
+
+    UiManager *getUiManager() const;
 
 private:
     std::string title;

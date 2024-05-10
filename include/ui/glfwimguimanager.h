@@ -6,20 +6,28 @@
 
 class GlfwImguiManager : public UiManager {
 public:
-    GlfwImguiManager(GLFWwindow *w = nullptr);
+    GlfwImguiManager(GLFWwindow *w = nullptr, bool manageContext = false);
     virtual ~GlfwImguiManager();
 
     virtual void manage() override;
-    void init(GLFWwindow *w);
+    virtual void update() override;
 
-    void setPipelinePosition(bool begin, bool end);
+    void init(GLFWwindow *w, bool manageContext = false);
+
+    void manageContext();
+    void stopManagingContext();
+
+    void handlePreRendering();
+    void stopHandingPreRendering();
+
+    void handlePostRendering();
+    void stopHandingPostRendering();
 
 protected:
     void render();
     virtual void renderUi();
     
-    void renderBegin();
-    void renderEnd();
+    virtual void initLogic() {};
 
     virtual void onWindowResize(GLFWwindow *w, int width, int height) {};
     virtual void onMouseMovement(GLFWwindow *w, double xpos, double ypos) {};
@@ -29,8 +37,17 @@ protected:
     GLFWwindow *getWindowPtr() const;
 
 private:
-    void init();
-    void destroy();
+    void initContext();
+    void destroyContext();
+    void preRendering();
+    void postRendering();
+
+    static bool m_contextManagerAssigned;
+    static bool m_contextInitialized;
+    static bool m_preRenderingHandled;
+    static bool m_postRenderingHandled;
+    static int m_preRenderingHandlers;
+    static int m_postRenderingHandlers;
 
     // Event handlers
     static void onWindowResizeEvent(GLFWwindow *w, int width, int height);
@@ -40,8 +57,9 @@ private:
 
     static GlfwImguiManager *retrieveThis(GLFWwindow *window);
 
-    bool m_pipelineBegin;
-    bool m_pipelineEnd;
+    bool m_manageContext;
+    bool m_handlePreRendering;
+    bool m_handlePostRendering;
 
     GLFWwindow *m_window;
 

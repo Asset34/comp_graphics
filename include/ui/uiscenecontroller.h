@@ -6,7 +6,7 @@
 
 class UiSceneController : public GlfwImguiManager {
 public:
-    UiSceneController(GLFWwindow *w = nullptr);
+    UiSceneController(GLFWwindow *w = nullptr, bool manageContext = false);
     virtual ~UiSceneController();
 
     void setAreaMargins(int marginLeft = 0, int marginTop = 0, int marginRight = 0, int marginBottom = 0);
