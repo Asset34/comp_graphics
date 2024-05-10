@@ -8,7 +8,9 @@
 GlfwImguiManager::GlfwImguiManager(GLFWwindow *w)
     : m_window(w)
 {
-    this->init();
+    if (m_window) {
+        this->init();
+    }
 
     // Setup Callbacks
     glfwSetFramebufferSizeCallback(m_window, onWindowResizeEvent);
@@ -34,7 +36,7 @@ void GlfwImguiManager::init(GLFWwindow *w)
         m_window = w;
     }
 
-    if (w) this->init();
+    if (m_window) this->init();
 }
 
 void GlfwImguiManager::render()
