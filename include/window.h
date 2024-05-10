@@ -18,9 +18,10 @@ public:
 
     void draw();
     bool shouldClose() const;
-
     int getCurrentWorkspaceIndex() const;
+    std::vector<std::string> getWorkspacesNames() const;
     int getWorkspacesNumber() const;
+
     void setCurrentWorkspace(int index);
 
 private:

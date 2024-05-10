@@ -79,6 +79,22 @@ int Window::getCurrentWorkspaceIndex() const
     return m_currentWorkspaceIndex;
 }
 
+std::vector<std::string> Window::getWorkspacesNames() const
+{
+    std::vector<std::string> names;
+    names.reserve(m_workspaces.size());
+
+    // for (auto w : m_workspaces) {
+    //     names.push_back(w.getName());
+    // }
+
+    for (int i = 0; i < m_workspaces.size(); i++) {
+        names.push_back(m_workspaces[i].getName());
+    }
+
+    return names;
+}
+
 int Window::getWorkspacesNumber() const
 {
     return m_workspaces.size();
@@ -115,7 +131,7 @@ void Window::setupWorkspaces()
     GLRenderer *renderer1 = new GLRenderer;
     renderer1->attach(scene1);
     UiLr1Controller *uiManager1 = new UiLr1Controller(m_window);
-    // uiManager1->setAreaMargins(0, 200, 0, 0);
+    uiManager1->setAreaMargins(0, 200, 0, 0);
     uiManager1->attachControllable(scene1);
     uiManager1->attachObservationController(scene1->getObservationController());
     uiManager1->handlePostRendering();
@@ -136,17 +152,21 @@ void Window::setupWorkspaces()
     GLRenderer *renderer3 = new GLRenderer;
     renderer3->attach(scene3);
     UiLr1Controller *uiManager3 = new UiLr1Controller(m_window);
-    // uiManager1->setAreaMargins(0, 200, 0, 0);
+    uiManager1->setAreaMargins(0, 200, 0, 0);
     uiManager3->attachControllable(scene3);
     uiManager3->attachObservationController(scene3->getObservationController());
     uiManager3->handlePostRendering();
 
 
-    // Add workspaces to the vector
+    // Setup Workspaces vector
     m_workspaces.resize(3);
+    m_workspaces[0].setName("LR 1");
     m_workspaces[0].attach(scene1, renderer1, uiManager1);
+    m_workspaces[1].setName("2D Scene");
     m_workspaces[1].attach(scene2, renderer2, uiManager2);
+    m_workspaces[2].setName("TEST");
     m_workspaces[2].attach(scene3, renderer3, uiManager3);
+
 
     // Setup initial workspace
     m_currentWorkspaceIndex = 0;

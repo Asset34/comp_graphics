@@ -1,8 +1,9 @@
 #ifndef UIWINDOWCONTROLLER_H_
 #define UIWINDOWCONTROLLER_H_
 
-// #include "window.h"
 #include "glfwimguimanager.h"
+#include <vector>
+#include <string>
 
 class Window;
 
@@ -24,6 +25,8 @@ private:
 
     int m_workspaceSelected;
     int m_workspacesNumber;
+    std::vector<std::string> m_workspacesNames;
+
     bool m_changed;
 
     Window *m_window;

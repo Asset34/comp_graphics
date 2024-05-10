@@ -39,23 +39,18 @@ void UiWindowController::renderUi()
 
     for (int i = 0; i < m_workspacesNumber; i++)
     {
-        char buf[32];
-        sprintf(buf, "LR %d", i + 1);
-        if (ImGui::Selectable(buf, m_workspaceSelected == i)) {
+        if (ImGui::Selectable(m_workspacesNames[i].c_str(), m_workspaceSelected == i)) {
             m_workspaceSelected = i;
             m_changed = true;
         }
     }
-
-    // ImGui::ShowDemoWindow();
 
     ImGui::End();
 }
 
 void UiWindowController::initFrom()
 {
-    m_workspaceSelected = m_window->getCurrentWorkspaceIndex();
-    m_workspacesNumber = m_window->getWorkspacesNumber();
+    this->updateFrom();
 }
 
 void UiWindowController::control() 
@@ -75,4 +70,6 @@ void UiWindowController::updateFrom()
 {
     m_workspaceSelected = m_window->getCurrentWorkspaceIndex();
     m_workspacesNumber = m_window->getWorkspacesNumber();
+
+    m_workspacesNames = m_window->getWorkspacesNames();
 }

@@ -1,7 +1,8 @@
 #include "workspace.h"
 
-Workspace::Workspace()
-    : m_scene(nullptr),
+Workspace::Workspace(const std::string name)
+    : m_name(name),
+      m_scene(nullptr),
       m_renderer(nullptr),
       m_uiManager(nullptr)
 {
@@ -34,6 +35,16 @@ void Workspace::run()
 void Workspace::update()
 {
     m_uiManager->update();
+}
+
+void Workspace::setName(const std::string &name)
+{
+    m_name = name;
+}
+
+const std::string Workspace::getName() const
+{
+    return m_name;
 }
 
 UiManager *Workspace::getUiManager() const
