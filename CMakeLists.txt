@@ -48,7 +48,6 @@ add_executable(project
     ${SRC}/glrenderer.cpp
     ${SRC}/glrendererunit.cpp
     ${SRC}/ui/glfwimguimanager.cpp
-    ${SRC}/ui/uicontroller.cpp
     ${SRC}/ui/uiscenecontroller.cpp
     ${SRC}/ui/uiscenecontroller3d.cpp
     ${SRC}/ui/uiscenecontroller2d.cpp
