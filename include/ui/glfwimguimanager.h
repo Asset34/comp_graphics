@@ -18,10 +18,10 @@ protected:
     void renderBegin();
     void renderEnd();
 
-    virtual void onWindowResize(GLFWwindow *w, int width, int height) = 0;
-    virtual void onMouseMovement(GLFWwindow *w, double xpos, double ypos) = 0;
-    virtual void onMouseScroll(GLFWwindow *w, double xoffset, double yoffset) = 0;
-    virtual void onKey(GLFWwindow *w, int key, int scancode, int action, int mods) = 0;
+    virtual void onWindowResize(GLFWwindow *w, int width, int height) {};
+    virtual void onMouseMovement(GLFWwindow *w, double xpos, double ypos) {};
+    virtual void onMouseScroll(GLFWwindow *w, double xoffset, double yoffset) {};
+    virtual void onKey(GLFWwindow *w, int key, int scancode, int action, int mods) {};
 
     GLFWwindow *getWindowPtr() const;
 
