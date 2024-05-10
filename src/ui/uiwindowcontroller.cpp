@@ -28,7 +28,7 @@ void UiWindowController::manage()
         return;
     }
 
-    this->updateFrom();
+    // this->updateFrom();
     this->render();
     this->control();
 }

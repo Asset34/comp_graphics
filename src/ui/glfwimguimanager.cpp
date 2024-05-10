@@ -20,11 +20,11 @@ GlfwImguiManager::GlfwImguiManager(GLFWwindow *w, bool manageContext)
 {
     this->init(w, manageContext);
 
-    // Setup Callbacks
-    glfwSetFramebufferSizeCallback(m_window, onWindowResizeEvent);
-    glfwSetCursorPosCallback(m_window, onMouseMovementEvent);
-    glfwSetScrollCallback(m_window, onMouseScrollEvent);
-    glfwSetKeyCallback(m_window, onKeyEvent);
+    // // Setup Callbacks
+    // glfwSetFramebufferSizeCallback(m_window, onWindowResizeEvent);
+    // glfwSetCursorPosCallback(m_window, onMouseMovementEvent);
+    // glfwSetScrollCallback(m_window, onMouseScrollEvent);
+    // glfwSetKeyCallback(m_window, onKeyEvent);
 }
 
 GlfwImguiManager::~GlfwImguiManager()
@@ -138,6 +138,12 @@ void GlfwImguiManager::initContext()
     // Setup Platform/Renderer backends
     ImGui_ImplGlfw_InitForOpenGL(m_window, true);
     ImGui_ImplOpenGL3_Init();
+
+    // Setup callbacks
+    glfwSetFramebufferSizeCallback(m_window, onWindowResizeEvent);
+    glfwSetCursorPosCallback(m_window, onMouseMovementEvent);
+    glfwSetScrollCallback(m_window, onMouseScrollEvent);
+    glfwSetKeyCallback(m_window, onKeyEvent);
 
     m_contextInitialized = true;
 }

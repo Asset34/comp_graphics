@@ -32,8 +32,8 @@ Window::Window(const std::string &title, int width, int height)
     glfwSetWindowUserPointer(m_window, this);
 
     this->initRenderer();
-    this->setupMainUiController();
     this->setupWorkspaces();
+    this->setupMainUiController();
 }
 
 Window::~Window()
