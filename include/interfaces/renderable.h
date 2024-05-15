@@ -7,16 +7,16 @@
 struct RenderData {
     // Types
     typedef glm::vec3 Color;
-    struct Vertex {
+    struct RenderVertex {
         int index;
         Color color;
     };
-    struct Edge {
+    struct RenderEdge {
         int begin;
         int end;
         Color color;
     };
-    struct Polygon {
+    struct RenderPolygon {
         std::vector<int> indices;
         Color color;
     };
@@ -39,9 +39,9 @@ struct RenderData {
 
     // Data
     std::vector<glm::vec3> VertexData;
-    std::vector<Vertex> Vertices;
-    std::vector<Edge> Edges;
-    std::vector<Polygon> Polygons;
+    std::vector<RenderVertex> Vertices;
+    std::vector<RenderEdge> Edges;
+    std::vector<RenderPolygon> Polygons;
 
     // Global values
     Color GlobalVertexColor;

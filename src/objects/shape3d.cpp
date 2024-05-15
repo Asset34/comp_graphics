@@ -160,7 +160,7 @@ RenderData Shape3D::getRenderData()
 
     data.Vertices.reserve(m_vertices.size());
     for (auto v : m_vertices) {
-        RenderData::Vertex dv;
+        RenderData::RenderVertex dv;
         dv.index = v.index;
         dv.color = v.color;
 
@@ -171,7 +171,7 @@ RenderData Shape3D::getRenderData()
     for (auto e : m_edges) {
         data.Edges.push_back({e.indexBegin, e.indexEnd});
 
-        RenderData::Edge de;
+        RenderData::RenderEdge de;
         de.begin = e.indexBegin;
         de.end = e.indexEnd;
         de.color = e.color;
@@ -181,7 +181,7 @@ RenderData Shape3D::getRenderData()
 
     data.Polygons.reserve(m_polygons.size());
     for (auto p : m_polygons) {
-        RenderData::Polygon dp;
+        RenderData::RenderPolygon dp;
         dp.indices = p.indices;
         dp.color = p.color;
 
