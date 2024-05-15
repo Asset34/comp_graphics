@@ -53,8 +53,8 @@ void Shape3D::defineVertex(int index, const vec3 &color)
 void Shape3D::defineEdge(int indexBegin, int indexEnd, const vec3 &color)
 {
     Edge e;
-    e.indexBegin = indexBegin;
-    e.indexEnd = indexEnd;
+    e.begin = indexBegin;
+    e.end = indexEnd;
     e.color = color;
 
     m_edges.push_back(e);
@@ -169,11 +169,11 @@ RenderData Shape3D::getRenderData()
 
     data.Edges.reserve(m_edges.size());
     for (auto e : m_edges) {
-        data.Edges.push_back({e.indexBegin, e.indexEnd});
+        data.Edges.push_back({e.begin, e.end});
 
         RenderData::RenderEdge de;
-        de.begin = e.indexBegin;
-        de.end = e.indexEnd;
+        de.begin = e.begin;
+        de.end = e.end;
         de.color = e.color;
 
         data.Edges.push_back(de);

@@ -4,6 +4,7 @@
 #include <vector>
 #include <list>
 
+#include "geometry.h"
 #include "interfaces/renderable.h"
 #include "abstract/transformableobj3d.h"
 
@@ -44,21 +45,6 @@ protected:
 private:
     // Default values
     static const vec3 COLOR_DEFAULT; // BLACK
-
-    // Types
-    struct Vertex {
-        int index;
-        vec3 color;
-    };
-    struct Edge {
-        int indexBegin;
-        int indexEnd;
-        vec3 color;
-    };
-    struct Polygon {
-        std::vector<int> indices;
-        vec3 color;
-    };
 
     // Data
     std::vector<vec3> m_vertexData;

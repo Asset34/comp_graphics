@@ -1,6 +1,7 @@
 #ifndef PLANE_H_
 #define PLANE_H_
 
+#include "geometry.h"
 #include "abstract/transformableobj3d.h"
 #include "interfaces/renderable.h"
 #include <vector>
@@ -25,11 +26,6 @@ private:
     void update(const vec3 &normal);
 
     static const vec3 DEFAULT_COLOR; // BLACK
-
-    struct Edge {
-        int begin;
-        int end;
-    };
 
     // Data
     std::vector<vec3> m_gridVertexData;
