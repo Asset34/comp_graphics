@@ -27,7 +27,7 @@ const mat4 &Camera2D::getViewMatrix()
     mat4 rotateMatrix(1.0f);
     rotateMatrix[0] = vec4(this->getUnitx(), 0, 0);
     rotateMatrix[1] = vec4(this->getUnity(), 0, 0);
-    rotateMatrix[2] = vec4(0);
+    rotateMatrix[2] = vec4(0, 0, 1, 0);
     rotateMatrix = glm::transpose(rotateMatrix);
 
     m_viewMatrix = rotateMatrix * translateMatrix;
