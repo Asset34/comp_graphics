@@ -110,7 +110,7 @@ RenderData BSplinePolygon2D::getRenderData()
     data.VertexData.reserve(m_controlPoints.size());
     data.Vertices.reserve(m_controlPoints.size());
     for (int i = 0; i < m_controlPoints.size(); i++) {
-        data.VertexData.push_back(vec3(m_controlPoints[i], 0.0));
+        data.VertexData.push_back(vec3(m_controlPoints[i], 0.5));
         data.Vertices.push_back({i});
     }
 

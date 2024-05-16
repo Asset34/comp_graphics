@@ -4,6 +4,7 @@
 #include "scenes/scene2d.h"
 #include "interfaces/controllable.h"
 #include "objects/bsplinepolygon2d.h"
+#include "objects/bspline2d.h"
 
 class SceneLR2 : public Scene2D, public Controllable {
 public:
@@ -28,7 +29,7 @@ public:
     std::list<int> getUpdateList() override;
 
 private:
-    void buildSplinePolygon();
+    void buildSpline();
 
     enum Commands {
         CMD_CONTROL_POINT_SET,
@@ -53,8 +54,9 @@ private:
         VID_CONTROL_POLYGON_FLAG
     };
 
+    // Objects
     BSplinePolygon2D m_splinePolygon;
-
+    BSpline2D m_spline;
     
     // Control values
     

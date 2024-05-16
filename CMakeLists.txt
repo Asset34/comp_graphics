@@ -62,10 +62,11 @@ add_executable(project
     # ${SRC}/scenes/scenetest2d.cpp
     ${SRC}/objects/shape3d.cpp
     ${SRC}/objects/line3d.cpp
+    ${SRC}/objects/bsplinepolygon2d.cpp
+    ${SRC}/objects/bspline2d.cpp
     ${SRC}/objects/plane.cpp
     ${SRC}/objects/axisxyz.cpp
     ${SRC}/objects/axisxy.cpp
-    ${SRC}/objects/bsplinepolygon2d.cpp
     ${SRC}/workspace.cpp
     ${SRC}/shader.cpp
     ${SRC}/camera3d.cpp

@@ -2,11 +2,19 @@
 
 SceneLR2::SceneLR2()
 {
+    // Build objects
+    m_spline.beginEdit();
+    this->buildSpline();
+
     // Init objects
-    this->buildSplinePolygon();
+    m_spline.defineKnots({0, 1, 2, 3, 4, 5, 6, 7, 8, 9});
+    m_spline.setOrder(3);
+    m_spline.setRenderStep(0.01);
+    m_spline.endEdit();
 
     // Add renderable objects
     this->addRenderable(&m_splinePolygon);
+    this->addRenderable(&m_spline);
 
     // Init control values
     m_updated = false;
@@ -171,18 +179,38 @@ std::list<int> SceneLR2::getUpdateList()
     return m_updateList;
 }
 
-void SceneLR2::buildSplinePolygon()
+void SceneLR2::buildSpline()
 {
-    m_splinePolygon.addControlPoint({1, 1});
-    m_splinePolygon.addControlPoint({5, 3});
-    m_splinePolygon.addControlPoint({10, -3});
-    m_splinePolygon.addControlPoint({13, 10});
-    m_splinePolygon.addControlPoint({15, 20});
-    m_splinePolygon.addControlPoint({20, 31});
-    m_splinePolygon.addControlPoint({25, -5});
+    // Define control points
+    std::vector<vec2> controlPoints = {
+        {1, 1},
+        {5, 3},
+        {10, -3},
+        {13, 10},
+        {15, 20},
+        {20, 31},
+        {25, -5}
+    };
+    // std::vector<vec2> controlPoints = {
+    //     {0, 0},
+    //     {3, 9},
+    //     {6, 3},
+    //     {9, 6}
+    // };
 
-    m_splinePolygon.setPolygonColor({1.0, 1.0, 0.0});
+    // Add control points
+    for (auto cp : controlPoints) {
+        m_splinePolygon.addControlPoint(cp);
+        m_spline.addControlPoint(cp);
+    }
+
+    // Define visuals
+    m_splinePolygon.setPolygonColor({1.0, 0.0, 0.0});
     m_splinePolygon.setControlPointsColor({1.0, 0.0, 0.0});
-    m_splinePolygon.setPolygonLineWidth(2.0);
-    m_splinePolygon.setControlPointSize(10);
+    m_splinePolygon.setPolygonLineWidth(1.0);
+    m_splinePolygon.setControlPointSize(6);
+    m_spline.setColor({0.0, 0.0, 1.0});
+    m_spline.setLineWidth(4.0);
+
+    this->setBackgroundColor({1.0, 1.0, 1.0});
 }
