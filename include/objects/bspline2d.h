@@ -39,7 +39,7 @@ private:
     void updateKnots();
     void updateAllSegments();
     void updateSegment(int index);
-    void computeSegment(int index, int basisBegin, int basisEnd, float t);
+    void computeSegment(int index, int basisBegin, float t);
 
     // Default values
     static const vec3 COLOR_DEFAULT; // BLACK
@@ -50,7 +50,6 @@ private:
     
     std::vector<std::vector<vec2>> m_segments;
 
-    int m_knotBeginIndex, m_knotEndIndex;
     int m_order;
     float m_renderStep;
 

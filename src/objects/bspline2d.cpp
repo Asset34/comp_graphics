@@ -3,9 +3,7 @@
 const vec3 BSpline2D::COLOR_DEFAULT = {0, 0, 0};
 
 BSpline2D::BSpline2D()
-    : m_knotBeginIndex(0),
-      m_knotEndIndex(0),
-      m_order(0),
+    : m_order(0),
       m_renderStep(0.1),
       m_autoupdate(true),
       m_color(COLOR_DEFAULT),
@@ -162,12 +160,6 @@ glm::mat4 BSpline2D::getTransformation()
     return glm::mat4(1.0);
 }
 
-void BSpline2D::updateSegmentsBorders()
-{
-    m_knotBeginIndex = m_order - 1;
-    m_knotEndIndex = m_knots.size() - m_order;
-}
-
 void BSpline2D::updateKnots()
 {
     int diff = m_contorlPoints.size() + m_order - m_knots.size();
@@ -205,21 +197,20 @@ void BSpline2D::updateSegment(int index)
     // Prepare segment
     m_segments[index].clear();
 
-    // Define basis range
+    // Define index of the 1st basis
     int basisBegin = index - m_order + 1;
-    int basisEnd = index;
 
-    // Define t range
+    // Define segment range
     float tmin = m_knots[index];
     float tmax = m_knots[index + 1];
 
     // Main loop
     for (float t = tmin; t < tmax; t += m_renderStep) {
-        this->computeSegment(index, basisBegin, basisEnd, t);
+        this->computeSegment(index, basisBegin, t);
     }
 }
 
-void BSpline2D::computeSegment(int index, int basisBegin, int basisEnd, float t)
+void BSpline2D::computeSegment(int index, int basisBegin, float t)
 {
     // Setup initial basis vector
     int size = 2 * m_order - 1;
