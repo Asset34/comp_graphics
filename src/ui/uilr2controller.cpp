@@ -150,7 +150,7 @@ void UiLr2Controller::control()
 
 void UiLr2Controller::renderUi()
 {
-    // UiSceneController2D::renderUi();
+    UiSceneController2D::renderUi();
     ImGui::Begin("LR 2");
 
     ImGui::SeparatorText("Control Points");

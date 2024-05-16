@@ -163,7 +163,7 @@ void SceneLR2::control(int cmd)
         m_updateList.push_back(VID_KNOTS);
     break;
     case CMD_STEP_SET:
-        m_spline.setRenderStep(m_order);
+        m_spline.setRenderStep(m_step);
     break;
     case CMD_SHOW_CONTROL_POINTS_SWITCH:
         m_splinePolygon.showControlPoints(m_showControlPoints);
