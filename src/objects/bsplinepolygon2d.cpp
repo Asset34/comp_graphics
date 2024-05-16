@@ -25,7 +25,7 @@ void BSplinePolygon2D::addControlPoint(const vec2 &point)
 void BSplinePolygon2D::setControlPoint(int index, const vec2 &point)
 {
     m_controlPoints[index] = point;
-
+    
 }
 
 void BSplinePolygon2D::removeControlPoint(int index)

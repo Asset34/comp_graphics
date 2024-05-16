@@ -34,7 +34,7 @@ private:
     enum Commands {
         CMD_CONTROL_POINT_SET,
         CMD_KNOT_SET,
-        CMD_DEGREE_SET,
+        CMD_ORDER_SET,
         CMD_STEP_SET,
         CMD_SHOW_CONTROL_POINTS_SWITCH,
         CMD_SOW_CONTROL_POLYGON_SWITCH
@@ -47,8 +47,9 @@ private:
         VID_KNOT_SIZE,
         VID_KNOT_INDEX,
         VID_KNOT_VALUE,
-        VID_DEGREE_MAX,
-        VID_DEGREE_VALUE,
+        VID_KNOTS,
+        VID_ORDER_MAX,
+        VID_ORDER_VALUE,
         VID_STEP,
         VID_CONTROL_POINTS_FLAG,
         VID_CONTROL_POLYGON_FLAG
@@ -64,7 +65,7 @@ private:
     vec2 m_controlPoint;
     int m_knotIndex;
     float m_knot;
-    int m_degree;
+    int m_order;
     float m_step;
     bool m_showControlPoints;
     bool m_showControlPolygon;

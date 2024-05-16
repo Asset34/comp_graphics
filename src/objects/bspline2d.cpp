@@ -35,6 +35,7 @@ void BSpline2D::addControlPoint(const vec2 &cp)
     if (m_autoupdate) {
         this->updateKnots();
         // TODO: update new segments
+        this->updateAllSegments();
     }
 }
 
@@ -44,6 +45,7 @@ void BSpline2D::setControlPoint(int index, const vec2 &cp)
 
     if (m_autoupdate) {
         // TODO: update near segments
+        this->updateAllSegments();
     }
 }
 
@@ -67,6 +69,7 @@ void BSpline2D::setKnot(int index, float knot)
 
     if (m_autoupdate) {
         // TODO: update near(left and right) segments
+        this->updateAllSegments();
     }
 }
 
@@ -80,8 +83,8 @@ void BSpline2D::setOrder(int order)
     m_order = order;
 
     if (m_autoupdate) {
+        this->updateKnots();
         this->updateAllSegments();
-        // this->updateKnots()
     }
 }
 
@@ -167,7 +170,18 @@ void BSpline2D::updateSegmentsBorders()
 
 void BSpline2D::updateKnots()
 {
+    int diff = m_contorlPoints.size() + m_order - m_knots.size();
 
+    if (diff > 0) {
+        float knotvalue = m_knots.back() + 1;
+        for (int i = 0; i < diff; i++) {
+            m_knots.push_back(knotvalue);
+        }
+    } else if (diff < 0) {
+        for (int i = 0; i < -diff; i++) {
+            m_knots.pop_back();
+        }
+    }
 }
 
 void BSpline2D::updateAllSegments()
@@ -177,6 +191,7 @@ void BSpline2D::updateAllSegments()
     int endSegment = m_knots.size() - m_order - 1;
 
     // Prepare segments
+    m_segments.clear();
     m_segments.resize(m_knots.size() - 1);
 
     // Update

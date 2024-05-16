@@ -7,7 +7,8 @@ SceneLR2::SceneLR2()
     this->buildSpline();
 
     // Init objects
-    m_spline.defineKnots({0, 1, 2, 3, 4, 5, 6, 7, 8, 9});
+    // m_spline.defineKnots({0, 1, 2, 3, 4, 5, 6, 7, 8, 9});
+    m_spline.defineKnots({0, 1, 2, 3, 4, 5, 6});
     m_spline.setOrder(3);
     m_spline.setRenderStep(0.01);
     m_spline.endEdit();
@@ -28,6 +29,7 @@ std::vector<int> SceneLR2::getRenderableUpdateVector()
 {
     std::vector<int> vector = Scene2D::getRenderableUpdateVector();
     vector.push_back(this->getNextRenderableUpdateVectorIndex()); // Update spline polygon
+    vector.push_back(this->getNextRenderableUpdateVectorIndex() + 1); // Update spline
 
     return vector;
 }
@@ -39,8 +41,11 @@ void SceneLR2::set(int vid, int value)
     case VID_CONTROL_POINT_INDEX:
         m_controlPointIndex = value;
     break;
-    case VID_DEGREE_VALUE:
-        m_degree = value;
+    case VID_KNOT_INDEX:
+        m_knotIndex = value;
+    break;
+    case VID_ORDER_VALUE:
+        m_order = value;
     break;
     }  
 }
@@ -49,6 +54,9 @@ void SceneLR2::set(int vid, float value)
 {
     switch (vid)
     {
+    case VID_KNOT_VALUE:
+        m_knot = value;
+    break;
     case VID_STEP:
         m_step = value;
     break;
@@ -87,16 +95,13 @@ void SceneLR2::get(int vid, int &receiver)
         receiver = m_splinePolygon.getSize();
     break;
     case VID_KNOT_SIZE:
-        // TODO
-        receiver = 5;
+        receiver = m_spline.getKnotsNumber();
     break;
-    case VID_DEGREE_MAX:
-        // TODO
-        receiver = 7;
+    case VID_ORDER_MAX:
+        receiver = m_spline.getOrderMax();
     break;
-    case VID_DEGREE_VALUE:
-        // TODO
-        receiver = 4;
+    case VID_ORDER_VALUE:
+        receiver = m_spline.getOrder();
     break;
     }
 }
@@ -106,8 +111,7 @@ void SceneLR2::get(int vid, float &receiver)
     switch (vid)
     {
     case VID_STEP:
-        // TODO
-        receiver = 0.1;
+        receiver = m_spline.getRenderStep();
     break;
     }
 }
@@ -133,6 +137,11 @@ void SceneLR2::get(int vid, float receiver[])
         receiver[0] = m_splinePolygon.getControlPoint(m_controlPointIndex).x;
         receiver[1] = m_splinePolygon.getControlPoint(m_controlPointIndex).y;
     break;
+    case VID_KNOTS:
+        for (int i = 0; i < m_spline.getKnotsNumber(); i++) {
+            receiver[i] = m_spline.getKnot(i);
+        }
+    break;
     }
 }
 
@@ -142,22 +151,24 @@ void SceneLR2::control(int cmd)
     {
     case CMD_CONTROL_POINT_SET:
         m_splinePolygon.setControlPoint(m_controlPointIndex, m_controlPoint);
+        m_spline.setControlPoint(m_controlPointIndex, m_controlPoint);
     break;
     case CMD_KNOT_SET:
-        // TODO
+        m_spline.setKnot(m_knotIndex, m_knot);
     break;
-    case CMD_DEGREE_SET:
-        // TODO
+    case CMD_ORDER_SET:
+        m_spline.setOrder(m_order);
+
+        m_updated = true;
+        m_updateList.push_back(VID_KNOTS);
     break;
     case CMD_STEP_SET:
-        // TODO
+        m_spline.setRenderStep(m_order);
     break;
     case CMD_SHOW_CONTROL_POINTS_SWITCH:
-        // TODO
         m_splinePolygon.showControlPoints(m_showControlPoints);
     break;
     case CMD_SOW_CONTROL_POLYGON_SWITCH:
-        // TODO
         m_splinePolygon.showPolygon(m_showControlPolygon);
     break;
     }
@@ -182,21 +193,21 @@ std::list<int> SceneLR2::getUpdateList()
 void SceneLR2::buildSpline()
 {
     // Define control points
-    std::vector<vec2> controlPoints = {
-        {1, 1},
-        {5, 3},
-        {10, -3},
-        {13, 10},
-        {15, 20},
-        {20, 31},
-        {25, -5}
-    };
     // std::vector<vec2> controlPoints = {
-    //     {0, 0},
-    //     {3, 9},
-    //     {6, 3},
-    //     {9, 6}
+    //     {1, 1},
+    //     {5, 3},
+    //     {10, -3},
+    //     {13, 10},
+    //     {15, 20},
+    //     {20, 31},
+    //     {25, -5}
     // };
+    std::vector<vec2> controlPoints = {
+        {0, 0},
+        {3, 9},
+        {6, 3},
+        {9, 6}
+    };
 
     // Add control points
     for (auto cp : controlPoints) {

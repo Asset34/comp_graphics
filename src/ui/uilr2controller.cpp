@@ -5,13 +5,11 @@
 #include "imgui/imgui_impl_opengl3.h"
 #include <stdio.h> 
 
-#include <iostream>
-
 UiLr2Controller::UiLr2Controller(GLFWwindow *w, bool manageContext)
     : UiSceneController2D(w, manageContext),
       m_controlPointChanged(false),
       m_knotChanged(false),
-      m_degreeChanged(false),
+      m_orderChanged(false),
       m_stepChanged(false),
       m_showControlPointsChanged(false),
       m_showControlPolygonChanged(false)
@@ -35,15 +33,16 @@ void UiLr2Controller::initFromControllable()
     
     // Init knots
     this->getControllable()->get(VID_KNOT_SIZE, size);
+    float knotsValues[size];
+    this->getControllable()->get(VID_KNOTS, knotsValues);
     m_knots.resize(size);
-    for (int i = 0; i < size; i++) {
-        this->getControllable()->set(VID_KNOT_INDEX, i);
-        this->getControllable()->get(VID_KNOT_VALUE, m_knots[i]);
+    for (int i = 0; i < m_knots.size(); i++) {
+        m_knots[i] = knotsValues[i];
     }
 
     // Init Misc
-    this->getControllable()->get(VID_DEGREE_MAX, m_degreeMax);
-    this->getControllable()->get(VID_DEGREE_VALUE, m_degreeValue);
+    this->getControllable()->get(VID_ORDER_MAX, m_orderMax);
+    this->getControllable()->get(VID_ORDER_VALUE, m_orderValue);
     this->getControllable()->get(VID_STEP, m_step);
 
     // Init Flags
@@ -56,6 +55,7 @@ void UiLr2Controller::updateFromControllable()
     if (!this->getControllable()->updated()) return;
 
     int size;
+
     for (auto i : this->getControllable()->getUpdateList()) {
         switch (i)
         {
@@ -69,21 +69,22 @@ void UiLr2Controller::updateFromControllable()
         case VID_CONTROL_POINT_VALUE:
             this->getControllable()->get(VID_CONTROL_POINT_VALUE, m_controlPoints[i].values);
         break;
-        case VID_KNOT_SIZE:
+        case VID_KNOTS:
+        {
             this->getControllable()->get(VID_KNOT_SIZE, size);
+            float knotsValues[size];
+            this->getControllable()->get(VID_KNOTS, knotsValues);
             m_knots.resize(size);
+            for (int i = 0; i < m_knots.size(); i++) {
+                m_knots[i] = knotsValues[i];
+            }
+        }
         break;
-        case VID_KNOT_INDEX:
-            this->getControllable()->get(VID_KNOT_INDEX, m_knotIndex);
+        case VID_ORDER_MAX:
+            this->getControllable()->get(VID_ORDER_MAX, m_orderMax);
         break;
-        case VID_KNOT_VALUE:
-            this->getControllable()->get(VID_KNOT_VALUE, m_knots[m_knotIndex]);
-        break;
-        case VID_DEGREE_MAX:
-            this->getControllable()->get(VID_DEGREE_MAX, m_degreeMax);
-        break;
-        case VID_DEGREE_VALUE:
-            this->getControllable()->get(VID_DEGREE_VALUE, m_degreeValue);
+        case VID_ORDER_VALUE:
+            this->getControllable()->get(VID_ORDER_VALUE, m_orderValue);
         break;
         case VID_STEP:
             this->getControllable()->get(VID_STEP, m_step);
@@ -118,11 +119,11 @@ void UiLr2Controller::control()
         m_knotChanged = false;
     }
 
-    if (m_degreeChanged) {
-        this->getControllable()->set(VID_DEGREE_VALUE, m_degreeValue);
-        this->getControllable()->control(CMD_DEGREE_SET);
+    if (m_orderChanged) {
+        this->getControllable()->set(VID_ORDER_VALUE, m_orderValue);
+        this->getControllable()->control(CMD_ORDER_SET);
 
-        m_degreeChanged = false;
+        m_orderChanged = false;
     }
 
     if (m_stepChanged) {
@@ -168,7 +169,7 @@ void UiLr2Controller::renderUi()
     float min, max;
     for (int i = 0; i < m_knots.size(); i++) {
         char buf[32];
-        sprintf(buf, "B%d", i);
+        sprintf(buf, "x%d", i);
 
         if (!m_knotChanged) {
             m_knotIndex = i;
@@ -192,7 +193,7 @@ void UiLr2Controller::renderUi()
     }
 
     ImGui::SeparatorText("Misc");
-    m_degreeChanged = ImGui::SliderInt("Degree", &m_degreeValue, 0, m_degreeMax);
+    m_orderChanged = ImGui::SliderInt("order", &m_orderValue, 2, m_orderMax);
 
     ImGui::SeparatorText("Render");
     m_stepChanged = ImGui::SliderFloat("Step", &m_step, 0.001, 1.0);
