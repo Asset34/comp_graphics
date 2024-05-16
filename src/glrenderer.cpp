@@ -13,6 +13,7 @@ void GLRenderer::init() {
 
     gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_MULTISAMPLE); 
 
     m_initialized = true;
 }
