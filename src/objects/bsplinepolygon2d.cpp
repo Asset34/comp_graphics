@@ -81,6 +81,16 @@ void BSplinePolygon2D::showControlPoints(bool flag)
     m_showControlPoints = flag;
 }
 
+bool BSplinePolygon2D::getPolygonShowStatus() const
+{
+    return m_showPolygon;
+}
+
+bool BSplinePolygon2D::getControlPointsShowStatus() const
+{
+    return m_showControlPoints;
+}
+
 RenderData BSplinePolygon2D::getRenderData()
 {
     RenderData data;

@@ -2,11 +2,13 @@
 
 #include "glrenderer.h"
 #include "ui/uilr1controller.h"
+#include "ui/uilr2controller.h"
 #include "scenes/scenelr1.h"
+#include "scenes/scenelr2.h"
 #include "glrenderer.h"
 
-#include "scenes/scenetest2d.h"
-#include "ui/uitestcontroller2d.h"
+// #include "scenes/scenetest2d.h"
+// #include "ui/uitestcontroller2d.h"
 
 Window::Window(const std::string &title, int width, int height)
     :m_title(title),
@@ -127,48 +129,33 @@ void Window::setupMainUiController()
 void Window::setupWorkspaces()
 {
     // Setup LR1 Workspace
-    SceneLR1 *scene1 = new SceneLR1;
-    GLRenderer *renderer1 = new GLRenderer;
-    renderer1->attach(scene1);
-    UiLr1Controller *uiManager1 = new UiLr1Controller(m_window);
-    uiManager1->setAreaMargins(0, 200, 0, 0);
-    uiManager1->attachControllable(scene1);
-    uiManager1->attachObservationController(scene1->getObservationController());
-    uiManager1->handlePostRendering();
+    SceneLR1 *sceneLr1 = new SceneLR1;
+    GLRenderer *rendererLr1 = new GLRenderer;
+    rendererLr1->attach(sceneLr1);
+    UiLr1Controller *uiManagerLr1 = new UiLr1Controller(m_window);
+    uiManagerLr1->setAreaMargins(0, 200, 0, 0);
+    uiManagerLr1->attachControllable(sceneLr1);
+    uiManagerLr1->attachObservationController(sceneLr1->getObservationController());
+    uiManagerLr1->handlePostRendering();
 
-
-    // Setup 2D test workspace
-    SceneTest2D *scene2 = new SceneTest2D;
-    GLRenderer *renderer2 = new GLRenderer;
-    renderer2->attach(scene2);
-    UiTestController2D *uiManager2 = new UiTestController2D(m_window);
-    uiManager2->attachControllable(scene2);
-    uiManager2->attachObservationController(scene2->getObservationController());
-    uiManager2->handlePostRendering();
-
-
-    // Setup Additional 3D Space
-    SceneLR1 *scene3 = new SceneLR1;
-    GLRenderer *renderer3 = new GLRenderer;
-    renderer3->attach(scene3);
-    UiLr1Controller *uiManager3 = new UiLr1Controller(m_window);
-    uiManager1->setAreaMargins(0, 200, 0, 0);
-    uiManager3->attachControllable(scene3);
-    uiManager3->attachObservationController(scene3->getObservationController());
-    uiManager3->handlePostRendering();
-
+    // Setup LR2 Workspace
+    SceneLR2 *sceneLr2 = new SceneLR2;
+    GLRenderer *rendererLr2 = new GLRenderer;
+    rendererLr2->attach(sceneLr2);
+    UiLr2Controller *uiManagerLr2 = new UiLr2Controller(m_window);
+    // uiManagerLr2->setAreaMargins(0, 300, 0, 0);
+    uiManagerLr2->attachControllable(sceneLr2);
+    uiManagerLr2->attachObservationController(sceneLr2->getObservationController());
+    uiManagerLr2->handlePostRendering();
 
     // Setup Workspaces vector
-    m_workspaces.resize(3);
+    m_workspaces.resize(2);
     m_workspaces[0].setName("LR 1");
-    m_workspaces[0].attach(scene1, renderer1, uiManager1);
-    m_workspaces[1].setName("2D Scene");
-    m_workspaces[1].attach(scene2, renderer2, uiManager2);
-    m_workspaces[2].setName("TEST");
-    m_workspaces[2].attach(scene3, renderer3, uiManager3);
-
+    m_workspaces[0].attach(sceneLr1, rendererLr1, uiManagerLr1);
+    m_workspaces[1].setName("LR 2");
+    m_workspaces[1].attach(sceneLr2, rendererLr2, uiManagerLr2);
 
     // Setup initial workspace
-    m_currentWorkspaceIndex = 0;
-    m_currentWorkspace = &m_workspaces[0];
+    m_currentWorkspaceIndex = 1;
+    m_currentWorkspace = &m_workspaces[1];
 }

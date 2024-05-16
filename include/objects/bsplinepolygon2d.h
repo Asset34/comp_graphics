@@ -26,6 +26,9 @@ public:
     void showPolygon(bool flag);
     void showControlPoints(bool flag);
 
+    bool getPolygonShowStatus() const;
+    bool getControlPointsShowStatus() const;
+
     RenderData getRenderData() override;
     glm::mat4 getTransformation() override;
 
