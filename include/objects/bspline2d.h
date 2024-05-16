@@ -35,7 +35,6 @@ public:
     glm::mat4 getTransformation() override;
 
 private:
-    void updateSegmentsBorders();
     void updateKnots();
     void updateAllSegments();
     void updateSegment(int index);
