@@ -34,6 +34,9 @@ void GLRenderer::GLRendererUnit::updateData()
 {
     glBindVertexArray(m_vao);
     this->loadVertexData(m_renderable->getRenderData());
+    this->loadVertices(m_renderable->getRenderData());
+    this->loadEdges(m_renderable->getRenderData());
+    this->loadPolygons(m_renderable->getRenderData());
     glBindVertexArray(0);
 }
 
