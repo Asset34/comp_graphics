@@ -190,6 +190,10 @@ void BSpline2D::updateAllSegments()
     for (int i = beginSegment; i <= endSegment; i++) {
         this->updateSegment(i);
     }
+
+
+    // Update last point
+    this->updateLast(endSegment);
 }
 
 void BSpline2D::updateSegment(int index)
@@ -208,6 +212,14 @@ void BSpline2D::updateSegment(int index)
     for (float t = tmin; t < tmax; t += m_renderStep) {
         this->computeSegment(index, basisBegin, t);
     }
+}
+
+void BSpline2D::updateLast(int lastSegment)
+{
+    int basisBegin = lastSegment - m_order + 1;
+    float tmax = m_knots[lastSegment + 1];
+
+    this->computeSegment(lastSegment, basisBegin, tmax);
 }
 
 void BSpline2D::computeSegment(int index, int basisBegin, float t)

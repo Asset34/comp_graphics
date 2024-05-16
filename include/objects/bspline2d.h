@@ -39,6 +39,7 @@ private:
     void updateKnots();
     void updateAllSegments();
     void updateSegment(int index);
+    void updateLast(int lastSegment);
     void computeSegment(int index, int basisBegin, float t);
 
     // Default values
