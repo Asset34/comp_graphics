@@ -7,9 +7,9 @@ SceneLR2::SceneLR2()
     this->buildSpline();
 
     // Init objects
-    m_spline.defineKnotsOpenUniform(1.0);
     m_spline.setOrder(3);
-    m_spline.setRenderStep(0.1);
+    m_spline.defineKnotsOpenUniform(1.0);
+    m_spline.setRenderStep(0.01);
     m_spline.endEdit();
 
     // Add renderable objects
