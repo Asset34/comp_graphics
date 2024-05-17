@@ -156,6 +156,12 @@ void BSpline2D::setColor(const vec3 &color)
 {
     m_color = color;
 }
+
+const vec3 &BSpline2D::getColor() const
+{
+    return m_color;
+}
+
 void BSpline2D::setLineWidth(float width)
 {
     m_lineWidth = width;

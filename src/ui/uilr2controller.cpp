@@ -11,6 +11,7 @@ UiLr2Controller::UiLr2Controller(GLFWwindow *w, bool manageContext)
       m_knotChanged(false),
       m_orderChanged(false),
       m_renderStepChanged(false),
+      m_renderColorChanged(false),
       m_showControlPointsChanged(false),
       m_showControlPolygonChanged(false)
 {
@@ -45,6 +46,7 @@ void UiLr2Controller::initFromControllable()
     this->getControllable()->get(VID_ORDER_MAX, m_orderMax);
     this->getControllable()->get(VID_ORDER_VALUE, m_orderValue);
     this->getControllable()->get(VID_RENDER_STEP, m_renderStep);
+    this->getControllable()->get(VID_RENDER_COLOR, m_renderColor);
 
     // Init Flags
     this->getControllable()->get(VID_CONTROL_POINTS_FLAG, m_showControlPoints);
@@ -90,6 +92,9 @@ void UiLr2Controller::updateFromControllable()
         case VID_RENDER_STEP:
             this->getControllable()->get(VID_RENDER_STEP, m_renderStep);
         break;
+        case VID_RENDER_COLOR:
+            this->getControllable()->get(VID_RENDER_COLOR, m_renderColor);
+        break;
         case VID_CONTROL_POINTS_FLAG:
             this->getControllable()->get(VID_CONTROL_POINTS_FLAG, m_showControlPoints);
         break;
@@ -132,6 +137,13 @@ void UiLr2Controller::control()
         this->getControllable()->control(CMD_STEP_SET);
 
         m_renderStepChanged = false;
+    }
+
+    if (m_renderColorChanged) {
+        this->getControllable()->set(VID_RENDER_COLOR, m_renderColor);
+        this->getControllable()->control(CMD_COLOR_SET);
+
+        m_renderColorChanged = false;
     }
 
     if (m_showControlPointsChanged) {
@@ -226,9 +238,10 @@ void UiLr2Controller::renderUi()
     }
 
     ImGui::SeparatorText("Render");
+    m_renderColorChanged = ImGui::ColorEdit3("Color", m_renderColor, ImGuiColorEditFlags_NoOptions | ImGuiColorEditFlags_NoInputs);
     m_renderStepChanged = ImGui::SliderFloat("Step##Render", &m_renderStep, 0.001, 1.0, "%.3f", ImGuiSliderFlags_Logarithmic);
     m_showControlPointsChanged = ImGui::Checkbox("Show Control Points", &m_showControlPoints);
     m_showControlPolygonChanged = ImGui::Checkbox("Show Polygon", &m_showControlPolygon);
-    
+
     ImGui::End();
 }

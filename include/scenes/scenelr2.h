@@ -36,6 +36,7 @@ private:
         CMD_KNOT_SET,
         CMD_ORDER_SET,
         CMD_STEP_SET,
+        CMD_COLOR_SET,
         CMD_SHOW_CONTROL_POINTS_SWITCH,
         CMD_SOW_CONTROL_POLYGON_SWITCH,
         CMD_KNOTS_UNIFORM,
@@ -53,6 +54,7 @@ private:
         VID_ORDER_MAX,
         VID_ORDER_VALUE,
         VID_RENDER_STEP,
+        VID_RENDER_COLOR,
         VID_CONTROL_POINTS_FLAG,
         VID_CONTROL_POLYGON_FLAG,
         VID_KNOT_STEP
@@ -70,6 +72,7 @@ private:
     float m_knot;
     int m_order;
     float m_renderStep;
+    vec3 m_renderColor;
     float m_knotStep;
     bool m_showControlPoints;
     bool m_showControlPolygon;

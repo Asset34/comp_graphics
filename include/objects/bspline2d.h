@@ -31,6 +31,8 @@ public:
     float getRenderStep() const;
 
     void setColor(const vec3 &color);
+    const vec3 &getColor() const;
+
     void setLineWidth(float width);
 
     RenderData getRenderData() override;

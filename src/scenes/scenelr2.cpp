@@ -73,6 +73,11 @@ void SceneLR2::set(int vid, const float values[])
         m_controlPoint.x = values[0];
         m_controlPoint.y = values[1];
     break;
+    case VID_RENDER_COLOR:
+        m_renderColor.r = values[0];
+        m_renderColor.g = values[1];
+        m_renderColor.b = values[2];
+    break;
     }  
 }
 
@@ -144,6 +149,11 @@ void SceneLR2::get(int vid, float receiver[])
             receiver[i] = m_spline.getKnot(i);
         }
     break;
+    case VID_RENDER_COLOR:
+        receiver[0] = m_spline.getColor().r;
+        receiver[1] = m_spline.getColor().g;
+        receiver[2] = m_spline.getColor().b;
+    break;
     }
 }
 
@@ -166,6 +176,9 @@ void SceneLR2::control(int cmd)
     break;
     case CMD_STEP_SET:
         m_spline.setRenderStep(m_renderStep);
+    break;
+    case CMD_COLOR_SET:
+        m_spline.setColor(m_renderColor);
     break;
     case CMD_SHOW_CONTROL_POINTS_SWITCH:
         m_splinePolygon.showControlPoints(m_showControlPoints);
