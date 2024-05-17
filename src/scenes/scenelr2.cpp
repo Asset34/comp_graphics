@@ -8,9 +8,9 @@ SceneLR2::SceneLR2()
 
     // Init objects
     // m_spline.defineKnots({0, 1, 2, 3, 4, 5, 6, 7, 8, 9});
-    m_spline.defineKnots({0, 1, 2, 3, 4, 5, 6});
+    m_spline.defineKnots({0, 0, 0, 1, 2, 2, 2});
     m_spline.setOrder(3);
-    m_spline.setRenderStep(0.01);
+    m_spline.setRenderStep(0.1);
     m_spline.endEdit();
 
     // Add renderable objects
@@ -57,8 +57,11 @@ void SceneLR2::set(int vid, float value)
     case VID_KNOT_VALUE:
         m_knot = value;
     break;
-    case VID_STEP:
-        m_step = value;
+    case VID_RENDER_STEP:
+        m_renderStep = value;
+    break;
+    case VID_KNOT_STEP:
+        m_knotStep = value;
     break;
     }
 }
@@ -110,7 +113,7 @@ void SceneLR2::get(int vid, float &receiver)
 {
     switch (vid)
     {
-    case VID_STEP:
+    case VID_RENDER_STEP:
         receiver = m_spline.getRenderStep();
     break;
     }
@@ -163,13 +166,25 @@ void SceneLR2::control(int cmd)
         m_updateList.push_back(VID_KNOTS);
     break;
     case CMD_STEP_SET:
-        m_spline.setRenderStep(m_step);
+        m_spline.setRenderStep(m_renderStep);
     break;
     case CMD_SHOW_CONTROL_POINTS_SWITCH:
         m_splinePolygon.showControlPoints(m_showControlPoints);
     break;
     case CMD_SOW_CONTROL_POLYGON_SWITCH:
         m_splinePolygon.showPolygon(m_showControlPolygon);
+    break;
+    case CMD_KNOTS_UNIFORM:
+        m_spline.defineKnotsUniform(m_knotStep);
+
+        m_updated = true;
+        m_updateList.push_back(VID_KNOTS);
+    break;
+    case CMD_KNOTS_OPENUNIFORM:
+        m_spline.defineKnotsOpenUniform(m_knotStep);
+
+        m_updated = true;
+        m_updateList.push_back(VID_KNOTS);
     break;
     }
 }

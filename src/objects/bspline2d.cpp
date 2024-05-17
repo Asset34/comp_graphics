@@ -56,6 +56,44 @@ void BSpline2D::defineKnots(const std::vector<float> &knots)
     }
 }
 
+void BSpline2D::defineKnotsUniform(float step)
+{
+    float value = 0;
+    for (int i = 0; i < m_knots.size(); i++) {
+        m_knots[i] = value;
+        value += step;
+    }
+
+    if (m_autoupdate) {
+        this->updateAllSegments();
+    }
+}
+
+void BSpline2D::defineKnotsOpenUniform(float step)
+{
+    // Begin
+    for (int i = 0; i < m_order; i++) {
+        m_knots[i] = 0;
+    }
+
+    // Intermediate
+    float value = 0;
+    for (int i = m_order; i < m_knots.size() - m_order; i++) {
+        value += step;
+        m_knots[i] = value;
+    }
+
+    // End
+    value += step;
+    for (int i = m_knots.size() - m_order; i < m_knots.size(); i++) {
+        m_knots[i] = value;
+    }
+
+    if (m_autoupdate) {
+        this->updateAllSegments();
+    }
+}
+
 int BSpline2D::getKnotsNumber() const
 {
     return m_knots.size();

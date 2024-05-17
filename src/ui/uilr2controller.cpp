@@ -10,10 +10,11 @@ UiLr2Controller::UiLr2Controller(GLFWwindow *w, bool manageContext)
       m_controlPointChanged(false),
       m_knotChanged(false),
       m_orderChanged(false),
-      m_stepChanged(false),
+      m_renderStepChanged(false),
       m_showControlPointsChanged(false),
       m_showControlPolygonChanged(false)
 {
+    m_knotStep = 1.0;
 }
 
 UiLr2Controller::~UiLr2Controller()
@@ -43,7 +44,7 @@ void UiLr2Controller::initFromControllable()
     // Init Misc
     this->getControllable()->get(VID_ORDER_MAX, m_orderMax);
     this->getControllable()->get(VID_ORDER_VALUE, m_orderValue);
-    this->getControllable()->get(VID_STEP, m_step);
+    this->getControllable()->get(VID_RENDER_STEP, m_renderStep);
 
     // Init Flags
     this->getControllable()->get(VID_CONTROL_POINTS_FLAG, m_showControlPoints);
@@ -86,8 +87,8 @@ void UiLr2Controller::updateFromControllable()
         case VID_ORDER_VALUE:
             this->getControllable()->get(VID_ORDER_VALUE, m_orderValue);
         break;
-        case VID_STEP:
-            this->getControllable()->get(VID_STEP, m_step);
+        case VID_RENDER_STEP:
+            this->getControllable()->get(VID_RENDER_STEP, m_renderStep);
         break;
         case VID_CONTROL_POINTS_FLAG:
             this->getControllable()->get(VID_CONTROL_POINTS_FLAG, m_showControlPoints);
@@ -126,11 +127,11 @@ void UiLr2Controller::control()
         m_orderChanged = false;
     }
 
-    if (m_stepChanged) {
-        this->getControllable()->set(VID_STEP, m_step);
+    if (m_renderStepChanged) {
+        this->getControllable()->set(VID_RENDER_STEP, m_renderStep);
         this->getControllable()->control(CMD_STEP_SET);
 
-        m_stepChanged = false;
+        m_renderStepChanged = false;
     }
 
     if (m_showControlPointsChanged) {
@@ -146,12 +147,28 @@ void UiLr2Controller::control()
         
         m_showControlPolygonChanged = false;
     }
+
+    if (m_buttonUniformStep) {
+        this->getControllable()->set(VID_KNOT_STEP, m_knotStep);
+        this->getControllable()->control(CMD_KNOTS_UNIFORM);
+
+        m_buttonUniformStep = false;
+    }
+
+    if (m_buttonOpenUniformStep) {
+        this->getControllable()->set(VID_KNOT_STEP, m_knotStep);
+        this->getControllable()->control(CMD_KNOTS_OPENUNIFORM);
+
+        m_buttonOpenUniformStep = false;
+    }
 }
 
 void UiLr2Controller::renderUi()
 {
-    UiSceneController2D::renderUi();
+    // UiSceneController2D::renderUi();
     ImGui::Begin("LR 2");
+    
+    m_orderChanged = ImGui::SliderInt("Order", &m_orderValue, 2, m_orderMax);
 
     ImGui::SeparatorText("Control Points");
     for (int i = 0; i < m_controlPoints.size(); i++) {
@@ -166,6 +183,21 @@ void UiLr2Controller::renderUi()
     }
 
     ImGui::SeparatorText("Knots");
+
+    ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.3f);
+    m_buttonUniformStep = ImGui::Button("Uniform");
+    ImGui::SameLine();
+    m_buttonOpenUniformStep = ImGui::Button("Open Uniform");
+    ImGui::SameLine();
+    ImGui::InputFloat("Step##Knots", &m_knotStep, 0.1);
+    if (m_knotStep < 0) {
+        m_knotStep = 0;
+    }
+    ImGui::PopItemWidth();
+
+    ImGui::Spacing();
+    ImGui::Spacing();
+    
     float min, max;
     for (int i = 0; i < m_knots.size(); i++) {
         char buf[32];
@@ -192,11 +224,8 @@ void UiLr2Controller::renderUi()
         m_knotChanged |= ImGui::SliderFloat(buf, &m_knots[i], min, max);
     }
 
-    ImGui::SeparatorText("Misc");
-    m_orderChanged = ImGui::SliderInt("order", &m_orderValue, 2, m_orderMax);
-
     ImGui::SeparatorText("Render");
-    m_stepChanged = ImGui::SliderFloat("Step", &m_step, 0.001, 1.0);
+    m_renderStepChanged = ImGui::SliderFloat("Step##Render", &m_renderStep, 0.001, 1.0, "%.3f", ImGuiSliderFlags_Logarithmic);
     m_showControlPointsChanged = ImGui::Checkbox("Show Control Points", &m_showControlPoints);
     m_showControlPolygonChanged = ImGui::Checkbox("Show Polygon", &m_showControlPolygon);
     

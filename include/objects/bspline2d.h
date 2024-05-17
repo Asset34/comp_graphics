@@ -17,6 +17,8 @@ public:
     void setControlPoint(int index, const vec2 &cp);
 
     void defineKnots(const std::vector<float> &knots);
+    void defineKnotsUniform(float step);
+    void defineKnotsOpenUniform(float step);
     int getKnotsNumber() const;
     void setKnot(int index, float knot);
     float getKnot(int index);

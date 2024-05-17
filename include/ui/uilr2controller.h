@@ -24,7 +24,9 @@ private:
         CMD_ORDER_SET,
         CMD_STEP_SET,
         CMD_SHOW_CONTROL_POINTS_SWITCH,
-        CMD_SOW_CONTROL_POLYGON_SWITCH
+        CMD_SOW_CONTROL_POLYGON_SWITCH,
+        CMD_KNOTS_UNIFORM,
+        CMD_KNOTS_OPENUNIFORM
     };
 
     enum ValueIds {
@@ -37,9 +39,10 @@ private:
         VID_KNOTS,
         VID_ORDER_MAX,
         VID_ORDER_VALUE,
-        VID_STEP,
+        VID_RENDER_STEP,
         VID_CONTROL_POINTS_FLAG,
-        VID_CONTROL_POLYGON_FLAG
+        VID_CONTROL_POLYGON_FLAG,
+        VID_KNOT_STEP
     };
 
     struct ControlPoint {
@@ -58,8 +61,13 @@ private:
     int m_orderValue;
     bool m_orderChanged;
 
-    float m_step;
-    bool m_stepChanged;
+    float m_renderStep;
+    bool m_renderStepChanged;
+
+    float m_knotStep;
+    
+    bool m_buttonUniformStep;
+    bool m_buttonOpenUniformStep;
 
     bool m_showControlPoints;
     bool m_showControlPointsChanged;

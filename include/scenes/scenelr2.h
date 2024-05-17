@@ -37,7 +37,9 @@ private:
         CMD_ORDER_SET,
         CMD_STEP_SET,
         CMD_SHOW_CONTROL_POINTS_SWITCH,
-        CMD_SOW_CONTROL_POLYGON_SWITCH
+        CMD_SOW_CONTROL_POLYGON_SWITCH,
+        CMD_KNOTS_UNIFORM,
+        CMD_KNOTS_OPENUNIFORM
     };
 
     enum ValueIds {
@@ -50,9 +52,10 @@ private:
         VID_KNOTS,
         VID_ORDER_MAX,
         VID_ORDER_VALUE,
-        VID_STEP,
+        VID_RENDER_STEP,
         VID_CONTROL_POINTS_FLAG,
-        VID_CONTROL_POLYGON_FLAG
+        VID_CONTROL_POLYGON_FLAG,
+        VID_KNOT_STEP
     };
 
     // Objects
@@ -66,7 +69,8 @@ private:
     int m_knotIndex;
     float m_knot;
     int m_order;
-    float m_step;
+    float m_renderStep;
+    float m_knotStep;
     bool m_showControlPoints;
     bool m_showControlPolygon;
 
