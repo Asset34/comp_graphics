@@ -166,9 +166,10 @@ void UiLr2Controller::control()
 void UiLr2Controller::renderUi()
 {
     // UiSceneController2D::renderUi();
-    ImGui::Begin("LR 2");
+    ImGui::Begin("Spline Control");
     
-    m_orderChanged = ImGui::SliderInt("Order", &m_orderValue, 2, m_orderMax);
+    ImGui::SeparatorText("Order");
+    m_orderChanged = ImGui::SliderInt("##", &m_orderValue, 2, m_orderMax);
 
     ImGui::SeparatorText("Control Points");
     for (int i = 0; i < m_controlPoints.size(); i++) {
