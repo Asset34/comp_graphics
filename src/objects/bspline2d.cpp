@@ -58,6 +58,8 @@ void BSpline2D::defineKnots(const std::vector<float> &knots)
 
 void BSpline2D::defineKnotsUniform(float step)
 {
+    m_knots.resize(m_contorlPoints.size() + m_order);
+
     float value = 0;
     for (int i = 0; i < m_knots.size(); i++) {
         m_knots[i] = value;
@@ -71,6 +73,8 @@ void BSpline2D::defineKnotsUniform(float step)
 
 void BSpline2D::defineKnotsOpenUniform(float step)
 {
+    m_knots.resize(m_contorlPoints.size() + m_order);
+
     // Begin
     for (int i = 0; i < m_order; i++) {
         m_knots[i] = 0;
