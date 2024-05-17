@@ -7,8 +7,7 @@ SceneLR2::SceneLR2()
     this->buildSpline();
 
     // Init objects
-    // m_spline.defineKnots({0, 1, 2, 3, 4, 5, 6, 7, 8, 9});
-    m_spline.defineKnots({0, 0, 0, 1, 2, 2, 2});
+    m_spline.defineKnotsOpenUniform(1.0);
     m_spline.setOrder(3);
     m_spline.setRenderStep(0.1);
     m_spline.endEdit();
@@ -208,21 +207,21 @@ std::list<int> SceneLR2::getUpdateList()
 void SceneLR2::buildSpline()
 {
     // Define control points
-    // std::vector<vec2> controlPoints = {
-    //     {1, 1},
-    //     {5, 3},
-    //     {10, -3},
-    //     {13, 10},
-    //     {15, 20},
-    //     {20, 31},
-    //     {25, -5}
-    // };
     std::vector<vec2> controlPoints = {
-        {0, 0},
-        {3, 9},
-        {6, 3},
-        {9, 6}
+        {1, 1},
+        {5, 3},
+        {15, -3},
+        {23, 10},
+        {35, 10},
+        {48, 31},
+        {64, -5}
     };
+    // std::vector<vec2> controlPoints = {
+    //     {0, 0},
+    //     {3, 9},
+    //     {6, 3},
+    //     {9, 6}
+    // };
 
     // Add control points
     for (auto cp : controlPoints) {
