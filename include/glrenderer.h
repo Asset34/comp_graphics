@@ -27,7 +27,7 @@ private:
         ~GLRendererUnit();
         
         void updateData();
-        void render(const RenderProviderData &data);
+        void render(const GlobalRenderData &data);
 
     private:
         void loadVertexData(const RenderData &data);

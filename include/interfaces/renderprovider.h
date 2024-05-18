@@ -5,7 +5,7 @@
 #include "glm/glm.hpp"
 #include "renderable.h"
 
-struct RenderProviderData {
+struct GlobalRenderData {
     // Types
     typedef glm::vec3 Color;
 
@@ -20,7 +20,7 @@ struct RenderProviderData {
 
 class RenderProvider {
 public:
-    virtual RenderProviderData getRenderProviderData() = 0;
+    virtual GlobalRenderData getGlobalRenderData() = 0;
     virtual const std::vector<Renderable*> &getRenderables() = 0;
     virtual std::vector<int> getRenderableUpdateVector() = 0;
 

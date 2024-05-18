@@ -40,7 +40,7 @@ void GLRenderer::GLRendererUnit::updateData()
     glBindVertexArray(0);
 }
 
-void GLRenderer::GLRendererUnit::render(const RenderProviderData &data)
+void GLRenderer::GLRendererUnit::render(const GlobalRenderData &data)
 {
     // Bind VAO
     glBindVertexArray(m_vao);

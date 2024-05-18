@@ -14,7 +14,7 @@ public:
     ObservationController2D *getObservationController();
     void setBackgroundColor(const glm::vec3 &color);
     
-    virtual RenderProviderData getRenderProviderData() override;
+    virtual GlobalRenderData getGlobalRenderData() override;
     virtual const std::vector<Renderable*> &getRenderables() override;
     virtual std::vector<int> getRenderableUpdateVector() override;
 

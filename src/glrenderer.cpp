@@ -47,7 +47,7 @@ void GLRenderer::render()
         return;
     }
 
-    RenderProviderData data = m_provider->getRenderProviderData();
+    GlobalRenderData data = m_provider->getGlobalRenderData();
 
     // Render global
     glClearColor(data.BackgroundColor.r, data.BackgroundColor.g, data.BackgroundColor.b, 1.0f);

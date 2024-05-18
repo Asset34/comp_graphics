@@ -44,9 +44,9 @@ void Scene3D::setBackgroundColor(const glm::vec3 &color)
     m_backgroundColor = color;
 }
 
-RenderProviderData Scene3D::getRenderProviderData()
+GlobalRenderData Scene3D::getGlobalRenderData()
 {
-    RenderProviderData data;
+    GlobalRenderData data;
     data.ViewMatrix = m_camera.getViewMatrix();
     data.ProjMatrix = m_camera.getProjMatrix();
     data.BackgroundColor = m_backgroundColor;
