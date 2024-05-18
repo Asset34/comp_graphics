@@ -18,6 +18,10 @@ SceneLR2::SceneLR2()
 
     // Init control values
     m_updated = false;
+    m_rememberedSplineIndex = -1;
+
+    // Init render values
+    this->initRenderUpdateList();
 }
 
 void SceneLR2::update()
@@ -26,11 +30,7 @@ void SceneLR2::update()
 
 std::vector<int> SceneLR2::getRenderableUpdateVector()
 {
-    std::vector<int> vector = Scene2D::getRenderableUpdateVector();
-    vector.push_back(this->getNextRenderableUpdateVectorIndex()); // Update spline polygon
-    vector.push_back(this->getNextRenderableUpdateVectorIndex() + 1); // Update spline
-
-    return vector;
+    return m_renderableUpdate;
 }
 
 void SceneLR2::set(int vid, int value)
@@ -45,6 +45,9 @@ void SceneLR2::set(int vid, int value)
     break;
     case VID_ORDER_VALUE:
         m_order = value;
+    break;
+    case VID_REMEMBERED_SPLINE_INDEX:
+        m_rememberedSplineIndex = value;
     break;
     }  
 }
@@ -110,6 +113,15 @@ void SceneLR2::get(int vid, int &receiver)
     case VID_ORDER_VALUE:
         receiver = m_spline.getOrder();
     break;
+    case VID_REMEMBERED_SPLINE_SIZE:
+        receiver = m_rememberedSplines.size();
+    break;
+    case VID_REMEMBERED_SPLINE_ORDER:
+        receiver = m_rememberedSplines[m_rememberedSplineIndex].getOrder();
+    break;
+    case VID_REMEMBERED_SPLINE_KNOTS_SIZE:
+        receiver = m_rememberedSplines[m_rememberedSplineIndex].getKnotsNumber();
+    break;
     }
 }
 
@@ -154,6 +166,16 @@ void SceneLR2::get(int vid, float receiver[])
         receiver[1] = m_spline.getColor().g;
         receiver[2] = m_spline.getColor().b;
     break;
+    case VID_REMEMBERED_SPLINE_KNOTS:
+        for (int i = 0; i < m_rememberedSplines[m_rememberedSplineIndex].getKnotsNumber(); i++) {
+            receiver[i] = m_rememberedSplines[m_rememberedSplineIndex].getKnot(i);
+        }
+    break;
+    case VID_REMEMBERED_SPLINE_COLOR:
+        receiver[0] = m_rememberedSplines[m_rememberedSplineIndex].getColor().r;
+        receiver[1] = m_rememberedSplines[m_rememberedSplineIndex].getColor().g;
+        receiver[2] = m_rememberedSplines[m_rememberedSplineIndex].getColor().b;
+    break;
     }
 }
 
@@ -197,6 +219,18 @@ void SceneLR2::control(int cmd)
 
         m_updated = true;
         m_updateList.push_back(VID_KNOTS);
+    break;
+    case CMD_REMEMBER_SPLINE:
+        this->rememberSpline();
+
+        m_updated = true;
+        m_updateList.push_back(VID_REMEMBERED_SPLINE_SIZE);
+    break;
+    case CMD_CLEAR_REMEMBERED_SPLINES:
+        this->clearRememberedSplines();
+
+        m_updated = true;
+        m_updateList.push_back(VID_REMEMBERED_SPLINE_SIZE);
     break;
     }
 }
@@ -251,4 +285,29 @@ void SceneLR2::buildSpline()
     m_spline.setLineWidth(4.0);
 
     this->setBackgroundColor({1.0, 1.0, 1.0});
+}
+
+void SceneLR2::initRenderUpdateList()
+{
+    m_renderableUpdate = Scene2D::getRenderableUpdateVector();
+    m_renderableUpdate.push_back(this->getNextRenderableUpdateVectorIndex()); // Update spline polygon
+    m_renderableUpdate.push_back(this->getNextRenderableUpdateVectorIndex() + 1); // Update spline
+
+    m_nextRenderUpdateIndex = this->getNextRenderableUpdateVectorIndex() + 2;
+}
+
+void SceneLR2::rememberSpline()
+{
+    m_rememberedSplines.push_back(m_spline);
+    this->addRenderable(&m_rememberedSplines.back());
+    m_renderableUpdate.push_back(m_nextRenderUpdateIndex);
+
+    m_nextRenderUpdateIndex++;
+}
+
+void SceneLR2::clearRememberedSplines()
+{
+    m_rememberedSplines.clear();
+    this->clearRenderables();   
+    this->initRenderUpdateList();
 }

@@ -20,11 +20,14 @@ public:
 
 protected:
     void addRenderable(Renderable *r);
+    void clearRenderables();
     int getNextRenderableUpdateVectorIndex();
 
     Camera2D &getCamera();
 
 private:
+    void initRenderables();
+
     Camera2D m_camera;
     AxisXY m_xy;
 

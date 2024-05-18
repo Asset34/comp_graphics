@@ -8,8 +8,8 @@ Scene2D::Scene2D()
     m_xy.setColorY({0.5, 0.8, 0.25});
     m_xy.setWidth(3);
 
-    // Add default renderable objects
-    m_renderables.push_back(&m_xy);
+    // Init Renderables
+    this->initRenderables();
 
     // Setup default background color
     m_backgroundColor = {0.25, 0.25, 0.25};
@@ -50,6 +50,12 @@ void Scene2D::addRenderable(Renderable *r)
     m_renderables.push_back(r);
 }
 
+void Scene2D::clearRenderables()
+{
+    m_renderables.clear();
+    this->initRenderables();
+}
+
 int Scene2D::getNextRenderableUpdateVectorIndex()
 {
     return 1;
@@ -57,4 +63,9 @@ int Scene2D::getNextRenderableUpdateVectorIndex()
 Camera2D &Scene2D::getCamera()
 {
     return m_camera;
+}
+
+void Scene2D::initRenderables()
+{
+    m_renderables.push_back(&m_xy);
 }
