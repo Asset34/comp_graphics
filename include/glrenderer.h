@@ -31,8 +31,10 @@ private:
         int getAssociatedId();
 
     private:
-        void load();
-        void render();
+        void initData();
+        void loadData();
+        void updateData();
+        void renderData();
 
         void loadVertexData(const RenderData &data);
         void loadVertices(const RenderData &data);

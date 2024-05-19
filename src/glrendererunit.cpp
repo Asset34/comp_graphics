@@ -16,7 +16,8 @@ GLRenderer::GLRendererUnit::GLRendererUnit(RenderableObj *r)
     // Associate Id
     m_associatedId = r->getId();
 
-    this->load();
+    this->initData();
+    this->loadData();
     m_obj->updateAck();
 
     // Unbind VAO
@@ -29,7 +30,7 @@ void GLRenderer::GLRendererUnit::update()
 
     glBindVertexArray(m_vao);
     
-    this->load();
+    this->loadData();
     m_obj->updateAck();
 
     glBindVertexArray(0);
@@ -62,7 +63,7 @@ void GLRenderer::GLRendererUnit::render(const GlobalRenderData &data)
         m_shader.setMat4("proj", glm::mat4(1)); // Indentity Matrix
     }
 
-    this->render();
+    this->renderData();
 
     // Unbind VAO
     glBindVertexArray(0);
@@ -73,7 +74,15 @@ int GLRenderer::GLRendererUnit::getAssociatedId()
     return m_associatedId;
 }
 
-void GLRenderer::GLRendererUnit::load()
+void GLRenderer::GLRendererUnit::initData()
+{
+    glGenBuffers(1, &m_vbo);
+    glGenBuffers(1, &m_eboVertices);
+    glGenBuffers(1, &m_eboEdges);
+    glGenBuffers(1, &m_eboPolygons);
+}
+
+void GLRenderer::GLRendererUnit::loadData()
 {
     const RenderData &data = m_obj->getRenderData();
 
@@ -83,7 +92,7 @@ void GLRenderer::GLRendererUnit::load()
     this->loadPolygons(data);
 }
 
-void GLRenderer::GLRendererUnit::render()
+void GLRenderer::GLRendererUnit::renderData()
 {
     const RenderData &data = m_obj->getRenderData();
 
@@ -94,15 +103,11 @@ void GLRenderer::GLRendererUnit::render()
 
 void GLRenderer::GLRendererUnit::loadVertexData(const RenderData &data)
 {
-    // Generate and bind vertex buffer
-    glGenBuffers(1, &m_vbo);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
 
     // Process data
-
     int rawDataSize = data.VertexData.size() * RenderData::VERTEX_PURE_SIZE;
     float rawData[rawDataSize];
-
     int i = 0;
     for (auto v : data.VertexData) {
         rawData[i] = v.x;
@@ -117,21 +122,16 @@ void GLRenderer::GLRendererUnit::loadVertexData(const RenderData &data)
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
-    // Unbind buffer
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 void GLRenderer::GLRendererUnit::loadVertices(const RenderData &data)
 {
-    // Generate and bind index buffer
-    glGenBuffers(1, &m_eboVertices);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_eboVertices);
 
     // Process data
-
     int rawDataSize = data.Vertices.size() * RenderData::VERTEX_UNIT_SIZE;
     unsigned int rawData[rawDataSize];
-
     int i = 0;
     for (auto v : data.Vertices) {
         rawData[i] = v.index;
@@ -148,15 +148,11 @@ void GLRenderer::GLRendererUnit::loadVertices(const RenderData &data)
 
 void GLRenderer::GLRendererUnit::loadEdges(const RenderData &data)
 {
-    // Generate and bind index buffer
-    glGenBuffers(1, &m_eboEdges);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_eboEdges);
 
     // Process data
-
     int rawDataSize = data.Edges.size() * RenderData::EDGE_UNIT_SIZE;
     unsigned int rawData[rawDataSize];
-
     int i = 0;
     for (auto e : data.Edges) {
         rawData[i] = e.begin;
@@ -168,24 +164,19 @@ void GLRenderer::GLRendererUnit::loadEdges(const RenderData &data)
     // Load buffer
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(rawData), rawData, GL_STATIC_DRAW);
 
-    // Unbind buffer
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
 void GLRenderer::GLRendererUnit::loadPolygons(const RenderData &data)
 {
-    // Generate and bind index buffer
-    glGenBuffers(1, &m_eboPolygons);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_eboPolygons);
 
     // Process data
-
     int rawDataSize = 0;
     for (auto p : data.Polygons) {
         rawDataSize += p.indices.size();
     }
     unsigned int rawData[rawDataSize];
-
     int i = 0;
     for (auto p : data.Polygons) {
         for (int j = 0; j < p.indices.size(); j++) {
@@ -198,13 +189,11 @@ void GLRenderer::GLRendererUnit::loadPolygons(const RenderData &data)
     // Load buffer
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(rawData), rawData, GL_STATIC_DRAW);
 
-    // Unbind buffer
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
 void GLRenderer::GLRendererUnit::renderVertices(const RenderData &data)
 {
-    // Bind index buffer
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_eboVertices);
 
     // Setup visuals
@@ -225,13 +214,11 @@ void GLRenderer::GLRendererUnit::renderVertices(const RenderData &data)
         }
     }
 
-    // Unbind buffer
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
 void GLRenderer::GLRendererUnit::renderEdges(const RenderData &data)
 {
-    // Bind index buffer
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_eboEdges);
 
     // Setup visuals
@@ -252,13 +239,11 @@ void GLRenderer::GLRendererUnit::renderEdges(const RenderData &data)
         }
     }
 
-    // Unbind buffer
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
 void GLRenderer::GLRendererUnit::renderPolygons(const RenderData &data)
 {
-    // Bind index buffer
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_eboPolygons);
 
     // Render
@@ -280,6 +265,5 @@ void GLRenderer::GLRendererUnit::renderPolygons(const RenderData &data)
         }
     }
 
-    // Unbind buffer
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
