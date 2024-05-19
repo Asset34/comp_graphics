@@ -14,7 +14,9 @@ void BSpline2D::setAutocompute(bool value)
 
 void BSpline2D::compute()
 {
+    this->computeBorders();
     this->updateAllSegments();
+    
     this->setUpdated();
 }
 
@@ -24,8 +26,9 @@ void BSpline2D::addControlPoint(const vec2 &cp)
 
     if (m_autoCompute) {
         this->updateKnots();
-        // TODO: update new segments
-        this->updateAllSegments();
+        this->computeBorders();        
+        this->updateSegment(m_endSegment);
+
         this->setUpdated();
     }
 }
@@ -35,8 +38,8 @@ void BSpline2D::setControlPoint(int index, const vec2 &cp)
     m_contorlPoints[index] = cp;
 
     if (m_autoCompute) {
-        // TODO: update near segments
-        this->updateAllSegments();
+        this->updateSegmentsAffectedByBasis(index);
+
         this->setUpdated();
     }
 }
@@ -46,6 +49,7 @@ void BSpline2D::defineKnots(const std::vector<float> &knots)
     m_knots = knots;
 
     if (m_autoCompute) {
+        this->computeBorders();
         this->updateAllSegments();
         this->setUpdated();
     }
@@ -62,6 +66,7 @@ void BSpline2D::defineKnotsUniform(float step)
     }
 
     if (m_autoCompute) {
+        this->computeBorders();
         this->updateAllSegments();
         this->setUpdated();
     }
@@ -90,6 +95,7 @@ void BSpline2D::defineKnotsOpenUniform(float step)
     }
 
     if (m_autoCompute) {
+        this->computeBorders();
         this->updateAllSegments();
         this->setUpdated();
     }
@@ -105,8 +111,10 @@ void BSpline2D::setKnot(int index, float knot)
     m_knots[index] = knot;
 
     if (m_autoCompute) {
-        // TODO: update near(left and right) segments
-        this->updateAllSegments();
+        this->computeBorders();
+        this->updateSegmentsAffectedByKnot(index);
+        // this->updateAllSegments();
+
         this->setUpdated();
     }
 }
@@ -176,11 +184,12 @@ const RenderData &BSpline2D::getRenderData()
     // Setup Data
 
     if (!this->updated()) return m_renderData;
-
+    
     int size = 0;
     for (auto segment : m_segments) {
         size += segment.size();
     }
+
     m_renderData.VertexData.resize(size);
     int i = 0;
     for (auto segment : m_segments) {
@@ -190,14 +199,22 @@ const RenderData &BSpline2D::getRenderData()
         }
     }
 
-    m_renderData.Edges.resize(m_renderData.VertexData.size() - 1);
-    for (int i = 0; i < m_renderData.Edges.size(); i++) {
-        m_renderData.Edges[i] = {i, i + 1};
+    if (size > 0) {
+        m_renderData.Edges.resize(size - 1);
+        for (int i = 0; i < size - 1; i++) {
+            m_renderData.Edges[i] = {i, i + 1};
+        }
     }
     
     return m_renderData;
 }
 
+void BSpline2D::computeBorders()
+{
+    m_beginSegment = m_order - 1;
+    m_endSegment = m_knots.size() - m_order - 1;
+}
+    
 void BSpline2D::updateKnots()
 {
     int diff = m_contorlPoints.size() + m_order - m_knots.size();
@@ -212,26 +229,70 @@ void BSpline2D::updateKnots()
             m_knots.pop_back();
         }
     }
+
+    this->computeBorders();
+}
+
+bool BSpline2D::isSegmentEmpty(int index)
+{
+    return m_knots[index + 1] - m_knots[index] == 0;
 }
 
 void BSpline2D::updateAllSegments()
 {
-    // Define begin and end segments
-    int beginSegment = m_order - 1;
-    int endSegment = m_knots.size() - m_order - 1;
-
     // Prepare segments
     m_segments.clear();
     m_segments.resize(m_knots.size() - 1);
 
     // Update
-    for (int i = beginSegment; i <= endSegment; i++) {
+    for (int i = m_beginSegment; i <= m_endSegment; i++) {
         this->updateSegment(i);
     }
 
-    // Update last point
-    this->updateLast(endSegment);
+    this->updateLast();
 }
+
+void BSpline2D::updateSegmentsAffectedByBasis(int basisIndex)
+{
+    // Define affected segments borders
+    int begin = basisIndex;
+    int end = basisIndex + m_order - 1;
+
+    // Project onto usable segments
+    if (begin < m_beginSegment) {
+        begin = m_beginSegment;
+    }
+    if (end > m_endSegment) {
+        end = m_endSegment;
+    }
+
+    // Update defined segments
+    for (int i = begin; i <= end; i++) {
+        this->updateSegment(i);
+    }
+
+    if (end == m_endSegment) {
+        this->updateLast();
+    }
+}
+
+void BSpline2D::updateSegmentsAffectedByKnot(int knotIndex)
+{
+    int begin = knotIndex - m_order;
+    int end = knotIndex + m_order - 1;
+
+    if (begin < m_beginSegment) begin = m_beginSegment;
+    if (end > m_endSegment) end = m_endSegment;
+
+    for (int i = begin; i <= end; i++) {
+        this->updateSegment(i);
+    }
+
+    if (end == m_endSegment) {
+        this->updateLast();
+    }
+}
+
 
 void BSpline2D::updateSegment(int index)
 {
@@ -249,14 +310,27 @@ void BSpline2D::updateSegment(int index)
     for (float t = tmin; t < tmax; t += m_renderStep) {
         this->computeSegment(index, basisBegin, t);
     }
+
+    // // Update last
+    // if (tmax - tmin > 0) {
+    //     this->computeSegment(index, basisBegin, tmax);
+    // }
 }
 
-void BSpline2D::updateLast(int lastSegment)
+void BSpline2D::updateLast()
 {
-    int basisBegin = lastSegment - m_order + 1;
-    float tmax = m_knots[lastSegment + 1];
+    int segment = m_endSegment;
+    while (isSegmentEmpty(segment) && segment > 0) {
+        segment--;
+    }
 
-    this->computeSegment(lastSegment, basisBegin, tmax);
+    if (segment < m_beginSegment) return;
+
+    // Define index of the 1st basis
+    int basisBegin = segment - m_order + 1;
+    float tmax = m_knots[segment + 1];
+
+    this->computeSegment(segment, basisBegin, tmax);
 }
 
 void BSpline2D::computeSegment(int index, int basisBegin, float t)

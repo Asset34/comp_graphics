@@ -37,11 +37,18 @@ public:
     const RenderData &getRenderData() override;
 
 private:
+    void computeBorders();
     void updateKnots();
+
+    bool isSegmentEmpty(int index);
+
     void updateAllSegments();
+    void updateSegmentsAffectedByBasis(int basisIndex);
+    void updateSegmentsAffectedByKnot(int knotIndex);
+
     void updateSegment(int index);
-    void updateLast(int lastSegment);
     void computeSegment(int index, int basisBegin, float t);
+    void updateLast();
 
     void initRenderData();
 
@@ -53,6 +60,10 @@ private:
     std::vector<float> m_knots;
     int m_order = 0;
     
+    // Borders
+    int m_beginSegment;
+    int m_endSegment;
+
     // Result Data
     std::vector<std::vector<vec2>> m_segments;
 

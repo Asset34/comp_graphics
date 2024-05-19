@@ -258,6 +258,10 @@ void UiLr2Controller::renderUi()
         }
 
         m_knotChanged |= ImGui::SliderFloat(buf, &m_knots[i], min, max);
+
+        // Check for borders
+        if (m_knots[i] < min) m_knots[i] = min;
+        if (m_knots[i] > max) m_knots[i] = max;
     }
 
     ImGui::SeparatorText("Render");

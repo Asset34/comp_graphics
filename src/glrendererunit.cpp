@@ -109,7 +109,7 @@ void GLRenderer::GLRendererUnit::loadVertexData(const RenderData &data)
     int rawDataSize = data.VertexData.size() * RenderData::VERTEX_PURE_SIZE;
     float rawData[rawDataSize];
     int i = 0;
-    for (auto v : data.VertexData) {
+    for (auto &v : data.VertexData) {
         rawData[i] = v.x;
         rawData[i + 1] = v.y;
         rawData[i + 2] = v.z;
@@ -133,7 +133,7 @@ void GLRenderer::GLRendererUnit::loadVertices(const RenderData &data)
     int rawDataSize = data.Vertices.size() * RenderData::VERTEX_UNIT_SIZE;
     unsigned int rawData[rawDataSize];
     int i = 0;
-    for (auto v : data.Vertices) {
+    for (auto &v : data.Vertices) {
         rawData[i] = v.index;
 
         i += RenderData::VERTEX_UNIT_SIZE;
@@ -152,9 +152,10 @@ void GLRenderer::GLRendererUnit::loadEdges(const RenderData &data)
 
     // Process data
     int rawDataSize = data.Edges.size() * RenderData::EDGE_UNIT_SIZE;
+
     unsigned int rawData[rawDataSize];
     int i = 0;
-    for (auto e : data.Edges) {
+    for (auto &e : data.Edges) {
         rawData[i] = e.begin;
         rawData[i + 1] = e.end;
 
@@ -173,12 +174,12 @@ void GLRenderer::GLRendererUnit::loadPolygons(const RenderData &data)
 
     // Process data
     int rawDataSize = 0;
-    for (auto p : data.Polygons) {
+    for (auto &p : data.Polygons) {
         rawDataSize += p.indices.size();
     }
     unsigned int rawData[rawDataSize];
     int i = 0;
-    for (auto p : data.Polygons) {
+    for (auto &p : data.Polygons) {
         for (int j = 0; j < p.indices.size(); j++) {
             rawData[i + j] = p.indices[j];
         }
@@ -207,7 +208,7 @@ void GLRenderer::GLRendererUnit::renderVertices(const RenderData &data)
         glDrawElements(GL_POINTS, n, GL_UNSIGNED_INT, (void*)(0));
     } else {
         unsigned int offset = 0;
-        for (auto v : data.Vertices) {
+        for (auto &v : data.Vertices) {
             m_shader.setVec3("color", v.color);
             glDrawElements(GL_POINTS, RenderData::VERTEX_UNIT_SIZE, GL_UNSIGNED_INT, (void*)(offset * sizeof(GLint)));
             offset += RenderData::VERTEX_UNIT_SIZE;
@@ -232,7 +233,7 @@ void GLRenderer::GLRendererUnit::renderEdges(const RenderData &data)
         glDrawElements(GL_LINES, n, GL_UNSIGNED_INT, (void*)(0));
     } else {
         unsigned int offset = 0;
-        for (auto p : data.Edges) {
+        for (auto &p : data.Edges) {
             m_shader.setVec3("color", p.color);
             glDrawElements(GL_LINES, RenderData::EDGE_UNIT_SIZE, GL_UNSIGNED_INT, (void*)(offset * sizeof(GLint)));
             offset += RenderData::EDGE_UNIT_SIZE;
@@ -251,13 +252,13 @@ void GLRenderer::GLRendererUnit::renderPolygons(const RenderData &data)
         m_shader.setVec3("color", data.GlobalPolygonColor);
 
         int n = 0;
-        for (auto p : data.Polygons) {
+        for (auto &p : data.Polygons) {
             n += p.indices.size();
         }
         glDrawElements(GL_TRIANGLE_FAN, n, GL_UNSIGNED_INT, (void*)(0));
     } else {
         unsigned int offset = 0;
-        for (auto p : data.Polygons) {
+        for (auto &p : data.Polygons) {
             m_shader.setVec3("color", p.color);
             glDrawElements(GL_TRIANGLE_FAN, p.indices.size(), GL_UNSIGNED_INT, (void*)(offset * sizeof(GLint)));
 
