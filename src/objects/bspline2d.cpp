@@ -160,13 +160,18 @@ void BSpline2D::setLineWidth(float width)
 
 const RenderData &BSpline2D::getRenderData()
 {
-    // Compute Vertex Data size
+    // Setup Visual values
+    m_renderData.GlobalEdgeColor = m_color;
+    m_renderData.EdgeWidth = m_lineWidth;
+
+    // Setup Data
+
+    if (!this->updated()) return m_renderData;
+
     int size = 0;
     for (auto segment : m_segments) {
         size += segment.size();
     }
-
-    // Setup Vertex Data
     m_renderData.VertexData.resize(size);
     int i = 0;
     for (auto segment : m_segments) {
@@ -176,16 +181,11 @@ const RenderData &BSpline2D::getRenderData()
         }
     }
 
-    // Setup Edges
     m_renderData.Edges.resize(m_renderData.VertexData.size() - 1);
     for (int i = 0; i < m_renderData.Edges.size(); i++) {
         m_renderData.Edges[i] = {i, i + 1};
     }
-
-    // Setup Visual values
-    m_renderData.GlobalEdgeColor = m_color;
-    m_renderData.EdgeWidth = m_lineWidth;
-
+    
     return m_renderData;
 }
 

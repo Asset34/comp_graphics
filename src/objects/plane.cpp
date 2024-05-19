@@ -71,13 +71,14 @@ const RenderData &Plane::getRenderData()
     // Setup Transformation Matrix
     m_renderData.ModelMatrix = this->getModelMatrix();
 
-    // Setup Data
-    m_renderData.VertexData = m_gridVertexData;
-    m_renderData.Edges = m_gridEdges;
-
     // Setup Visuals
     m_renderData.EdgeWidth = m_gridThickness;
     m_renderData.GlobalEdgeColor = m_color;
+
+    // Setup Data
+    if (!this->updated()) return m_renderData;
+    m_renderData.VertexData = m_gridVertexData;
+    m_renderData.Edges      = m_gridEdges;
 
     return m_renderData;
 }

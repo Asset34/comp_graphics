@@ -40,24 +40,26 @@ void AxisXYZ::setColorZ(const Color &color)
 
 const RenderData &AxisXYZ::getRenderData()
 {
-    // Setup Vertex Data
+    // Setup Visuals
+    m_renderData.EdgeWidth = m_width;
+
+    // Setup Transformation Matrix
+    m_renderData.ModelMatrix = this->getModelMatrix();
+
+    // Setup Data
+
+    if (!this->updated()) return m_renderData;
+
     m_renderData.VertexData.resize(4);
     m_renderData.VertexData[0] = m_center;
     m_renderData.VertexData[1] = m_axisx;
     m_renderData.VertexData[2] = m_axisy;
     m_renderData.VertexData[3] = m_axisz;
 
-    // Setup Edges
     m_renderData.Edges.resize(3);
     m_renderData.Edges[0] = {0, 1, m_colorx};
     m_renderData.Edges[1] = {0, 2, m_colory};
     m_renderData.Edges[2] = {0, 3, m_colorz};
-
-    // Setup Visuals
-    m_renderData.EdgeWidth = m_width;
-
-    // Setup Transformation Matrix
-    m_renderData.ModelMatrix = this->getModelMatrix();
 
     return m_renderData;
 }

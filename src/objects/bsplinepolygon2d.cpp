@@ -76,7 +76,16 @@ const RenderData &BSplinePolygon2D::getRenderData()
     m_renderData.DrawVertices = m_showControlPoints;
     m_renderData.DrawEdges = m_showPolygon;
 
-    // Setup Vertex Data and Vertices
+    // Setup Visual values
+    m_renderData.GlobalEdgeColor   = m_polygonColor;
+    m_renderData.GlobalVertexColor = m_controlPointColor;
+    m_renderData.EdgeWidth         = m_polygonLineWidth;
+    m_renderData.VertexSize        = m_controlPointSize;
+
+    // Setup Data
+
+    if (!this->updated()) return m_renderData;
+
     m_renderData.VertexData.resize(m_controlPoints.size());
     m_renderData.Vertices.resize(m_controlPoints.size());
     for (int i = 0; i < m_controlPoints.size(); i++) {
@@ -84,17 +93,10 @@ const RenderData &BSplinePolygon2D::getRenderData()
         m_renderData.Vertices[i] = {i};
     }
 
-    // Setup Edges
     m_renderData.Edges.resize(m_controlPoints.size() - 1);
     for (int i = 0; i < m_renderData.Edges.size(); i++) {
         m_renderData.Edges[i] = {i, i + 1};
     }
-
-    // Setup Visual values
-    m_renderData.GlobalEdgeColor   = m_polygonColor;
-    m_renderData.GlobalVertexColor = m_controlPointColor;
-    m_renderData.EdgeWidth         = m_polygonLineWidth;
-    m_renderData.VertexSize        = m_controlPointSize;
 
     return m_renderData;
 }

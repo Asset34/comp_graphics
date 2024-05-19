@@ -33,20 +33,22 @@ void AxisXY::setColorY(const Color &color)
 
 const RenderData &AxisXY::getRenderData()
 {
-    // Setup Vertex Data
+    // Setup Visuals
+    m_renderData.EdgeWidth = m_width;
+
+    // Setup Data
+
+    if (!this->updated()) return m_renderData;
+
     m_renderData.VertexData.resize(4);
     m_renderData.VertexData[0] = {m_center - m_axisx, 0.0};
     m_renderData.VertexData[1] = {m_center + m_axisx, 0.0};
     m_renderData.VertexData[2] = {m_center - m_axisy, 0.0};
     m_renderData.VertexData[3] = {m_center + m_axisy, 0.0};
 
-    // Setup Edges
     m_renderData.Edges.resize(2);
     m_renderData.Edges[0] = {0, 1, m_colorx};
     m_renderData.Edges[1] = {2, 3, m_colory};
-
-    // Setup Visuals
-    m_renderData.EdgeWidth = m_width;
 
     return m_renderData;
 }

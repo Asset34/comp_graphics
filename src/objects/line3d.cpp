@@ -64,22 +64,23 @@ const RenderData &Line3D::getRenderData()
     // Setup Transformation Matrix
     m_renderData.ModelMatrix = this->getModelMatrix();
 
-    // Setup Vertex Data
-    m_renderData.VertexData[0] = m_begin;
-    m_renderData.VertexData[1] = m_end;
-
-    // Setup Vertices
-    m_renderData.Vertices[0] = {0};
-    m_renderData.Vertices[1] = {1};
-
-    // Setup Edges
-    m_renderData.Edges[0] = {0, 1};
-
     // Setup Visual values
     m_renderData.GlobalEdgeColor   = m_color;
     m_renderData.GlobalVertexColor = m_endsColor;
     m_renderData.EdgeWidth         = m_width;
     m_renderData.VertexSize        = m_endsSize;
+
+    // Setup Data
+
+    if (!this->updated()) return m_renderData;
+
+    m_renderData.VertexData[0] = m_begin;
+    m_renderData.VertexData[1] = m_end;
+
+    m_renderData.Vertices[0] = {0};
+    m_renderData.Vertices[1] = {1};
+
+    m_renderData.Edges[0] = {0, 1};
 
     return m_renderData;
 }
