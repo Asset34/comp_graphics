@@ -1,39 +1,32 @@
 #include "objects/bspline2d.h"
 
-const vec3 BSpline2D::COLOR_DEFAULT = {0, 0, 0};
+const Color BSpline2D::COLOR_DEFAULT = {0, 0, 0};
 
 BSpline2D::BSpline2D()
-    : m_order(0),
-      m_renderStep(0.1),
-      m_autoupdate(true),
-      m_color(COLOR_DEFAULT),
-      m_lineWidth(1.0)
 {
+    this->initRenderData();
 }
 
-BSpline2D::~BSpline2D()
+void BSpline2D::setAutocompute(bool value)
 {
+    m_autoCompute = value;
 }
 
-void BSpline2D::beginEdit()
+void BSpline2D::compute()
 {
-    m_autoupdate = false;
-}
-
-void BSpline2D::endEdit()
-{
-    m_autoupdate = true;
     this->updateAllSegments();
+    this->setUpdated();
 }
 
 void BSpline2D::addControlPoint(const vec2 &cp)
 {
     m_contorlPoints.push_back(cp);
 
-    if (m_autoupdate) {
+    if (m_autoCompute) {
         this->updateKnots();
         // TODO: update new segments
         this->updateAllSegments();
+        this->setUpdated();
     }
 }
 
@@ -41,9 +34,10 @@ void BSpline2D::setControlPoint(int index, const vec2 &cp)
 {
     m_contorlPoints[index] = cp;
 
-    if (m_autoupdate) {
+    if (m_autoCompute) {
         // TODO: update near segments
         this->updateAllSegments();
+        this->setUpdated();
     }
 }
 
@@ -51,8 +45,9 @@ void BSpline2D::defineKnots(const std::vector<float> &knots)
 {
     m_knots = knots;
 
-    if (m_autoupdate) {
+    if (m_autoCompute) {
         this->updateAllSegments();
+        this->setUpdated();
     }
 }
 
@@ -64,8 +59,9 @@ void BSpline2D::defineKnotsUniform(float step)
         value += step;
     }
 
-    if (m_autoupdate) {
+    if (m_autoCompute) {
         this->updateAllSegments();
+        this->setUpdated();
     }
 }
 
@@ -89,8 +85,9 @@ void BSpline2D::defineKnotsOpenUniform(float step)
         m_knots[i] = value;
     }
 
-    if (m_autoupdate) {
+    if (m_autoCompute) {
         this->updateAllSegments();
+        this->setUpdated();
     }
 }
 
@@ -103,9 +100,10 @@ void BSpline2D::setKnot(int index, float knot)
 {
     m_knots[index] = knot;
 
-    if (m_autoupdate) {
+    if (m_autoCompute) {
         // TODO: update near(left and right) segments
         this->updateAllSegments();
+        this->setUpdated();
     }
 }
 
@@ -118,9 +116,10 @@ void BSpline2D::setOrder(int order)
 {
     m_order = order;
 
-    if (m_autoupdate) {
+    if (m_autoCompute) {
         this->updateKnots();
         this->updateAllSegments();
+        this->setUpdated();
     }
 }
 
@@ -138,8 +137,9 @@ void BSpline2D::setRenderStep(float step)
 {
     m_renderStep = step;
 
-    if (m_autoupdate) {
+    if (m_autoCompute) {
         this->updateAllSegments();
+        this->setUpdated();
     }
 }
 
@@ -148,54 +148,45 @@ float BSpline2D::getRenderStep() const
     return m_renderStep;
 }
 
-void BSpline2D::setColor(const vec3 &color)
+void BSpline2D::setColor(const Color &color)
 {
     m_color = color;
 }
+
 void BSpline2D::setLineWidth(float width)
 {
     m_lineWidth = width;
 }
 
-RenderData BSpline2D::getRenderData()
+const RenderData &BSpline2D::getRenderData()
 {
-    RenderData data;
-
-    // Setup Flags
-    data.DrawEdges    = true;
-    data.UseViewMatr  = true;
-    data.UseProjMatr  = true;
-    data.UseGlobalEdgeColor = true;
-
-    // Setup Data
-    
+    // Compute Vertex Data size
     int size = 0;
     for (auto segment : m_segments) {
         size += segment.size();
     }
 
-    data.VertexData.reserve(size);
+    // Setup Vertex Data
+    m_renderData.VertexData.resize(size);
+    int i = 0;
     for (auto segment : m_segments) {
         for (auto v : segment) {
-            data.VertexData.push_back(vec3(v, 0.0));
+            m_renderData.VertexData[i] = {v, 0.0};
+            i++;
         }
     }
 
-    data.Edges.reserve(data.VertexData.size() - 1);
-    for (int i = 0; i < data.VertexData.size() - 1; i++) {
-        data.Edges.push_back({i, i + 1});
+    // Setup Edges
+    m_renderData.Edges.resize(m_renderData.VertexData.size() - 1);
+    for (int i = 0; i < m_renderData.Edges.size(); i++) {
+        m_renderData.Edges[i] = {i, i + 1};
     }
 
-    // Setup global values
-    data.GlobalEdgeColor = m_color;
-    data.EdgeWidth = m_lineWidth;
+    // Setup Visual values
+    m_renderData.GlobalEdgeColor = m_color;
+    m_renderData.EdgeWidth = m_lineWidth;
 
-    return data;
-}
-
-glm::mat4 BSpline2D::getTransformation()
-{
-    return glm::mat4(1.0);
+    return m_renderData;
 }
 
 void BSpline2D::updateKnots()
@@ -228,7 +219,6 @@ void BSpline2D::updateAllSegments()
     for (int i = beginSegment; i <= endSegment; i++) {
         this->updateSegment(i);
     }
-
 
     // Update last point
     this->updateLast(endSegment);
@@ -302,4 +292,16 @@ void BSpline2D::computeSegment(int index, int basisBegin, float t)
 
     // Add value
     m_segments[index].push_back(value);
+}
+
+void BSpline2D::initRenderData()
+{
+    // Setup Transformation Matrix
+    m_renderData.ModelMatrix = glm::mat4(1.0); // Identity Matrix
+
+    // Setup Flags
+    m_renderData.DrawEdges    = true;
+    m_renderData.UseViewMatr  = true;
+    m_renderData.UseProjMatr  = true;
+    m_renderData.UseGlobalEdgeColor = true;
 }

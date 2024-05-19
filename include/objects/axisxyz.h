@@ -1,41 +1,47 @@
 #ifndef AXISXYZ_H_
 #define AXISXYZ_H_
 
+#include "abstract/renderableobj.h"
 #include "abstract/transformableobj3d.h"
-#include "interfaces/renderable.h"
 #include <vector>
 
 using glm::vec3;
 
-class AxisXYZ : public TransformableObj3D,  public Renderable {
+class AxisXYZ : public TransformableObj3D,  public RenderableObj {
 public:
     AxisXYZ();
-    virtual ~AxisXYZ();
+    virtual ~AxisXYZ() {};
 
     void setSize(float size);
     void setWidth(float width);
 
-    void setColorX(const vec3 &color);
-    void setColorY(const vec3 &color);
-    void setColorZ(const vec3 &color);
+    void setColorX(const Color &color);
+    void setColorY(const Color &color);
+    void setColorZ(const Color &color);
 
-    RenderData getRenderData() override;
-    glm::mat4 getTransformation() override;
+    const RenderData &getRenderData() override;
 
 private:
-    vec3 m_center;
-    vec3 m_axisx, m_axisy, m_axisz;
+    void initRenderData();
+
+    // Vertices
+    vec3 m_center = {0, 0, 0};
+    vec3 m_axisx  = {1, 0, 0};
+    vec3 m_axisy  = {0, 1, 0};
+    vec3 m_axisz  = {0, 0, 1};
     
     // Colors
-    static const vec3 COLOR_X;
-    static const vec3 COLOR_Y;
-    static const vec3 COLOR_Z;
+    static const Color COLOR_X; // Red
+    static const Color COLOR_Y; // Green
+    static const Color COLOR_Z; // Blue
 
     // Visuals
-    vec3 m_colorx;
-    vec3 m_colory;
-    vec3 m_colorz;
-    float m_width;
+    Color m_colorx = COLOR_X;
+    Color m_colory = COLOR_Y;
+    Color m_colorz = COLOR_Z;
+    float m_width = 1.0;
+
+    RenderData m_renderData;
 
 };
 

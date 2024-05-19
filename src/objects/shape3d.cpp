@@ -1,30 +1,6 @@
 #include "objects/shape3d.h"
 
-const vec3 Shape3D::COLOR_DEFAULT = {0, 0, 0};
-
-Shape3D::Shape3D()
-    : m_centerValue(0),
-      m_center(0),
-      m_globalVertexColor(COLOR_DEFAULT),
-      m_globalEdgeColor(COLOR_DEFAULT),
-      m_globalPolygonColor(COLOR_DEFAULT),
-      m_renderVertices(false),
-      m_renderEdges(false),
-      m_renderPolygons(true),
-      m_useModelMatr(true),
-      m_useViewMatr(true),
-      m_useProjMatr(true),
-      m_useGlobalVertexColor(false),
-      m_useGlobalEdgeColor(false),
-      m_useGlobalPolygonColor(false),
-      m_edgeWidth(1.0),
-      m_vertexSize(1.0)
-{
-}
-
-Shape3D::~Shape3D()
-{
-}
+const Color Shape3D::COLOR_DEFAULT = {0, 0, 0};
 
 void Shape3D::setVertexData(const std::vector<vec3> &vertexData)
 {
@@ -41,7 +17,7 @@ void Shape3D::setVertexData(const std::vector<vec3> &vertexData)
     m_centerValue = vec3(sumx/n, sumy/n, sumz/n);
 }
 
-void Shape3D::defineVertex(int index, const vec3 &color)
+void Shape3D::defineVertex(int index, const Color &color)
 {
     Vertex v;
     v.index = index;
@@ -50,7 +26,7 @@ void Shape3D::defineVertex(int index, const vec3 &color)
     m_vertices.push_back(v);
 }
 
-void Shape3D::defineEdge(int indexBegin, int indexEnd, const vec3 &color)
+void Shape3D::defineEdge(int indexBegin, int indexEnd, const Color &color)
 {
     Edge e;
     e.begin = indexBegin;
@@ -60,7 +36,7 @@ void Shape3D::defineEdge(int indexBegin, int indexEnd, const vec3 &color)
     m_edges.push_back(e);
 }
 
-void Shape3D::definePolygon(const std::vector<int> &indices, const vec3 &color)
+void Shape3D::definePolygon(const std::vector<int> &indices, const Color &color)
 {
     Polygon p;
     p.indices = indices;
@@ -69,17 +45,17 @@ void Shape3D::definePolygon(const std::vector<int> &indices, const vec3 &color)
     m_polygons.push_back(p);
 }
 
-void Shape3D::setGlobalVertexColor(const vec3 &color)
+void Shape3D::setGlobalVertexColor(const Color &color)
 {
     m_globalVertexColor = color;
 }
 
-void Shape3D::setGlobalEdgeColor(const vec3 &color)
+void Shape3D::setGlobalEdgeColor(const Color &color)
 {
     m_globalEdgeColor = color;
 }
 
-void Shape3D::setGlobalPolygonColor(const vec3 &color)
+void Shape3D::setGlobalPolygonColor(const Color &color)
 {
     m_globalPolygonColor = color;
 }
@@ -139,70 +115,36 @@ void Shape3D::setVertexSize(float size)
     m_vertexSize = size;
 }
 
-RenderData Shape3D::getRenderData()
+const RenderData &Shape3D::getRenderData()
 {
-    RenderData data;
+    // Setup Transformation Matrix
+    m_renderData.ModelMatrix = this->getModelMatrix();
 
     // Setup Flags
-    data.DrawVertices = m_renderVertices;
-    data.DrawEdges    = m_renderEdges;
-    data.DrawPolygons = m_renderPolygons;
-    data.UseModelMatr = m_useModelMatr;
-    data.UseViewMatr  = m_useViewMatr;
-    data.UseProjMatr  = m_useProjMatr;
-    data.UseGlobalVertexColor = m_useGlobalVertexColor;
-    data.UseGlobalEdgeColor = m_useGlobalEdgeColor;
-    data.UseGlobalPolygonColor = m_useGlobalPolygonColor;
+    m_renderData.DrawVertices          = m_renderVertices;
+    m_renderData.DrawEdges             = m_renderEdges;
+    m_renderData.DrawPolygons          = m_renderPolygons;
+    m_renderData.UseModelMatr          = m_useModelMatr;
+    m_renderData.UseViewMatr           = m_useViewMatr;
+    m_renderData.UseProjMatr           = m_useProjMatr;
+    m_renderData.UseGlobalVertexColor  = m_useGlobalVertexColor;
+    m_renderData.UseGlobalEdgeColor    = m_useGlobalEdgeColor;
+    m_renderData.UseGlobalPolygonColor = m_useGlobalPolygonColor;
 
     // Setup Data
+    m_renderData.VertexData = m_vertexData;
+    m_renderData.Vertices = m_vertices;
+    m_renderData.Edges = m_edges;
+    m_renderData.Polygons = m_polygons;
 
-    data.VertexData = m_vertexData;
+    // Setup Visual valies
+    m_renderData.GlobalVertexColor  = m_globalVertexColor;
+    m_renderData.GlobalEdgeColor    = m_globalEdgeColor;
+    m_renderData.GlobalPolygonColor = m_globalPolygonColor;
+    m_renderData.EdgeWidth          = m_edgeWidth;
+    m_renderData.VertexSize         = m_vertexSize;
 
-    data.Vertices.reserve(m_vertices.size());
-    for (auto v : m_vertices) {
-        RenderData::RenderVertex dv;
-        dv.index = v.index;
-        dv.color = v.color;
-
-        data.Vertices.push_back(dv);
-    }
-
-    data.Edges.reserve(m_edges.size());
-    for (auto e : m_edges) {
-        data.Edges.push_back({e.begin, e.end});
-
-        RenderData::RenderEdge de;
-        de.begin = e.begin;
-        de.end = e.end;
-        de.color = e.color;
-
-        data.Edges.push_back(de);
-    }
-
-    data.Polygons.reserve(m_polygons.size());
-    for (auto p : m_polygons) {
-        RenderData::RenderPolygon dp;
-        dp.indices = p.indices;
-        dp.color = p.color;
-
-        data.Polygons.push_back(dp);
-    }
-
-    // Setup Global values
-    data.GlobalVertexColor = m_globalVertexColor;
-    data.GlobalEdgeColor = m_globalEdgeColor;
-    data.GlobalPolygonColor = m_globalPolygonColor;
-
-    // Setup Misc Visual values
-    data.EdgeWidth = m_edgeWidth;
-    data.VertexSize = m_vertexSize;
-
-    return data;
-}
-
-glm::mat4 Shape3D::getTransformation()
-{
-    return this->getModelMatrix();
+    return m_renderData;
 }
 
 const vec3 &Shape3D::selfOrigin() const

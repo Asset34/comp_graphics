@@ -1,13 +1,13 @@
 #ifndef LINE_H_
 #define LINE_H_
 
-#include "interfaces/renderable.h"
+#include "abstract/renderableobj.h"
 #include "abstract/transformableobj3d.h"
 
-class Line3D : public TransformableObj3D, public Renderable {
+class Line3D : public TransformableObj3D, public RenderableObj {
 public:
     Line3D(const vec3 &b = {0, 0, 0}, const vec3 &e = {0, 0, 0});
-    ~Line3D();
+    ~Line3D() {};
 
     void setBegin(const vec3 &p);
     void setEnd(const vec3 &p);
@@ -16,35 +16,36 @@ public:
     const vec3 &getEnd() const;
     vec3 getUnit() const;
 
-    void setColor(const vec3 &color);
-    void setEndsColor(const vec3 &color);
+    void setColor(const Color &color);
+    void setEndsColor(const Color &color);
     void setWidth(float width);
     void setEndsSize(float size);
 
-
-    virtual RenderData getRenderData() override;
-    virtual glm::mat4 getTransformation() override;
+    const RenderData &getRenderData() override;
 
 protected:
     void transformationCallback() override;
     const vec3 &selfOrigin() const override;
 
 private:
-    // Default values
-    static const vec3 COLOR_DEFAULT; // BLACK
-
     void updateCenter();
+    void initRenderData();
+
+    // Default values
+    static const Color COLOR_DEFAULT; // BLACK
 
     vec3 m_begin, m_end;
     vec3 m_center;
 
     // Colors
-    vec3 m_color;
-    vec3 m_endsColor;
+    Color m_color     = COLOR_DEFAULT;
+    Color m_endsColor = COLOR_DEFAULT;
 
     // Misc Visuals
-    float m_width;
-    float m_endsSize;
+    float m_width    = 1.0;
+    float m_endsSize = 1.0;
+
+    RenderData m_renderData;
 
 };
 

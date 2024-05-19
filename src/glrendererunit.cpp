@@ -1,8 +1,8 @@
 #include "glrenderer.h"
 #include "shaders.h"
 
-GLRenderer::GLRendererUnit::GLRendererUnit(Renderable *r)
-    :m_renderable(r)
+GLRenderer::GLRendererUnit::GLRendererUnit(RenderableObj *r)
+    :m_obj(r)
 {
     // Init shader
     m_shader.addVertexShader(Shaders::BASIC_VERTEX_SHADER);
@@ -13,30 +13,25 @@ GLRenderer::GLRendererUnit::GLRendererUnit(Renderable *r)
     glGenVertexArrays(1, &m_vao);
     glBindVertexArray(m_vao);
 
-    // Get Render Data
-    const RenderData data = r->getRenderData();
+    // Associate Id
+    m_associatedId = r->getId();
 
-    // Process Data
-    this->loadVertexData(data);
-    this->loadVertices(data);
-    this->loadEdges(data);
-    this->loadPolygons(data);
+    this->load();
+    m_obj->updateAck();
 
     // Unbind VAO
     glBindVertexArray(0);
 }
 
-GLRenderer::GLRendererUnit::~GLRendererUnit()
+void GLRenderer::GLRendererUnit::update()
 {
-}
+    if (!m_obj->updated()) return;
 
-void GLRenderer::GLRendererUnit::updateData()
-{
     glBindVertexArray(m_vao);
-    this->loadVertexData(m_renderable->getRenderData());
-    this->loadVertices(m_renderable->getRenderData());
-    this->loadEdges(m_renderable->getRenderData());
-    this->loadPolygons(m_renderable->getRenderData());
+    
+    this->load();
+    m_obj->updateAck();
+
     glBindVertexArray(0);
 }
 
@@ -48,27 +43,53 @@ void GLRenderer::GLRendererUnit::render(const GlobalRenderData &data)
     // Activate shader
     m_shader.use();
     
-    // Retrieve Render Data
-    const RenderData renderData = m_renderable->getRenderData();
+    // Prepare for render with data (global and local)
+    if (m_obj->getRenderData().UseModelMatr) {
+        m_shader.setMat4("model", m_obj->getRenderData().ModelMatrix);
+    } else {
+        m_shader.setMat4("model", glm::mat4(1)); // Indentity Matrix
+    }
     
-    // Apply Globals
-
-    if (renderData.UseModelMatr) m_shader.setMat4("model", m_renderable->getTransformation());
-    else m_shader.setMat4("model", glm::mat4(1)); // Identity Matrix
-
-    if (renderData.UseViewMatr) m_shader.setMat4("view", data.ViewMatrix);
-    else m_shader.setMat4("view", glm::mat4(1)); // Identity Matrix
+    if (m_obj->getRenderData().UseViewMatr) {
+        m_shader.setMat4("view", data.ViewMatrix);
+    } else {
+        m_shader.setMat4("view", glm::mat4(1)); // Indentity Matrix
+    }
     
-    if (renderData.UseProjMatr) m_shader.setMat4("proj", data.ProjMatrix);
-    else m_shader.setMat4("proj", glm::mat4(1)); // Identity Matrix
+    if (m_obj->getRenderData().UseProjMatr) {
+        m_shader.setMat4("proj", data.ProjMatrix);
+    } else {
+        m_shader.setMat4("proj", glm::mat4(1)); // Indentity Matrix
+    }
 
-    // Render
-    if (renderData.DrawVertices) this->renderVertices(renderData);
-    if (renderData.DrawPolygons) this->renderPolygons(renderData);
-    if (renderData.DrawEdges) this->renderEdges(renderData);
+    this->render();
 
     // Unbind VAO
     glBindVertexArray(0);
+}
+
+int GLRenderer::GLRendererUnit::getAssociatedId()
+{
+    return m_associatedId;
+}
+
+void GLRenderer::GLRendererUnit::load()
+{
+    const RenderData &data = m_obj->getRenderData();
+
+    this->loadVertexData(data);
+    this->loadVertices(data);
+    this->loadEdges(data);
+    this->loadPolygons(data);
+}
+
+void GLRenderer::GLRendererUnit::render()
+{
+    const RenderData &data = m_obj->getRenderData();
+
+    if (data.DrawVertices) this->renderVertices(data);
+    if (data.DrawEdges) this->renderEdges(data);
+    if (data.DrawPolygons) this->renderPolygons(data);
 }
 
 void GLRenderer::GLRendererUnit::loadVertexData(const RenderData &data)
@@ -79,7 +100,7 @@ void GLRenderer::GLRendererUnit::loadVertexData(const RenderData &data)
 
     // Process data
 
-    int rawDataSize = data.VertexData.size() * data.VertexDataSize;
+    int rawDataSize = data.VertexData.size() * RenderData::VERTEX_PURE_SIZE;
     float rawData[rawDataSize];
 
     int i = 0;
@@ -88,7 +109,7 @@ void GLRenderer::GLRendererUnit::loadVertexData(const RenderData &data)
         rawData[i + 1] = v.y;
         rawData[i + 2] = v.z;
 
-        i += data.VertexDataSize;
+        i += RenderData::VERTEX_PURE_SIZE;
     }
 
     // Load buffer
@@ -108,14 +129,14 @@ void GLRenderer::GLRendererUnit::loadVertices(const RenderData &data)
 
     // Process data
 
-    int rawDataSize = data.Vertices.size() * data.VertexIndexSize;
+    int rawDataSize = data.Vertices.size() * RenderData::VERTEX_UNIT_SIZE;
     unsigned int rawData[rawDataSize];
 
     int i = 0;
     for (auto v : data.Vertices) {
         rawData[i] = v.index;
 
-        i += data.VertexIndexSize;
+        i += RenderData::VERTEX_UNIT_SIZE;
     }
 
     // Load buffer
@@ -133,7 +154,7 @@ void GLRenderer::GLRendererUnit::loadEdges(const RenderData &data)
 
     // Process data
 
-    int rawDataSize = data.Edges.size() * data.EdgeIndexSize;
+    int rawDataSize = data.Edges.size() * RenderData::EDGE_UNIT_SIZE;
     unsigned int rawData[rawDataSize];
 
     int i = 0;
@@ -141,7 +162,7 @@ void GLRenderer::GLRendererUnit::loadEdges(const RenderData &data)
         rawData[i] = e.begin;
         rawData[i + 1] = e.end;
 
-        i += data.EdgeIndexSize;
+        i += RenderData::EDGE_UNIT_SIZE;
     }
 
     // Load buffer
@@ -193,14 +214,14 @@ void GLRenderer::GLRendererUnit::renderVertices(const RenderData &data)
     if (data.UseGlobalVertexColor) {
         m_shader.setVec3("color", data.GlobalVertexColor);
 
-        int n = data.Vertices.size() * data.VertexIndexSize;
+        int n = data.Vertices.size() * RenderData::VERTEX_UNIT_SIZE;
         glDrawElements(GL_POINTS, n, GL_UNSIGNED_INT, (void*)(0));
     } else {
         unsigned int offset = 0;
         for (auto v : data.Vertices) {
             m_shader.setVec3("color", v.color);
-            glDrawElements(GL_POINTS, data.VertexIndexSize, GL_UNSIGNED_INT, (void*)(offset * sizeof(GLint)));
-            offset += data.VertexIndexSize;
+            glDrawElements(GL_POINTS, RenderData::VERTEX_UNIT_SIZE, GL_UNSIGNED_INT, (void*)(offset * sizeof(GLint)));
+            offset += RenderData::VERTEX_UNIT_SIZE;
         }
     }
 
@@ -220,14 +241,14 @@ void GLRenderer::GLRendererUnit::renderEdges(const RenderData &data)
     if (data.UseGlobalEdgeColor) {
         m_shader.setVec3("color", data.GlobalEdgeColor);
 
-        int n = data.Edges.size() * data.EdgeIndexSize;
+        int n = data.Edges.size() * RenderData::EDGE_UNIT_SIZE;
         glDrawElements(GL_LINES, n, GL_UNSIGNED_INT, (void*)(0));
     } else {
         unsigned int offset = 0;
         for (auto p : data.Edges) {
             m_shader.setVec3("color", p.color);
-            glDrawElements(GL_LINES, data.EdgeIndexSize, GL_UNSIGNED_INT, (void*)(offset * sizeof(GLint)));
-            offset += data.EdgeIndexSize;
+            glDrawElements(GL_LINES, RenderData::EDGE_UNIT_SIZE, GL_UNSIGNED_INT, (void*)(offset * sizeof(GLint)));
+            offset += RenderData::EDGE_UNIT_SIZE;
         }
     }
 

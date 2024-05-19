@@ -4,22 +4,28 @@
 #include <vector>
 #include "glm/glm.hpp"
 
+// Aliases
+typedef glm::vec3 Color;
+using glm::vec2;
 using glm::vec3;
+using glm::mat3;
+using glm::mat4;
 
+// Structures
 struct Vertex {
     int index;
-    vec3 color;
+    Color color;
 };
 
 struct Edge {
     int begin;
     int end;
-    vec3 color;
+    Color color;
 };
 
 struct Polygon {
     std::vector<int> indices;
-    vec3 color;
+    Color color;
 };
 
 #endif // GEOMETRY_H_

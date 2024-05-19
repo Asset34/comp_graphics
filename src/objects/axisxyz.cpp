@@ -1,23 +1,12 @@
 #include "objects/axisxyz.h"
 
-const vec3 AxisXYZ::COLOR_X = {1.0, 0.0, 0.0};
-const vec3 AxisXYZ::COLOR_Y = {0.0, 1.0, 0.0};
-const vec3 AxisXYZ::COLOR_Z = {0.0, 0.0, 1.0};
+const Color AxisXYZ::COLOR_X = {1.0, 0.0, 0.0};
+const Color AxisXYZ::COLOR_Y = {0.0, 1.0, 0.0};
+const Color AxisXYZ::COLOR_Z = {0.0, 0.0, 1.0};
 
 AxisXYZ::AxisXYZ()
-    : m_center({0, 0, 0}),
-      m_axisx({1, 0, 0}),
-      m_axisy({0, 1, 0}),
-      m_axisz({0, 0, 1}),
-      m_colorx(COLOR_X),
-      m_colory(COLOR_Y),
-      m_colorz(COLOR_Z),
-      m_width(1.0)
 {
-}
-
-AxisXYZ::~AxisXYZ()
-{
+    this->initRenderData();
 }
 
 void AxisXYZ::setSize(float size)
@@ -25,6 +14,8 @@ void AxisXYZ::setSize(float size)
     m_axisx.x = size;
     m_axisy.y = size;
     m_axisz.z = size;
+
+    this->setUpdated();
 }
 
 void AxisXYZ::setWidth(float width)
@@ -32,52 +23,50 @@ void AxisXYZ::setWidth(float width)
     m_width = width;
 }
 
-void AxisXYZ::setColorX(const vec3 &color)
+void AxisXYZ::setColorX(const Color &color)
 {
     m_colorx = color;
 }
 
-void AxisXYZ::setColorY(const vec3 &color)
+void AxisXYZ::setColorY(const Color &color)
 {
     m_colory = color;
 }
 
-void AxisXYZ::setColorZ(const vec3 &color)
+void AxisXYZ::setColorZ(const Color &color)
 {
     m_colorz = color;
 }
 
-RenderData AxisXYZ::getRenderData()
+const RenderData &AxisXYZ::getRenderData()
 {
-    RenderData data;
+    // Setup Vertex Data
+    m_renderData.VertexData.resize(4);
+    m_renderData.VertexData[0] = m_center;
+    m_renderData.VertexData[1] = m_axisx;
+    m_renderData.VertexData[2] = m_axisy;
+    m_renderData.VertexData[3] = m_axisz;
 
-    // Setup Flags
-    data.DrawEdges = true;
-    data.DrawPolygons = false;
-    data.UseModelMatr = true;
-    data.UseViewMatr = true;
-    data.UseProjMatr = true;
+    // Setup Edges
+    m_renderData.Edges.resize(3);
+    m_renderData.Edges[0] = {0, 1, m_colorx};
+    m_renderData.Edges[1] = {0, 2, m_colory};
+    m_renderData.Edges[2] = {0, 3, m_colorz};
 
-    // Setup data
+    // Setup Visuals
+    m_renderData.EdgeWidth = m_width;
 
-    data.VertexData.reserve(4);
-    data.VertexData.push_back(m_center);
-    data.VertexData.push_back(m_axisx);
-    data.VertexData.push_back(m_axisy);
-    data.VertexData.push_back(m_axisz);
+    // Setup Transformation Matrix
+    m_renderData.ModelMatrix = this->getModelMatrix();
 
-    data.Edges.reserve(3);
-    data.Edges.push_back({0, 1, m_colorx});
-    data.Edges.push_back({0, 2, m_colory});
-    data.Edges.push_back({0, 3, m_colorz});
-
-    // Setup Misc Visual values
-    data.EdgeWidth = m_width;
-
-    return data;
+    return m_renderData;
 }
 
-glm::mat4 AxisXYZ::getTransformation()
+void AxisXYZ::initRenderData()
 {
-    return this->getModelMatrix();
+    // Setup flags
+    m_renderData.DrawEdges    = true;
+    m_renderData.UseModelMatr = true;
+    m_renderData.UseViewMatr  = true;
+    m_renderData.UseProjMatr  = true;
 }

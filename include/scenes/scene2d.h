@@ -2,34 +2,30 @@
 #define SCENE2D_H_
 
 #include "abstract/scene.h"
+#include "abstract/renderprovider.h"
 #include "camera2d.h"
 #include "objects/axisxy.h"
 
-
-class Scene2D : public Scene {
+class Scene2D : public Scene, public RenderProvider {
 public:
     Scene2D();
     virtual ~Scene2D() {};
     
+    virtual void update() override {};
+
     ObservationController2D *getObservationController();
-    void setBackgroundColor(const glm::vec3 &color);
     
-    virtual GlobalRenderData getGlobalRenderData() override;
-    virtual const std::vector<Renderable*> &getRenderables() override;
-    virtual std::vector<int> getRenderableUpdateVector() override;
+    virtual const GlobalRenderData &getGlobalRenderData() override;
 
 protected:
-    void addRenderable(Renderable *r);
-    int getNextRenderableUpdateVectorIndex();
-
     Camera2D &getCamera();
 
 private:
+    // Objects
     Camera2D m_camera;
     AxisXY m_xy;
 
-    std::vector<Renderable*> m_renderables;
-    glm::vec3 m_backgroundColor;
+    GlobalRenderData m_globalRenderData;
 
 };
 

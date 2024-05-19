@@ -3,7 +3,6 @@
 SceneLR2::SceneLR2()
 {
     // Build objects
-    m_spline.beginEdit();
     this->buildSpline();
 
     // Init objects
@@ -11,27 +10,15 @@ SceneLR2::SceneLR2()
     m_spline.defineKnots({0, 0, 0, 1, 2, 2, 2});
     m_spline.setOrder(3);
     m_spline.setRenderStep(0.1);
-    m_spline.endEdit();
+    m_spline.setAutocompute(true);
+    m_spline.compute();
 
     // Add renderable objects
-    this->addRenderable(&m_splinePolygon);
-    this->addRenderable(&m_spline);
+    this->addObject(&m_splinePolygon);
+    this->addObject(&m_spline);
 
     // Init control values
     m_updated = false;
-}
-
-void SceneLR2::update()
-{
-}
-
-std::vector<int> SceneLR2::getRenderableUpdateVector()
-{
-    std::vector<int> vector = Scene2D::getRenderableUpdateVector();
-    vector.push_back(this->getNextRenderableUpdateVectorIndex()); // Update spline polygon
-    vector.push_back(this->getNextRenderableUpdateVectorIndex() + 1); // Update spline
-
-    return vector;
 }
 
 void SceneLR2::set(int vid, int value)
@@ -200,7 +187,7 @@ void SceneLR2::updateAck()
     m_updateList.clear();
 }
 
-std::list<int> SceneLR2::getUpdateList()
+const std::list<int> &SceneLR2::getUpdateList()
 {
     return m_updateList;
 }

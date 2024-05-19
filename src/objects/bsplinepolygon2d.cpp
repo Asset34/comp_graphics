@@ -1,44 +1,23 @@
 #include "objects/bsplinepolygon2d.h"
 
-const vec3 BSplinePolygon2D::POLYGON_COLOR = {1.0, 1.0, 1.0};
-const vec3 BSplinePolygon2D::CONTROL_POINT_COLOR = {1.0, 1.0, 1.0};
+const Color BSplinePolygon2D::POLYGON_COLOR = {0.0, 0.0, 0.0};
+const Color BSplinePolygon2D::CONTROL_POINT_COLOR = {0.0, 0.0, 0.0};
 
 BSplinePolygon2D::BSplinePolygon2D()
-    : m_showControlPoints(true),
-      m_showPolygon(true),
-      m_polygonColor(POLYGON_COLOR),
-      m_controlPointColor(CONTROL_POINT_COLOR),
-      m_polygonLineWidth(1.0),
-      m_controlPointSize(1.0)
 {
-}
-
-BSplinePolygon2D::~BSplinePolygon2D()
-{
+    this->initRenderData();
 }
 
 void BSplinePolygon2D::addControlPoint(const vec2 &point)
 {
     m_controlPoints.push_back(point);
+    this->setUpdated();
 }
 
 void BSplinePolygon2D::setControlPoint(int index, const vec2 &point)
 {
     m_controlPoints[index] = point;
-    
-}
-
-void BSplinePolygon2D::removeControlPoint(int index)
-{
-    m_controlPoints.erase(m_controlPoints.begin() + index);
-}
-
-void BSplinePolygon2D::moveControlPoint(int index, int destinationIndex)
-{
-    vec2 point = m_controlPoints[index];
-
-    this->removeControlPoint(index);
-    m_controlPoints.insert(m_controlPoints.begin() + destinationIndex, point);
+    this->setUpdated();    
 }
 
 void BSplinePolygon2D::setControlPointsColor(const vec3 &color)
@@ -91,44 +70,44 @@ bool BSplinePolygon2D::getControlPointsShowStatus() const
     return m_showControlPoints;
 }
 
-RenderData BSplinePolygon2D::getRenderData()
+const RenderData &BSplinePolygon2D::getRenderData()
 {
-    RenderData data;
-
     // Setup Flags
-    data.DrawVertices = m_showControlPoints;
-    data.DrawEdges = m_showPolygon;
-    data.DrawPolygons = false;
-    data.UseModelMatr = true;
-    data.UseViewMatr = true;
-    data.UseProjMatr = true;
-    data.UseGlobalEdgeColor = true;
-    data.UseGlobalVertexColor = true;
+    m_renderData.DrawVertices = m_showControlPoints;
+    m_renderData.DrawEdges = m_showPolygon;
 
-    // Setup data
-
-    data.VertexData.reserve(m_controlPoints.size());
-    data.Vertices.reserve(m_controlPoints.size());
+    // Setup Vertex Data and Vertices
+    m_renderData.VertexData.resize(m_controlPoints.size());
+    m_renderData.Vertices.resize(m_controlPoints.size());
     for (int i = 0; i < m_controlPoints.size(); i++) {
-        data.VertexData.push_back(vec3(m_controlPoints[i], 0.5));
-        data.Vertices.push_back({i});
+        m_renderData.VertexData[i] = {m_controlPoints[i], 0.5};
+        m_renderData.Vertices[i] = {i};
     }
 
-    data.Edges.reserve(m_controlPoints.size() - 1);
-    for (int i = 0; i < m_controlPoints.size() - 1; i++) {
-        data.Edges.push_back({i, i + 1});
+    // Setup Edges
+    m_renderData.Edges.resize(m_controlPoints.size() - 1);
+    for (int i = 0; i < m_renderData.Edges.size(); i++) {
+        m_renderData.Edges[i] = {i, i + 1};
     }
 
-    // Setup Misc Visual values
-    data.GlobalEdgeColor = m_polygonColor;
-    data.GlobalVertexColor = m_controlPointColor;
-    data.EdgeWidth = m_polygonLineWidth;
-    data.VertexSize = m_controlPointSize;
+    // Setup Visual values
+    m_renderData.GlobalEdgeColor   = m_polygonColor;
+    m_renderData.GlobalVertexColor = m_controlPointColor;
+    m_renderData.EdgeWidth         = m_polygonLineWidth;
+    m_renderData.VertexSize        = m_controlPointSize;
 
-    return data;
+    return m_renderData;
 }
 
-glm::mat4 BSplinePolygon2D::getTransformation()
+void BSplinePolygon2D::initRenderData()
 {
-    return this->getModelMatrix();
+    // Setup Flags
+    m_renderData.UseModelMatr = true;
+    m_renderData.UseViewMatr = true;
+    m_renderData.UseProjMatr = true;
+    m_renderData.UseGlobalEdgeColor = true;
+    m_renderData.UseGlobalVertexColor = true;
+
+    // Setup Transformation Matrix
+    m_renderData.ModelMatrix = glm::mat4(1.0); // Identity Matrix
 }

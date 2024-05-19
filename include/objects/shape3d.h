@@ -5,22 +5,21 @@
 #include <list>
 
 #include "geometry.h"
-#include "interfaces/renderable.h"
+#include "abstract/renderableobj.h"
 #include "abstract/transformableobj3d.h"
 
-class Shape3D : public TransformableObj3D, public Renderable {
+class Shape3D : public TransformableObj3D, public RenderableObj {
 public:
-    Shape3D();
-    ~Shape3D();
+    ~Shape3D() {};
 
     void setVertexData(const std::vector<vec3> &vertexData);
-    void defineVertex(int index, const vec3 &color);
-    void defineEdge(int indexBegin, int indexEnd, const vec3 &color); 
-    void definePolygon(const std::vector<int> &indices, const vec3 &color);
+    void defineVertex(int index, const Color &color);
+    void defineEdge(int indexBegin, int indexEnd, const Color &color); 
+    void definePolygon(const std::vector<int> &indices, const Color &color);
 
-    void setGlobalVertexColor(const vec3 &color);
-    void setGlobalEdgeColor(const vec3 &color);
-    void setGlobalPolygonColor(const vec3 &color);
+    void setGlobalVertexColor(const Color &color);
+    void setGlobalEdgeColor(const Color &color);
+    void setGlobalPolygonColor(const Color &color);
 
     void setRenderVerticesFlag(bool value);
     void setRenderEdgesFlag(bool value);
@@ -35,8 +34,7 @@ public:
     void setEdgeWidth(float width);
     void setVertexSize(float size);
 
-    RenderData getRenderData() override;
-    glm::mat4 getTransformation() override;
+    const RenderData &getRenderData() override;
 
 protected:
     const vec3 &selfOrigin() const override;
@@ -44,7 +42,7 @@ protected:
 
 private:
     // Default values
-    static const vec3 COLOR_DEFAULT; // BLACK
+    static const Color COLOR_DEFAULT; // BLACK
 
     // Data
     std::vector<vec3> m_vertexData;
@@ -53,27 +51,29 @@ private:
     std::vector<Polygon> m_polygons;
 
     // Colors
-    vec3 m_globalVertexColor;
-    vec3 m_globalEdgeColor;
-    vec3 m_globalPolygonColor;
+    Color m_globalVertexColor  = COLOR_DEFAULT;
+    Color m_globalEdgeColor    = COLOR_DEFAULT;
+    Color m_globalPolygonColor = COLOR_DEFAULT;
 
-    vec3 m_centerValue;
-    vec3 m_center;
+    vec3 m_centerValue = {0, 0, 0};
+    vec3 m_center      = {0, 0, 0};
 
     // Flags
-    bool m_renderVertices;
-    bool m_renderEdges;
-    bool m_renderPolygons;
-    bool m_useModelMatr;
-    bool m_useViewMatr;
-    bool m_useProjMatr;
-    bool m_useGlobalVertexColor;
-    bool m_useGlobalEdgeColor;
-    bool m_useGlobalPolygonColor;
+    bool m_renderVertices        = false;
+    bool m_renderEdges           = false;
+    bool m_renderPolygons        = true;
+    bool m_useModelMatr          = true;
+    bool m_useViewMatr           = true;
+    bool m_useProjMatr           = true;
+    bool m_useGlobalVertexColor  = false;
+    bool m_useGlobalEdgeColor    = false;
+    bool m_useGlobalPolygonColor = false;
 
     // Misc Visuals
-    float m_edgeWidth;
-    float m_vertexSize;
+    float m_edgeWidth  = 1.0;
+    float m_vertexSize = 1.0;
+
+    RenderData m_renderData;
 
 };
 

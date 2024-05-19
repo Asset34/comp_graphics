@@ -26,7 +26,7 @@ public:
 
     virtual bool updated() = 0;
     virtual void updateAck() = 0; // Ack = Acknowledged
-    virtual std::list<int> getUpdateList() = 0;
+    virtual const std::list<int> &getUpdateList() = 0;
 
 };
 

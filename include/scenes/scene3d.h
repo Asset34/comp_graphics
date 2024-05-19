@@ -1,38 +1,37 @@
 #ifndef SCENE3D_H_
 #define SCENE3D_H_
 
+#include "abstract/renderprovider.h"
 #include "abstract/scene.h"
 #include "camera3d.h"
 #include "objects/axisxyz.h"
 #include "objects/plane.h"
 
-class Scene3D : public Scene {
+class Scene3D : public Scene, public RenderProvider {
 public:
     Scene3D();
     virtual ~Scene3D() {};
     
+    virtual void update() override {};
+
     ObservationController3D *getObservationController();
-    void setBackgroundColor(const glm::vec3 &color);
+    void setBackgroundColor(const Color &color);
     
-    virtual GlobalRenderData getGlobalRenderData() override;
-    virtual const std::vector<Renderable*> &getRenderables() override;
-    virtual std::vector<int> getRenderableUpdateVector() override;
+    virtual const GlobalRenderData &getGlobalRenderData() override;
 
 protected:
-    void addRenderable(Renderable *r);
-    int getNextRenderableUpdateVectorIndex();
 
     Camera3D &getCamera();
     AxisXYZ &getXYZ();
     Plane &getGrid();
 
 private:
+    // Objects
     Camera3D m_camera;
     AxisXYZ m_xyz;
     Plane m_grid;
 
-    std::vector<Renderable*> m_renderables;
-    glm::vec3 m_backgroundColor;
+    GlobalRenderData m_globalRenderData;
 
 };
 

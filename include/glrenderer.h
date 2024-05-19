@@ -5,31 +5,35 @@
 #include "shader.h"
 #include "glad/glad.h"
 #include "glfw/glfw3.h"
-#include <vector>
+#include <list>
 
 class GLRenderer : public Renderer {
 public:
-    ~GLRenderer();
+    ~GLRenderer() {};
 
     static void init();
 
-    // void init() override;
-    void attach(RenderProvider *rp);
-    void updateData() override;
+    void attach(RenderProvider *p) override;
+    void update() override;
     void render() override;
 
 private:
-    static bool m_initialized;
+    static bool Initialized;
 
     class GLRendererUnit {
     public:
-        GLRendererUnit(Renderable *r);
-        ~GLRendererUnit();
+        GLRendererUnit(RenderableObj *r);
+        ~GLRendererUnit() {};
         
-        void updateData();
+        void update();
         void render(const GlobalRenderData &data);
 
+        int getAssociatedId();
+
     private:
+        void load();
+        void render();
+
         void loadVertexData(const RenderData &data);
         void loadVertices(const RenderData &data);
         void loadEdges(const RenderData &data);
@@ -45,11 +49,16 @@ private:
 
         Shader m_shader;
 
-        Renderable *m_renderable;
+        RenderableObj *m_obj;
+
+        int m_associatedId;
 
     };
 
-    std::vector<GLRendererUnit> m_units;
+    void loadObject(RenderableObj *r);
+    void unloadObect(int id);
+    
+    std::list<GLRendererUnit> m_units;
 
 };
 

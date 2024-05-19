@@ -10,9 +10,9 @@ SceneLR1::SceneLR1()
     m_shape.translate({-20, 30, 0});
     m_shape.trackAngle(true);
 
-    // Add renderable objects
-    this->addRenderable(&m_shape);
-    this->addRenderable(&m_line);
+    // Add scene objects
+    this->addObject(&m_shape);
+    this->addObject(&m_line);
 
     // Init control values
     m_shapePos = m_shape.getOrigin();
@@ -20,22 +20,6 @@ SceneLR1::SceneLR1()
     m_lineEndPos = m_line.getEnd();
     m_rotationAngle = 0;
     m_updated = false;
-}
-
-SceneLR1::~SceneLR1()
-{
-}
-
-void SceneLR1::update()
-{
-}
-
-std::vector<int> SceneLR1::getRenderableUpdateVector()
-{
-    std::vector<int> vector = Scene3D::getRenderableUpdateVector();
-    vector.push_back(this->getNextRenderableUpdateVectorIndex() + 1); // Update only line data
-
-    return vector;
 }
 
 void SceneLR1::set(int vid, float value)
@@ -147,7 +131,7 @@ void SceneLR1::updateAck()
     m_updateList.clear();
 }
 
-std::list<int> SceneLR1::getUpdateList()
+const std::list<int> &SceneLR1::getUpdateList()
 {
     return m_updateList;
 }

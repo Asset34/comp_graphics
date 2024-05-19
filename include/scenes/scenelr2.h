@@ -11,9 +11,6 @@ public:
     SceneLR2();
     ~SceneLR2() {};
     
-    void update() override;
-    std::vector<int> getRenderableUpdateVector() override;
-
     void set(int vid, int value) override;
     void set(int vid, float value) override;
     void set(int vid, const float values[]) override;
@@ -26,7 +23,7 @@ public:
     void control(int cmd) override;
     bool updated() override;
     void updateAck() override;
-    std::list<int> getUpdateList() override;
+    const std::list<int> &getUpdateList() override;
 
 private:
     void buildSpline();

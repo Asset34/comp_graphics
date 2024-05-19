@@ -1,22 +1,18 @@
 #include "objects/plane.h"
 
-const vec3 Plane::DEFAULT_COLOR = {0.0, 0.0, 0.0};
+const Color Plane::DEFAULT_COLOR = {0.0, 0.0, 0.0};
 
 Plane::Plane(const vec3 &point, const vec3 &normal)
-    : m_color(DEFAULT_COLOR),
-      m_gridThickness(1.0)
 {
+    this->initRenderData();
     this->translateTo(point);
     this->update(normal);
-}
-
-Plane::~Plane()
-{
 }
 
 void Plane::setNormal(const vec3 &normal)
 {
     this->update(normal);
+    this->setUpdated();
 }
 
 const vec3 &Plane::getNormal() const
@@ -24,7 +20,7 @@ const vec3 &Plane::getNormal() const
     return this->getUnitz();
 }
 
-void Plane::setColor(const vec3 &color)
+void Plane::setColor(const Color &color)
 {
     m_color = color;
 }
@@ -66,41 +62,38 @@ void Plane::defineGrid(float cellSize, int quadrantCellWidthNumber, int quadrant
 
         i += 2;
     }
+
+    this->setUpdated();
 }
 
-RenderData Plane::getRenderData()
+const RenderData &Plane::getRenderData()
 {
-    RenderData data;
-
-    // Setup Flags
-    data.DrawEdges = true;
-    data.UseModelMatr = true;
-    data.UseViewMatr = true;
-    data.UseProjMatr = true;
-    data.UseGlobalEdgeColor = true;
+    // Setup Transformation Matrix
+    m_renderData.ModelMatrix = this->getModelMatrix();
 
     // Setup Data
-
-    data.VertexData = m_gridVertexData;
-    data.Edges.reserve(m_gridEdges.size());
-    for (auto e : m_gridEdges) {
-        data.Edges.push_back({e.begin, e.end});
-    }
+    m_renderData.VertexData = m_gridVertexData;
+    m_renderData.Edges = m_gridEdges;
 
     // Setup Visuals
-    data.EdgeWidth = m_gridThickness;
-    data.GlobalEdgeColor = m_color;
+    m_renderData.EdgeWidth = m_gridThickness;
+    m_renderData.GlobalEdgeColor = m_color;
 
-    return data;
-}
-
-glm::mat4 Plane::getTransformation()
-{
-    return this->getModelMatrix();
+    return m_renderData;
 }
 
 void Plane::update(const vec3 &normal)
 {
     this->coincideWithZ(this->getUnity());
     this->coincideWithZReverse(normal);
+}
+
+void Plane::initRenderData()
+{
+    // Setup Flags
+    m_renderData.DrawEdges          = true;
+    m_renderData.UseModelMatr       = true;
+    m_renderData.UseViewMatr        = true;
+    m_renderData.UseProjMatr        = true;
+    m_renderData.UseGlobalEdgeColor = true;
 }

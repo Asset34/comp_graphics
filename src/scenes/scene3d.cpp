@@ -26,12 +26,9 @@ Scene3D::Scene3D()
     m_camera.rotateVertical(-40);
     m_camera.setHome();
 
-    // Add default renderable objects
-    m_renderables.push_back(&m_xyz);
-    m_renderables.push_back(&m_grid);
-
-    // Setup default background color
-    m_backgroundColor = {0.25, 0.25, 0.25};
+    // Add initial objects for 3D scenes
+    this->addObject(&m_xyz);
+    this->addObject(&m_grid);
 }
 
 ObservationController3D *Scene3D::getObservationController()
@@ -39,40 +36,15 @@ ObservationController3D *Scene3D::getObservationController()
     return &m_camera;
 }
 
-void Scene3D::setBackgroundColor(const glm::vec3 &color)
+const GlobalRenderData &Scene3D::getGlobalRenderData()
 {
-    m_backgroundColor = color;
+    m_globalRenderData.ViewMatrix = m_camera.getViewMatrix();
+    m_globalRenderData.ProjMatrix = m_camera.getProjMatrix();
+    m_globalRenderData.BackgroundColor = this->getBackgroundColor();
+
+    return m_globalRenderData;
 }
 
-GlobalRenderData Scene3D::getGlobalRenderData()
-{
-    GlobalRenderData data;
-    data.ViewMatrix = m_camera.getViewMatrix();
-    data.ProjMatrix = m_camera.getProjMatrix();
-    data.BackgroundColor = m_backgroundColor;
-
-    return data;
-}
-
-const std::vector<Renderable*> &Scene3D::getRenderables()
-{
-    return m_renderables;
-}
-
-std::vector<int> Scene3D::getRenderableUpdateVector()
-{
-    return {};
-}
-
-void Scene3D::addRenderable(Renderable *r)
-{
-    m_renderables.push_back(r);
-}
-
-int Scene3D::getNextRenderableUpdateVectorIndex()
-{
-    return 2;
-}
 Camera3D &Scene3D::getCamera()
 {
     return m_camera;

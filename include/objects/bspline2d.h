@@ -1,17 +1,16 @@
 #ifndef BSPLINE2D_H_
 #define BSPLINE2D_H_
 
-#include "abstract/transformableobj2d.h"
-#include "interfaces/renderable.h"
+#include "abstract/renderableobj.h"
 #include <vector>
 
-class BSpline2D : public Renderable {
+class BSpline2D : public RenderableObj {
 public:
     BSpline2D();
-    ~BSpline2D();
+    ~BSpline2D() {};
 
-    void beginEdit();
-    void endEdit();
+    void setAutocompute(bool value);
+    void compute();
 
     void addControlPoint(const vec2 &cp);
     void setControlPoint(int index, const vec2 &cp);
@@ -30,11 +29,10 @@ public:
     void setRenderStep(float step);
     float getRenderStep() const;
 
-    void setColor(const vec3 &color);
+    void setColor(const Color &color);
     void setLineWidth(float width);
 
-    RenderData getRenderData() override;
-    glm::mat4 getTransformation() override;
+    const RenderData &getRenderData() override;
 
 private:
     void updateKnots();
@@ -43,23 +41,26 @@ private:
     void updateLast(int lastSegment);
     void computeSegment(int index, int basisBegin, float t);
 
-    // Default values
-    static const vec3 COLOR_DEFAULT; // BLACK
+    void initRenderData();
 
-    // Data
+    // Default values
+    static const Color COLOR_DEFAULT; // BLACK
+
+    // Control Data
     std::vector<vec2> m_contorlPoints;
     std::vector<float> m_knots;
+    int m_order = 0;
     
+    // Result Data
     std::vector<std::vector<vec2>> m_segments;
 
-    int m_order;
-    float m_renderStep;
+    bool m_autoCompute = false;
 
-    bool m_autoupdate;
-
-    // Visuals
-    vec3 m_color;
-    float m_lineWidth;
+    // Render Data
+    float m_renderStep = 0.05;
+    Color m_color = COLOR_DEFAULT;
+    float m_lineWidth = 1.0;
+    RenderData m_renderData;
 
 };
 

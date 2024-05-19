@@ -1,34 +1,27 @@
 #include "objects/line3d.h"
 
-const vec3 Line3D::COLOR_DEFAULT = {0, 0, 0};
+const Color Line3D::COLOR_DEFAULT = {0, 0, 0};
 
 Line3D::Line3D(const vec3 &b, const vec3 &e)
     : m_begin(b),
-      m_end(e),
-      m_color(COLOR_DEFAULT),
-      m_endsColor(COLOR_DEFAULT),
-      m_width(1.0),
-      m_endsSize(1.0)
+      m_end(e)
 {
     this->updateCenter();
-}
-
-Line3D::~Line3D()
-{
+    this->initRenderData();
 }
 
 void Line3D::setBegin(const vec3 &p)
 {
     m_begin = p;
-
     this->updateCenter();
+    this->setUpdated();
 }
 
 void Line3D::setEnd(const vec3 &p)
 {
     m_end = p;
-
     this->updateCenter();
+    this->setUpdated();
 }
 
 const vec3 &Line3D::getBegin() const
@@ -46,12 +39,12 @@ vec3 Line3D::getUnit() const
     return glm::normalize(m_end - m_begin);
 }
 
-void Line3D::setColor(const vec3 &color)
+void Line3D::setColor(const Color &color)
 {
     m_color = color;
 }
 
-void Line3D::setEndsColor(const vec3 &color)
+void Line3D::setEndsColor(const Color &color)
 {
     m_endsColor = color;
 }
@@ -66,44 +59,29 @@ void Line3D::setEndsSize(float size)
     m_endsSize = size;
 }
 
-RenderData Line3D::getRenderData()
+const RenderData &Line3D::getRenderData()
 {
-    RenderData data;
+    // Setup Transformation Matrix
+    m_renderData.ModelMatrix = this->getModelMatrix();
 
-    // Setup Flags
-    data.DrawVertices = true;
-    data.DrawEdges    = true;
-    data.UseViewMatr  = true;
-    data.UseProjMatr  = true;
-    data.UseGlobalVertexColor = true;
-    data.UseGlobalEdgeColor = true;
+    // Setup Vertex Data
+    m_renderData.VertexData[0] = m_begin;
+    m_renderData.VertexData[1] = m_end;
 
-    // Setup Data
+    // Setup Vertices
+    m_renderData.Vertices[0] = {0};
+    m_renderData.Vertices[1] = {1};
 
-    data.VertexData.reserve(2);
-    data.VertexData.push_back(m_begin);
-    data.VertexData.push_back(m_end);
+    // Setup Edges
+    m_renderData.Edges[0] = {0, 1};
 
-    data.Edges.push_back({0, 1});
+    // Setup Visual values
+    m_renderData.GlobalEdgeColor   = m_color;
+    m_renderData.GlobalVertexColor = m_endsColor;
+    m_renderData.EdgeWidth         = m_width;
+    m_renderData.VertexSize        = m_endsSize;
 
-    data.Vertices.reserve(2);
-    data.Vertices.push_back({0});
-    data.Vertices.push_back({1});
-
-    // Setup Globals
-    data.GlobalEdgeColor = m_color;
-    data.GlobalVertexColor = m_endsColor;
-
-    // Setup Visuals
-    data.EdgeWidth = m_width;
-    data.VertexSize = m_endsSize;
-
-    return data;
-}
-
-glm::mat4 Line3D::getTransformation()
-{
-    return this->getModelMatrix();
+    return m_renderData;
 }
 
 void Line3D::transformationCallback()
@@ -127,4 +105,20 @@ void Line3D::updateCenter()
 {
     vec3 dp = m_end + m_begin;
     m_center = {dp.x / 2.0, dp.y / 2.0, dp.z / 2.0};
+}
+
+void Line3D::initRenderData()
+{
+    // Setup Flags
+    m_renderData.DrawVertices = true;
+    m_renderData.DrawEdges    = true;
+    m_renderData.UseViewMatr  = true;
+    m_renderData.UseProjMatr  = true;
+    m_renderData.UseGlobalVertexColor = true;
+    m_renderData.UseGlobalEdgeColor = true;
+
+    // Setup Data sizes
+    m_renderData.VertexData.resize(2);
+    m_renderData.Vertices.resize(2);
+    m_renderData.Edges.resize(1);
 }

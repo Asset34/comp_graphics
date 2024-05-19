@@ -1,60 +1,94 @@
 #include "glrenderer.h"
 
-bool GLRenderer::m_initialized = false;
-
-GLRenderer::~GLRenderer()
-{
-}
+bool GLRenderer::Initialized = false;
 
 void GLRenderer::init() {
-    if (m_initialized) {
+    if (Initialized) {
         return;
     }
 
-    gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-    glEnable(GL_DEPTH_TEST);
+    // Load GL pointers
+    gladLoadGLLoader((GLADloadproc)glfwGetProcAddress); 
+
+    // Enable possibility of antialiasing (Antialiasing is on by default)
+    glEnable(GL_DEPTH_TEST); 
     glEnable(GL_MULTISAMPLE); 
 
-    m_initialized = true;
+    // Acknowledge initialization
+    Initialized = true;
 }
 
-void GLRenderer::attach(RenderProvider *rp)
+void GLRenderer::attach(RenderProvider *p)
 {
-    Renderer::attach(rp);
+    Renderer::attach(p);
 
-    const std::vector<Renderable*> renderables = rp->getRenderables();
-    m_units.reserve(renderables.size());
-    for (auto r : renderables) {
-        m_units.push_back(GLRendererUnit(r));
+    m_units.clear();
+
+    // Check for provider
+    if (!this->providerAttached()) return;
+
+    // Load all provided renderable objects
+    for (auto &obj : p->getAllObjects()) {
+        this->loadObject(obj);
     }
+
+    // Acknowledge changes
+    this->getProvider()->changedAck();
 }
 
-void GLRenderer::updateData()
+void GLRenderer::update()
 {
-    if (!m_provider) {
-        return;
+    // Check for provider
+    if (!this->providerAttached()) return;
+
+    // Process provided objects to be removed
+    for (int id : this->getProvider()->getRemovedObjectsIds()) {
+        this->unloadObect(id);
     }
 
-    std::vector<int> v = m_provider->getRenderableUpdateVector();
-    for (auto i : v) {
-        m_units[i].updateData();
+    // Process provided objects to be added
+    for (auto &obj : this->getProvider()->getNewObjects()) {
+        this->loadObject(obj);
     }
+
+    // Update objects (if required)
+    for (auto &unit : m_units) {
+        unit.update();
+    }
+
+    // Acknowledge changes
+    this->getProvider()->changedAck();
 }
 
 void GLRenderer::render()
 {
-    if (!m_provider && !m_initialized) {
-        return;
-    }
+    // Check for provider
+    if (!this->providerAttached()) return;
 
-    GlobalRenderData data = m_provider->getGlobalRenderData();
+    // Get explicit data (for convenience)
+    const GlobalRenderData &data = this->getProvider()->getGlobalRenderData();
 
-    // Render global
+    // Prepare render with global data
     glClearColor(data.BackgroundColor.r, data.BackgroundColor.g, data.BackgroundColor.b, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    // Render renderables
-    for (auto u : m_units) {
-        u.render(data);
+    // Render objects
+    for (auto &unit : m_units) {
+        unit.render(data);
+    }
+}
+
+void GLRenderer::loadObject(RenderableObj *r)
+{
+    m_units.push_back(GLRendererUnit(r));
+}
+
+void GLRenderer::unloadObect(int id)
+{
+    for (auto it = m_units.begin(); it != m_units.end(); ++it) {
+        if (it->getAssociatedId() == id) {
+            m_units.erase(it);
+            break;
+        }
     }
 }

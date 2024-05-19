@@ -1,39 +1,40 @@
 #ifndef AXISXY_H_
 #define AXISXY_H_
 
-#include "abstract/transformableobj2d.h"
-#include "interfaces/renderable.h"
+#include "abstract/renderableobj.h"
 #include <vector>
 
-using glm::vec2;
-using glm::vec3;
-
-class AxisXY : public TransformableObj2D,  public Renderable {
+class AxisXY : public RenderableObj {
 public:
     AxisXY();
-    virtual ~AxisXY();
+    virtual ~AxisXY() {};
 
     void setSize(float size);
     void setWidth(float width);
 
-    void setColorX(const vec3 &color);
-    void setColorY(const vec3 &color);
+    void setColorX(const Color &color);
+    void setColorY(const Color &color);
 
-    RenderData getRenderData() override;
-    glm::mat4 getTransformation() override;
+    const RenderData &getRenderData() override;
 
 private:
-    vec2 m_center;
-    vec2 m_axisx, m_axisy;
+    void initRenderData();
+
+    // Vertices
+    vec2 m_center = {0, 0};
+    vec2 m_axisx  = {1, 0};
+    vec2 m_axisy  = {0, 1};
     
     // Colors
-    static const vec3 COLOR_X;
-    static const vec3 COLOR_Y;
+    static const Color COLOR_X; // Red
+    static const Color COLOR_Y; // Green
 
     // Visuals
-    vec3 m_colorx;
-    vec3 m_colory;
-    float m_width;
+    Color m_colorx = COLOR_X;
+    Color m_colory = COLOR_Y;
+    float m_width = 1.0;
+
+    RenderData m_renderData;
 
 };
 

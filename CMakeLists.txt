@@ -42,7 +42,10 @@ target_include_directories(imgui PUBLIC ${INCLUDE}/${INCLUDE_LIB}/imgui)
 
 # Create executavle
 add_executable(project
+    ${SRC}/abstract/scene.cpp
     ${SRC}/abstract/renderer.cpp
+    ${SRC}/abstract/renderableobj.cpp
+    ${SRC}/abstract/renderprovider.cpp
     ${SRC}/abstract/transformableobj3d.cpp
     ${SRC}/abstract/transformableobj2d.cpp
     ${SRC}/glrenderer.cpp

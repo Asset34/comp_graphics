@@ -8,11 +8,8 @@ Scene2D::Scene2D()
     m_xy.setColorY({0.5, 0.8, 0.25});
     m_xy.setWidth(3);
 
-    // Add default renderable objects
-    m_renderables.push_back(&m_xy);
-
-    // Setup default background color
-    m_backgroundColor = {0.25, 0.25, 0.25};
+    // Add initial objects for 2D scenes
+    this->addObject(&m_xy);
 }
 
 ObservationController2D *Scene2D::getObservationController()
@@ -20,40 +17,18 @@ ObservationController2D *Scene2D::getObservationController()
     return &m_camera;
 }
 
-void Scene2D::setBackgroundColor(const glm::vec3 &color)
+const GlobalRenderData &Scene2D::getGlobalRenderData()
 {
-    m_backgroundColor = color;
+    // Setup Global Transformation Matrices
+    m_globalRenderData.ViewMatrix = m_camera.getViewMatrix();
+    m_globalRenderData.ProjMatrix = m_camera.getClippingMatrix();
+
+    // Setup Global Visuals
+    m_globalRenderData.BackgroundColor = this->getBackgroundColor();
+
+    return m_globalRenderData;
 }
 
-GlobalRenderData Scene2D::getGlobalRenderData()
-{
-    GlobalRenderData data;
-    data.ViewMatrix = m_camera.getViewMatrix();
-    data.ProjMatrix = m_camera.getClippingMatrix();
-    data.BackgroundColor = m_backgroundColor;
-
-    return data;
-}
-
-const std::vector<Renderable *> &Scene2D::getRenderables()
-{
-    return m_renderables;
-}
-
-std::vector<int> Scene2D::getRenderableUpdateVector()
-{
-    return {};
-}
-
-void Scene2D::addRenderable(Renderable *r)
-{
-    m_renderables.push_back(r);
-}
-
-int Scene2D::getNextRenderableUpdateVectorIndex()
-{
-    return 1;
-}
 Camera2D &Scene2D::getCamera()
 {
     return m_camera;

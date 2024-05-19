@@ -1,12 +1,21 @@
 #ifndef SCENE_H_
 #define SCENE_H_
 
-#include "interfaces/renderprovider.h"
+#include "geometry.h"
 
-class Scene : public RenderProvider {
+class Scene {
 public:
     virtual ~Scene() {};
+
     virtual void update() = 0;
+
+    void setBackgroundColor(const Color &color);
+    const Color &getBackgroundColor() const;
+
+private:
+    static const Color BACKGROUND_COLOR;
+
+    Color m_backgroundColor = BACKGROUND_COLOR;
 
 };
 

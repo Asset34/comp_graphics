@@ -12,10 +12,7 @@
 class SceneLR1 : public Scene3D, public Controllable {
 public:
     SceneLR1();
-    ~SceneLR1();
-
-    void update() override;
-    std::vector<int> getRenderableUpdateVector() override;
+    ~SceneLR1() {};
 
     void set(int vid, float value) override;
     void set(int vid, const float values[]) override;
@@ -25,7 +22,7 @@ public:
     void control(int cmd) override;
     bool updated() override;
     void updateAck() override;
-    std::list<int> getUpdateList() override;
+    virtual const std::list<int> &getUpdateList();
 
 private:
     void buildShape();

@@ -87,10 +87,6 @@ std::vector<std::string> Window::getWorkspacesNames() const
     std::vector<std::string> names;
     names.reserve(m_workspaces.size());
 
-    // for (auto w : m_workspaces) {
-    //     names.push_back(w.getName());
-    // }
-
     for (int i = 0; i < m_workspaces.size(); i++) {
         names.push_back(m_workspaces[i].getName());
     }
