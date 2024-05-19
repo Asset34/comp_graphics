@@ -43,7 +43,7 @@ private:
         CMD_KNOTS_UNIFORM,
         CMD_KNOTS_OPENUNIFORM,
         CMD_REMEMBER_SPLINE,
-        CMD_CLEAR_REMEMBERED_SPLINES
+        CMD_CLEAR_SPLINES
     };
 
     enum ValueIds {
@@ -60,18 +60,12 @@ private:
         VID_RENDER_COLOR,
         VID_CONTROL_POINTS_FLAG,
         VID_CONTROL_POLYGON_FLAG,
-        VID_KNOT_STEP,
-        VID_REMEMBERED_SPLINE_SIZE,
-        VID_REMEMBERED_SPLINE_INDEX,
-        VID_REMEMBERED_SPLINE_KNOTS_SIZE,
-        VID_REMEMBERED_SPLINE_KNOTS,
-        VID_REMEMBERED_SPLINE_ORDER,
-        VID_REMEMBERED_SPLINE_COLOR
+        VID_KNOT_STEP
     };
 
     // Objects
     BSplinePolygon2D m_splinePolygon;
-    std::vector<BSpline2D> m_rememberedSplines;
+    std::list<BSpline2D> m_rememberedSplines;
     BSpline2D m_spline;
     
     // Control values

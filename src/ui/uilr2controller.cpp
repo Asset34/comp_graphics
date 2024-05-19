@@ -3,7 +3,8 @@
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
-#include <stdio.h> 
+#include <stdio.h>
+#include <sstream>
 
 UiLr2Controller::UiLr2Controller(GLFWwindow *w, bool manageContext)
     : UiSceneController2D(w, manageContext),
@@ -51,24 +52,6 @@ void UiLr2Controller::initFromControllable()
     // Init Flags
     this->getControllable()->get(VID_CONTROL_POINTS_FLAG, m_showControlPoints);
     this->getControllable()->get(VID_CONTROL_POLYGON_FLAG, m_showControlPolygon);
-
-    // Init Legend
-    this->getControllable()->get(VID_REMEMBERED_SPLINE_SIZE, size);
-    int knotsSize;
-    for (int i = 0; i < size; i++) {
-        SplineLegendInfo info;
-
-        this->getControllable()->set(VID_REMEMBERED_SPLINE_INDEX, i);
-        this->getControllable()->get(VID_REMEMBERED_SPLINE_ORDER, info.order);
-        this->getControllable()->get(VID_REMEMBERED_SPLINE_COLOR, info.color);
-
-        // TODO: knots to string
-        this->getControllable()->get(VID_REMEMBERED_SPLINE_KNOTS_SIZE, knotsSize);
-        float knots[knotsSize];
-        this->getControllable()->get(VID_REMEMBERED_SPLINE_KNOTS, knots);
-
-        m_legend.push_back(info);
-    }
 }
 
 void UiLr2Controller::updateFromControllable()
@@ -118,28 +101,6 @@ void UiLr2Controller::updateFromControllable()
         break;
         case VID_CONTROL_POLYGON_FLAG:
             this->getControllable()->get(VID_CONTROL_POLYGON_FLAG, m_showControlPolygon);
-        break;
-        case VID_REMEMBERED_SPLINE_SIZE:
-        {
-            m_legend.clear();
-
-            this->getControllable()->get(VID_REMEMBERED_SPLINE_SIZE, size);
-            int knotsSize;
-            for (int i = 0; i < size; i++) {
-                SplineLegendInfo info;
-
-                this->getControllable()->set(VID_REMEMBERED_SPLINE_INDEX, i);
-                this->getControllable()->get(VID_REMEMBERED_SPLINE_ORDER, info.order);
-                this->getControllable()->get(VID_REMEMBERED_SPLINE_COLOR, info.color);
-
-                // TODO: knots to string
-                this->getControllable()->get(VID_REMEMBERED_SPLINE_KNOTS_SIZE, knotsSize);
-                float knots[knotsSize];
-                this->getControllable()->get(VID_REMEMBERED_SPLINE_KNOTS, knots);
-
-                m_legend.push_back(info);
-            }
-        }
         break;
         }
     }
@@ -217,11 +178,23 @@ void UiLr2Controller::control()
     if (m_buttonLegendRemember) {
         this->getControllable()->control(CMD_REMEMBER_SPLINE);
 
+        SplineLegendInfo info;
+        info.color[0] = m_renderColor[0];
+        info.color[1] = m_renderColor[1];
+        info.color[2] = m_renderColor[2];
+        info.knots = this->knotsToString();
+        info.order = m_orderValue;
+        m_legend.push_back(info);
+
         m_buttonLegendRemember = false;
     }
 
     if (m_buttonLegendClear) {
-        this->getControllable()->control(CMD_CLEAR_REMEMBERED_SPLINES);
+        this->getControllable()->control(CMD_CLEAR_SPLINES);
+
+        m_legend.clear();
+
+        m_buttonLegendClear = false;
     }
 }
 
@@ -305,13 +278,30 @@ void UiLr2Controller::renderUi()
 
     for (auto info : m_legend) {
         ImGui::ColorEdit3("##", info.color, ImGuiColorEditFlags_NoPicker | ImGuiColorEditFlags_NoOptions | ImGuiColorEditFlags_NoInputs);
+        
+        ImGui::SameLine();
 
         char buf[32];
-        sprintf(buf, "Order = ", info.order);
+        sprintf(buf, "Order = %d", info.order);
         ImGui::Text(buf);
+
+        ImGui::Text(info.knots.c_str());
 
         ImGui::Separator();
     }
 
     ImGui::End();
+}
+
+std::string UiLr2Controller::knotsToString()
+{
+    std::stringstream stream;
+
+    stream << "[ ";
+    for (float knot : m_knots) {
+        stream << knot << " ";
+    }
+    stream << "]";
+
+    return stream.str();
 }
