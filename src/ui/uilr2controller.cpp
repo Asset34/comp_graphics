@@ -11,6 +11,7 @@ UiLr2Controller::UiLr2Controller(GLFWwindow *w, bool manageContext)
       m_knotChanged(false),
       m_orderChanged(false),
       m_renderStepChanged(false),
+      m_renderColorChanged(false),
       m_showControlPointsChanged(false),
       m_showControlPolygonChanged(false)
 {
@@ -45,10 +46,29 @@ void UiLr2Controller::initFromControllable()
     this->getControllable()->get(VID_ORDER_MAX, m_orderMax);
     this->getControllable()->get(VID_ORDER_VALUE, m_orderValue);
     this->getControllable()->get(VID_RENDER_STEP, m_renderStep);
+    this->getControllable()->get(VID_RENDER_COLOR, m_renderColor);
 
     // Init Flags
     this->getControllable()->get(VID_CONTROL_POINTS_FLAG, m_showControlPoints);
     this->getControllable()->get(VID_CONTROL_POLYGON_FLAG, m_showControlPolygon);
+
+    // Init Legend
+    this->getControllable()->get(VID_REMEMBERED_SPLINE_SIZE, size);
+    int knotsSize;
+    for (int i = 0; i < size; i++) {
+        SplineLegendInfo info;
+
+        this->getControllable()->set(VID_REMEMBERED_SPLINE_INDEX, i);
+        this->getControllable()->get(VID_REMEMBERED_SPLINE_ORDER, info.order);
+        this->getControllable()->get(VID_REMEMBERED_SPLINE_COLOR, info.color);
+
+        // TODO: knots to string
+        this->getControllable()->get(VID_REMEMBERED_SPLINE_KNOTS_SIZE, knotsSize);
+        float knots[knotsSize];
+        this->getControllable()->get(VID_REMEMBERED_SPLINE_KNOTS, knots);
+
+        m_legend.push_back(info);
+    }
 }
 
 void UiLr2Controller::updateFromControllable()
@@ -90,11 +110,36 @@ void UiLr2Controller::updateFromControllable()
         case VID_RENDER_STEP:
             this->getControllable()->get(VID_RENDER_STEP, m_renderStep);
         break;
+        case VID_RENDER_COLOR:
+            this->getControllable()->get(VID_RENDER_COLOR, m_renderColor);
+        break;
         case VID_CONTROL_POINTS_FLAG:
             this->getControllable()->get(VID_CONTROL_POINTS_FLAG, m_showControlPoints);
         break;
         case VID_CONTROL_POLYGON_FLAG:
             this->getControllable()->get(VID_CONTROL_POLYGON_FLAG, m_showControlPolygon);
+        break;
+        case VID_REMEMBERED_SPLINE_SIZE:
+        {
+            m_legend.clear();
+
+            this->getControllable()->get(VID_REMEMBERED_SPLINE_SIZE, size);
+            int knotsSize;
+            for (int i = 0; i < size; i++) {
+                SplineLegendInfo info;
+
+                this->getControllable()->set(VID_REMEMBERED_SPLINE_INDEX, i);
+                this->getControllable()->get(VID_REMEMBERED_SPLINE_ORDER, info.order);
+                this->getControllable()->get(VID_REMEMBERED_SPLINE_COLOR, info.color);
+
+                // TODO: knots to string
+                this->getControllable()->get(VID_REMEMBERED_SPLINE_KNOTS_SIZE, knotsSize);
+                float knots[knotsSize];
+                this->getControllable()->get(VID_REMEMBERED_SPLINE_KNOTS, knots);
+
+                m_legend.push_back(info);
+            }
+        }
         break;
         }
     }
@@ -134,6 +179,13 @@ void UiLr2Controller::control()
         m_renderStepChanged = false;
     }
 
+    if (m_renderColorChanged) {
+        this->getControllable()->set(VID_RENDER_COLOR, m_renderColor);
+        this->getControllable()->control(CMD_COLOR_SET);
+
+        m_renderColorChanged = false;
+    }
+
     if (m_showControlPointsChanged) {
         this->getControllable()->set(VID_CONTROL_POINTS_FLAG, m_showControlPoints);
         this->getControllable()->control(CMD_SHOW_CONTROL_POINTS_SWITCH);
@@ -161,14 +213,25 @@ void UiLr2Controller::control()
 
         m_buttonOpenUniformStep = false;
     }
+
+    if (m_buttonLegendRemember) {
+        this->getControllable()->control(CMD_REMEMBER_SPLINE);
+
+        m_buttonLegendRemember = false;
+    }
+
+    if (m_buttonLegendClear) {
+        this->getControllable()->control(CMD_CLEAR_REMEMBERED_SPLINES);
+    }
 }
 
 void UiLr2Controller::renderUi()
 {
     // UiSceneController2D::renderUi();
-    ImGui::Begin("LR 2");
+    ImGui::Begin("Spline Control");
     
-    m_orderChanged = ImGui::SliderInt("Order", &m_orderValue, 2, m_orderMax);
+    ImGui::SeparatorText("Order");
+    m_orderChanged = ImGui::SliderInt("##", &m_orderValue, 2, m_orderMax);
 
     ImGui::SeparatorText("Control Points");
     for (int i = 0; i < m_controlPoints.size(); i++) {
@@ -225,9 +288,30 @@ void UiLr2Controller::renderUi()
     }
 
     ImGui::SeparatorText("Render");
+    m_renderColorChanged = ImGui::ColorEdit3("Color", m_renderColor, ImGuiColorEditFlags_NoOptions | ImGuiColorEditFlags_NoInputs);
     m_renderStepChanged = ImGui::SliderFloat("Step##Render", &m_renderStep, 0.001, 1.0, "%.3f", ImGuiSliderFlags_Logarithmic);
     m_showControlPointsChanged = ImGui::Checkbox("Show Control Points", &m_showControlPoints);
     m_showControlPolygonChanged = ImGui::Checkbox("Show Polygon", &m_showControlPolygon);
-    
+
+    ImGui::End();
+
+    ImGui::Begin("Legend");
+
+    ImGui::SeparatorText("Control##Legend");
+    m_buttonLegendRemember = ImGui::Button("Remember##Legend");
+    ImGui::SameLine();
+    m_buttonLegendClear = ImGui::Button("Clear##Legend");
+    ImGui::SeparatorText("List##Legend");
+
+    for (auto info : m_legend) {
+        ImGui::ColorEdit3("##", info.color, ImGuiColorEditFlags_NoPicker | ImGuiColorEditFlags_NoOptions | ImGuiColorEditFlags_NoInputs);
+
+        char buf[32];
+        sprintf(buf, "Order = ", info.order);
+        ImGui::Text(buf);
+
+        ImGui::Separator();
+    }
+
     ImGui::End();
 }

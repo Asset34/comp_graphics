@@ -6,9 +6,8 @@ SceneLR2::SceneLR2()
     this->buildSpline();
 
     // Init objects
-    // m_spline.defineKnots({0, 1, 2, 3, 4, 5, 6, 7, 8, 9});
-    m_spline.defineKnots({0, 0, 0, 1, 2, 2, 2});
     m_spline.setOrder(3);
+    m_spline.defineKnotsOpenUniform(1.0);
     m_spline.setRenderStep(0.1);
     m_spline.setAutocompute(true);
     m_spline.compute();
@@ -19,6 +18,7 @@ SceneLR2::SceneLR2()
 
     // Init control values
     m_updated = false;
+    m_rememberedSplineIndex = -1;
 }
 
 void SceneLR2::set(int vid, int value)
@@ -33,6 +33,9 @@ void SceneLR2::set(int vid, int value)
     break;
     case VID_ORDER_VALUE:
         m_order = value;
+    break;
+    case VID_REMEMBERED_SPLINE_INDEX:
+        m_rememberedSplineIndex = value;
     break;
     }  
 }
@@ -60,6 +63,11 @@ void SceneLR2::set(int vid, const float values[])
     case VID_CONTROL_POINT_VALUE:
         m_controlPoint.x = values[0];
         m_controlPoint.y = values[1];
+    break;
+    case VID_RENDER_COLOR:
+        m_renderColor.r = values[0];
+        m_renderColor.g = values[1];
+        m_renderColor.b = values[2];
     break;
     }  
 }
@@ -92,6 +100,15 @@ void SceneLR2::get(int vid, int &receiver)
     break;
     case VID_ORDER_VALUE:
         receiver = m_spline.getOrder();
+    break;
+    case VID_REMEMBERED_SPLINE_SIZE:
+        receiver = m_rememberedSplines.size();
+    break;
+    case VID_REMEMBERED_SPLINE_ORDER:
+        receiver = m_rememberedSplines[m_rememberedSplineIndex].getOrder();
+    break;
+    case VID_REMEMBERED_SPLINE_KNOTS_SIZE:
+        receiver = m_rememberedSplines[m_rememberedSplineIndex].getKnotsNumber();
     break;
     }
 }
@@ -132,6 +149,21 @@ void SceneLR2::get(int vid, float receiver[])
             receiver[i] = m_spline.getKnot(i);
         }
     break;
+    case VID_RENDER_COLOR:
+        receiver[0] = m_spline.getColor().r;
+        receiver[1] = m_spline.getColor().g;
+        receiver[2] = m_spline.getColor().b;
+    break;
+    case VID_REMEMBERED_SPLINE_KNOTS:
+        for (int i = 0; i < m_rememberedSplines[m_rememberedSplineIndex].getKnotsNumber(); i++) {
+            receiver[i] = m_rememberedSplines[m_rememberedSplineIndex].getKnot(i);
+        }
+    break;
+    case VID_REMEMBERED_SPLINE_COLOR:
+        receiver[0] = m_rememberedSplines[m_rememberedSplineIndex].getColor().r;
+        receiver[1] = m_rememberedSplines[m_rememberedSplineIndex].getColor().g;
+        receiver[2] = m_rememberedSplines[m_rememberedSplineIndex].getColor().b;
+    break;
     }
 }
 
@@ -155,6 +187,9 @@ void SceneLR2::control(int cmd)
     case CMD_STEP_SET:
         m_spline.setRenderStep(m_renderStep);
     break;
+    case CMD_COLOR_SET:
+        m_spline.setColor(m_renderColor);
+    break;
     case CMD_SHOW_CONTROL_POINTS_SWITCH:
         m_splinePolygon.showControlPoints(m_showControlPoints);
     break;
@@ -172,6 +207,18 @@ void SceneLR2::control(int cmd)
 
         m_updated = true;
         m_updateList.push_back(VID_KNOTS);
+    break;
+    case CMD_REMEMBER_SPLINE:
+        // this->rememberSpline();
+
+        m_updated = true;
+        m_updateList.push_back(VID_REMEMBERED_SPLINE_SIZE);
+    break;
+    case CMD_CLEAR_REMEMBERED_SPLINES:
+        // this->clearRememberedSplines();
+
+        m_updated = true;
+        m_updateList.push_back(VID_REMEMBERED_SPLINE_SIZE);
     break;
     }
 }
@@ -195,21 +242,21 @@ const std::list<int> &SceneLR2::getUpdateList()
 void SceneLR2::buildSpline()
 {
     // Define control points
-    // std::vector<vec2> controlPoints = {
-    //     {1, 1},
-    //     {5, 3},
-    //     {10, -3},
-    //     {13, 10},
-    //     {15, 20},
-    //     {20, 31},
-    //     {25, -5}
-    // };
     std::vector<vec2> controlPoints = {
-        {0, 0},
-        {3, 9},
-        {6, 3},
-        {9, 6}
+        {1, 1},
+        {5, 3},
+        {15, -3},
+        {23, 10},
+        {35, 10},
+        {48, 31},
+        {64, -5}
     };
+    // std::vector<vec2> controlPoints = {
+    //     {0, 0},
+    //     {3, 9},
+    //     {6, 3},
+    //     {9, 6}
+    // };
 
     // Add control points
     for (auto cp : controlPoints) {
@@ -227,3 +274,19 @@ void SceneLR2::buildSpline()
 
     this->setBackgroundColor({1.0, 1.0, 1.0});
 }
+
+// void SceneLR2::rememberSpline()
+// {
+//     m_rememberedSplines.push_back(m_spline);
+//     this->addRenderable(&m_rememberedSplines.back());
+//     m_renderableUpdate.push_back(m_nextRenderUpdateIndex);
+
+//     m_nextRenderUpdateIndex++;
+// }
+
+// void SceneLR2::clearRememberedSplines()
+// {
+//     m_rememberedSplines.clear();
+//     this->clearRenderables();   
+//     this->initRenderUpdateList();
+// }
