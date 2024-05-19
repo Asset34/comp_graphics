@@ -31,8 +31,8 @@ void SceneLR2::set(int vid, int value)
     case VID_KNOT_INDEX:
         m_knotIndex = value;
     break;
-    case VID_ORDER_VALUE:
-        m_order = value;
+    case VID_DEGREE_VALUE:
+        m_degree = value;
     break;
     }  
 }
@@ -92,11 +92,11 @@ void SceneLR2::get(int vid, int &receiver)
     case VID_KNOT_SIZE:
         receiver = m_spline.getKnotsNumber();
     break;
-    case VID_ORDER_MAX:
-        receiver = m_spline.getOrderMax();
+    case VID_DEGREE_MAX:
+        receiver = m_spline.getDegreeMax();
     break;
-    case VID_ORDER_VALUE:
-        receiver = m_spline.getOrder();
+    case VID_DEGREE_VALUE:
+        receiver = m_spline.getDegree();
     break;
     }
 }
@@ -156,8 +156,8 @@ void SceneLR2::control(int cmd)
     case CMD_KNOT_SET:
         m_spline.setKnot(m_knotIndex, m_knot);
     break;
-    case CMD_ORDER_SET:
-        m_spline.setOrder(m_order);
+    case CMD_DEGREE_SET:
+        m_spline.setDegree(m_degree);
 
         m_updated = true;
         m_updateList.push_back(VID_KNOTS);
@@ -194,6 +194,7 @@ void SceneLR2::control(int cmd)
         for (auto it = m_rememberedSplines.begin(); it != m_rememberedSplines.end(); ++it) {
             this->removeObject(&(*it));
             m_rememberedSplines.erase(it);
+            break;
         }
     break;
     }

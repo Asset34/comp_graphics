@@ -113,7 +113,6 @@ void BSpline2D::setKnot(int index, float knot)
     if (m_autoCompute) {
         this->computeBorders();
         this->updateSegmentsAffectedByKnot(index);
-        // this->updateAllSegments();
 
         this->setUpdated();
     }
@@ -122,6 +121,27 @@ void BSpline2D::setKnot(int index, float knot)
 float BSpline2D::getKnot(int index)
 {
     return m_knots[index];
+}
+
+void BSpline2D::setDegree(int degree)
+{
+    m_order = degree + 1;
+
+    if (m_autoCompute) {
+        this->updateKnots();
+        this->updateAllSegments();
+        this->setUpdated();
+    }
+}
+
+int BSpline2D::getDegree() const
+{
+    return m_order - 1;
+}
+
+int BSpline2D::getDegreeMax() const
+{
+    return m_contorlPoints.size() - 1;
 }
 
 void BSpline2D::setOrder(int order)
@@ -310,11 +330,6 @@ void BSpline2D::updateSegment(int index)
     for (float t = tmin; t < tmax; t += m_renderStep) {
         this->computeSegment(index, basisBegin, t);
     }
-
-    // // Update last
-    // if (tmax - tmin > 0) {
-    //     this->computeSegment(index, basisBegin, tmax);
-    // }
 }
 
 void BSpline2D::updateLast()
@@ -326,7 +341,6 @@ void BSpline2D::updateLast()
 
     if (segment < m_beginSegment) return;
 
-    // Define index of the 1st basis
     int basisBegin = segment - m_order + 1;
     float tmax = m_knots[segment + 1];
 

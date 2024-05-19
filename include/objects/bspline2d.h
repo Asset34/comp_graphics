@@ -22,6 +22,10 @@ public:
     void setKnot(int index, float knot);
     float getKnot(int index);
 
+    void setDegree(int degree);
+    int getDegree() const;
+    int getDegreeMax() const;
+
     void setOrder(int order);
     int getOrder() const;
     int getOrderMax() const;

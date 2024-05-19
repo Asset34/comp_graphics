@@ -35,7 +35,7 @@ private:
     enum Commands {
         CMD_CONTROL_POINT_SET,
         CMD_KNOT_SET,
-        CMD_ORDER_SET,
+        CMD_DEGREE_SET,
         CMD_STEP_SET,
         CMD_COLOR_SET,
         CMD_SHOW_CONTROL_POINTS_SWITCH,
@@ -54,8 +54,8 @@ private:
         VID_KNOT_INDEX,
         VID_KNOT_VALUE,
         VID_KNOTS,
-        VID_ORDER_MAX,
-        VID_ORDER_VALUE,
+        VID_DEGREE_MAX,
+        VID_DEGREE_VALUE,
         VID_RENDER_STEP,
         VID_RENDER_COLOR,
         VID_CONTROL_POINTS_FLAG,
@@ -74,7 +74,7 @@ private:
     vec2 m_controlPoint;
     int m_knotIndex;
     float m_knot;
-    int m_order;
+    int m_degree;
     float m_renderStep;
     vec3 m_renderColor;
     float m_knotStep;

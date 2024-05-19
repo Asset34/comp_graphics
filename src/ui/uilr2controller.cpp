@@ -10,7 +10,7 @@ UiLr2Controller::UiLr2Controller(GLFWwindow *w, bool manageContext)
     : UiSceneController2D(w, manageContext),
       m_controlPointChanged(false),
       m_knotChanged(false),
-      m_orderChanged(false),
+      m_degreeChanged(false),
       m_renderStepChanged(false),
       m_renderColorChanged(false),
       m_showControlPointsChanged(false),
@@ -44,8 +44,8 @@ void UiLr2Controller::initFromControllable()
     }
 
     // Init Misc
-    this->getControllable()->get(VID_ORDER_MAX, m_orderMax);
-    this->getControllable()->get(VID_ORDER_VALUE, m_orderValue);
+    this->getControllable()->get(VID_DEGREE_MAX, m_degreeMax);
+    this->getControllable()->get(VID_DEGREE_VALUE, m_degreeValue);
     this->getControllable()->get(VID_RENDER_STEP, m_renderStep);
     this->getControllable()->get(VID_RENDER_COLOR, m_renderColor);
 
@@ -84,11 +84,11 @@ void UiLr2Controller::updateFromControllable()
             }
         }
         break;
-        case VID_ORDER_MAX:
-            this->getControllable()->get(VID_ORDER_MAX, m_orderMax);
+        case VID_DEGREE_MAX:
+            this->getControllable()->get(VID_DEGREE_MAX, m_degreeMax);
         break;
-        case VID_ORDER_VALUE:
-            this->getControllable()->get(VID_ORDER_VALUE, m_orderValue);
+        case VID_DEGREE_VALUE:
+            this->getControllable()->get(VID_DEGREE_VALUE, m_degreeValue);
         break;
         case VID_RENDER_STEP:
             this->getControllable()->get(VID_RENDER_STEP, m_renderStep);
@@ -126,11 +126,11 @@ void UiLr2Controller::control()
         m_knotChanged = false;
     }
 
-    if (m_orderChanged) {
-        this->getControllable()->set(VID_ORDER_VALUE, m_orderValue);
-        this->getControllable()->control(CMD_ORDER_SET);
+    if (m_degreeChanged) {
+        this->getControllable()->set(VID_DEGREE_VALUE, m_degreeValue);
+        this->getControllable()->control(CMD_DEGREE_SET);
 
-        m_orderChanged = false;
+        m_degreeChanged = false;
     }
 
     if (m_renderStepChanged) {
@@ -183,7 +183,7 @@ void UiLr2Controller::control()
         info.color[1] = m_renderColor[1];
         info.color[2] = m_renderColor[2];
         info.knots = this->knotsToString();
-        info.order = m_orderValue;
+        info.degree = m_degreeValue;
         m_legend.push_back(info);
 
         m_buttonLegendRemember = false;
@@ -203,8 +203,8 @@ void UiLr2Controller::renderUi()
     // UiSceneController2D::renderUi();
     ImGui::Begin("Spline Control");
     
-    ImGui::SeparatorText("Order");
-    m_orderChanged = ImGui::SliderInt("##", &m_orderValue, 2, m_orderMax);
+    ImGui::SeparatorText("Degree");
+    m_degreeChanged = ImGui::SliderInt("##", &m_degreeValue, 2, m_degreeMax);
 
     ImGui::SeparatorText("Control Points");
     for (int i = 0; i < m_controlPoints.size(); i++) {
@@ -286,7 +286,7 @@ void UiLr2Controller::renderUi()
         ImGui::SameLine();
 
         char buf[32];
-        sprintf(buf, "Order = %d", info.order);
+        sprintf(buf, "Degree = %d", info.degree);
         ImGui::Text(buf);
 
         ImGui::Text(info.knots.c_str());
@@ -300,10 +300,11 @@ void UiLr2Controller::renderUi()
 std::string UiLr2Controller::knotsToString()
 {
     std::stringstream stream;
+    stream.precision(3);
 
     stream << "[ ";
     for (float knot : m_knots) {
-        stream << knot << " ";
+        stream << knot << "; ";
     }
     stream << "]";
 
