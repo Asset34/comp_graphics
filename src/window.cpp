@@ -3,8 +3,10 @@
 #include "glrenderer.h"
 #include "ui/uilr1controller.h"
 #include "ui/uilr2controller.h"
+#include "ui/uilr3controller.h"
 #include "scenes/scenelr1.h"
 #include "scenes/scenelr2.h"
+#include "scenes/scenelr3.h"
 #include "glrenderer.h"
 
 // #include "scenes/scenetest2d.h"
@@ -145,14 +147,26 @@ void Window::setupWorkspaces()
     uiManagerLr2->attachObservationController(sceneLr2->getObservationController());
     uiManagerLr2->handlePostRendering();
 
+    // Setup LR3 Workspace
+    SceneLR3 *sceneLr3 = new SceneLR3;
+    GLRenderer *rendererLr3 = new GLRenderer;
+    rendererLr3->attach(sceneLr3);
+    UiLr3Controller *uiManagerLr3 = new UiLr3Controller(m_window);
+    uiManagerLr3->setAreaMargins(0, 200, 0, 0);
+    uiManagerLr3->attachControllable(sceneLr3);
+    uiManagerLr3->attachObservationController(sceneLr3->getObservationController());
+    uiManagerLr3->handlePostRendering();
+
     // Setup Workspaces vector
-    m_workspaces.resize(2);
+    m_workspaces.resize(3);
     m_workspaces[0].setName("LR 1");
     m_workspaces[0].attach(sceneLr1, rendererLr1, uiManagerLr1);
     m_workspaces[1].setName("LR 2");
     m_workspaces[1].attach(sceneLr2, rendererLr2, uiManagerLr2);
+    m_workspaces[2].setName("LR 3");
+    m_workspaces[2].attach(sceneLr3, rendererLr3, uiManagerLr3);
 
     // Setup initial workspace
-    m_currentWorkspaceIndex = 1;
-    m_currentWorkspace = &m_workspaces[1];
+    m_currentWorkspaceIndex = 2;
+    m_currentWorkspace = &m_workspaces[2];
 }
