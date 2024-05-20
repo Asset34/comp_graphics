@@ -1,10 +1,9 @@
-#ifndef SCENELR2_H_
-#define SCENELR2_H_
+#ifndef SCENELR3_H_
+#define SCENELR3_H_
 
 #include "scenes/scene2d.h"
 #include "interfaces/controllable.h"
-#include "objects/bsplinepolygon2d.h"
-#include "objects/bspline2d.h"
+
 
 class SceneLR2 : public Scene2D, public Controllable {
 public:
@@ -26,43 +25,14 @@ public:
     const std::list<int> &getUpdateList() override;
 
 private:
-    void buildSpline();
 
     enum Commands {
-        CMD_CONTROL_POINT_SET,
-        CMD_KNOT_SET,
-        CMD_DEGREE_SET,
-        CMD_STEP_SET,
-        CMD_COLOR_SET,
-        CMD_SHOW_CONTROL_POINTS_SWITCH,
-        CMD_SOW_CONTROL_POLYGON_SWITCH,
-        CMD_KNOTS_UNIFORM,
-        CMD_KNOTS_OPENUNIFORM,
-        CMD_REMEMBER_SPLINE,
-        CMD_CLEAR_SPLINES
     };
 
     enum ValueIds {
-        VID_CONTROL_POINT_SIZE,
-        VID_CONTROL_POINT_INDEX,
-        VID_CONTROL_POINT_VALUE,
-        VID_KNOT_SIZE,
-        VID_KNOT_INDEX,
-        VID_KNOT_VALUE,
-        VID_KNOTS,
-        VID_DEGREE_MAX,
-        VID_DEGREE_VALUE,
-        VID_RENDER_STEP,
-        VID_RENDER_COLOR,
-        VID_CONTROL_POINTS_FLAG,
-        VID_CONTROL_POLYGON_FLAG,
-        VID_KNOT_STEP
     };
 
     // Objects
-    BSplinePolygon2D m_splinePolygon;
-    std::list<BSpline2D> m_rememberedSplines;
-    BSpline2D m_spline;
     
     // Control values
     
@@ -81,6 +51,10 @@ private:
     bool m_updated;
     std::list<int> m_updateList;
 
+    // Render values
+    std::vector<int> m_renderableUpdate;
+    int m_nextRenderUpdateIndex;
+
 };
 
-#endif // SCENELR2_H_
+#endif // SCENELR3_H_
