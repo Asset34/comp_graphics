@@ -2,9 +2,9 @@
 
 const Color BSurfacePolygon::POLYGON_COLOR = {0.0, 0.0, 0.0};
 const Color BSurfacePolygon::CONTROL_POINT_COLOR = {0.0, 0.0, 0.0};
-const float BSurfacePolygon::DEFAULT_COLUMN_VALUE = 1;
-const float BSurfacePolygon::DEFAULT_ROW_VALUE = 2;
-const float BSurfacePolygon::DEFAULT_CONTROL_POINT_VALUE = 5;
+const float BSurfacePolygon::DEFAULT_COLUMN_VALUE = 0;
+const float BSurfacePolygon::DEFAULT_ROW_VALUE = 0;
+const float BSurfacePolygon::DEFAULT_CONTROL_POINT_VALUE = 0;
 
 BSurfacePolygon::BSurfacePolygon()
 {
@@ -28,6 +28,8 @@ void BSurfacePolygon::setHeight(int height)
             m_controlPointsValues[i] = m_controlPointsValues[prevHeight - 1];
         }
     }
+
+    this->setUpdated();
 }
 
 void BSurfacePolygon::setWidth(int width)
@@ -56,21 +58,29 @@ void BSurfacePolygon::setWidth(int width)
             }
         }
     }
+
+    this->setUpdated();
 }
 
 void BSurfacePolygon::setRow(int index, float value)
 {
     m_rowValues[index] = value;
+
+    this->setUpdated();
 }
 
 void BSurfacePolygon::setColumn(int index, float value)
 {
     m_columnValues[index] = value;
+    
+    this->setUpdated();
 }
 
 void BSurfacePolygon::setControlPointValue(int row, int column, float value)
 {
     m_controlPointsValues[row][column] = value;
+
+    this->setUpdated();
 }
 
 int BSurfacePolygon::getHeight() const
@@ -157,17 +167,40 @@ const RenderData &BSurfacePolygon::getRenderData()
 
     if (!this->updated()) return m_renderData;
 
-    // m_renderData.VertexData.resize(m_controlPoints.size());
-    // m_renderData.Vertices.resize(m_controlPoints.size());
-    // for (int i = 0; i < m_controlPoints.size(); i++) {
-    //     m_renderData.VertexData[i] = {m_controlPoints[i], 0.5};
-    //     m_renderData.Vertices[i] = {i};
-    // }
+    int size = this->getHeight() * this->getWidth();
 
-    // m_renderData.Edges.resize(m_controlPoints.size() - 1);
-    // for (int i = 0; i < m_renderData.Edges.size(); i++) {
-    //     m_renderData.Edges[i] = {i, i + 1};
-    // }
+    m_renderData.VertexData.resize(size);
+    m_renderData.Vertices.resize(size);
+    int k = 0;
+    for (int i = 0; i < this->getHeight(); i++) {
+        for (int j = 0; j < this->getWidth(); j++) {
+            m_renderData.VertexData[k] = vec3(m_columnValues[j], m_rowValues[i], m_controlPointsValues[i][j]);
+            m_renderData.Vertices[k].index = k;
+            k++;
+        }
+    }
+
+    size = (this->getWidth() - 1) * this->getHeight() + (this->getHeight() - 1) * this->getWidth();
+    m_renderData.Edges.resize(size);
+
+    k = 0;
+    int startIndex;
+    for (int i = 0; i < this->getHeight(); i++) {
+        for (int j = 0; j < this->getWidth() - 1; j++) {
+            startIndex = i * this->getWidth() + j;
+            m_renderData.Edges[k] = {startIndex, startIndex + 1};
+
+            k++;
+        }
+    }
+    for (int j = 0; j < this->getWidth(); j++) {
+        for (int i = 0; i < this->getHeight() - 1; i++) {
+            startIndex = i * this->getWidth() + j;
+            m_renderData.Edges[k] = {startIndex, startIndex + this->getWidth()};
+
+            k++;
+        }
+    }
 
     return m_renderData;
 }

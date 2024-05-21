@@ -2,7 +2,18 @@
 
 SceneLR3::SceneLR3()
 {
+    // Build objects
     this->buildSurface();
+
+    // Init objects
+    m_surfacePolygon.setPolygonColor({0.0, 1.0, 0.0});
+    m_surfacePolygon.setControlPointsColor({1.0, 1.0, 0.0});
+    m_surfacePolygon.setPolygonLineWidth(2.0);
+    m_surfacePolygon.setControlPointSize(5);
+
+    m_surfacePolygon.rotateItselfx(-90);
+
+    this->addObject(&m_surfacePolygon);
 }
 
 void SceneLR3::set(int vid, int value)
@@ -119,4 +130,29 @@ void SceneLR3::buildSurface()
 {
     m_surfacePolygon.setHeight(3);
     m_surfacePolygon.setWidth(4);
+
+    m_surfacePolygon.setColumn(0, 1);
+    m_surfacePolygon.setColumn(1, 20);
+    m_surfacePolygon.setColumn(2, 40);
+    m_surfacePolygon.setColumn(3, 60);
+
+    m_surfacePolygon.setRow(0, 1);
+    m_surfacePolygon.setRow(1, 20);
+    m_surfacePolygon.setRow(2, 40);
+
+    m_surfacePolygon.setControlPointValue(0, 0, 20);
+    m_surfacePolygon.setControlPointValue(1, 0, 30);
+    m_surfacePolygon.setControlPointValue(2, 0, 20);
+
+    m_surfacePolygon.setControlPointValue(0, 1, 25);
+    m_surfacePolygon.setControlPointValue(1, 1, 40);
+    m_surfacePolygon.setControlPointValue(2, 1, 25);
+
+    m_surfacePolygon.setControlPointValue(0, 2, 25);
+    m_surfacePolygon.setControlPointValue(1, 2, 40);
+    m_surfacePolygon.setControlPointValue(2, 2, 25);
+
+    m_surfacePolygon.setControlPointValue(0, 3, 20);
+    m_surfacePolygon.setControlPointValue(1, 3, 30);
+    m_surfacePolygon.setControlPointValue(2, 3, 20);
 }
