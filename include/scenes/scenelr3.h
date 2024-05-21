@@ -3,19 +3,19 @@
 
 #include "scenes/scene3d.h"
 #include "interfaces/controllable.h"
-
+#include "objects/bsurfacepolygon.h"
 
 class SceneLR3 : public Scene3D, public Controllable {
 public:
     SceneLR3();
     ~SceneLR3() {};
     
-    // void set(int vid, int value) override;
-    // void set(int vid, float value) override;
+    void set(int vid, int value) override;
+    void set(int vid, float value) override;
     // void set(int vid, const float values[]) override;
     // void set(int vid, bool value) override;
-    // void get(int vid, int &receiver) override;
-    // void get(int vid, float &receiver) override;
+    void get(int vid, int &receiver) override;
+    void get(int vid, float &receiver) override;
     // void get(int vid, bool &receiver) override;
     // void get(int vid, float receiver[]) override;
 
@@ -25,16 +25,39 @@ public:
     const std::list<int> &getUpdateList() override;
 
 private:
+    void buildSurface();
 
     enum Commands {
+        CMD_SET_SURFACE_HEIGHT,
+        CMD_SET_SURFACE_WIDTH,
+        CMD_SET_SURFACE_ROW_VALUE,
+        CMD_SET_SURFACE_COLUMN_VALUE,
+        CMD_SET_SURFACE_VALUE
     };
 
     enum ValueIds {
+        VID_SURFACE_HEIGHT,
+        VID_SURFACE_WIDTH,
+        VID_SURFACE_ROW,
+        VID_SURFACE_COLUMN,
+        VID_SURFACE_ROW_VALUE,
+        VID_SURFACE_COLUMN_VALUE,
+        VID_SURFACE_VALUE
     };
 
     // Objects
-    
+    BSurfacePolygon m_surfacePolygon;
+
     // Control values
+    int m_surfaceHeight;
+    int m_surfaceWidth;
+    int m_surfaceRow;
+    int m_surfaceColumn;
+    float m_surfaceRowValue;
+    float m_surfaceColumnValue;
+    float m_surfaceValue;
+
+    bool m_updated;
     std::list<int> m_updateList;
 
 };

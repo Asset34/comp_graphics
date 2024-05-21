@@ -68,6 +68,7 @@ add_executable(project
     ${SRC}/objects/shape3d.cpp
     ${SRC}/objects/line3d.cpp
     ${SRC}/objects/bsplinepolygon2d.cpp
+    ${SRC}/objects/bsurfacepolygon.cpp
     ${SRC}/objects/bspline2d.cpp
     ${SRC}/objects/plane.cpp
     ${SRC}/objects/axisxyz.cpp
