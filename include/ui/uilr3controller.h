@@ -18,7 +18,7 @@ protected:
 
 private:
 
-      enum Commands {
+    enum Commands {
         CMD_SET_SURFACE_HEIGHT,
         CMD_SET_SURFACE_WIDTH,
         CMD_SET_SURFACE_ROW_VALUE,
@@ -33,7 +33,9 @@ private:
         CMD_HDEGREE_SET,
         CMD_WDEGREE_SET,
         CMD_HSTEP_SET,
-        CMD_WSTEP_SET
+        CMD_WSTEP_SET,
+        CMD_SHOW_CONTROL_POINTS_SWITCH,
+        CMD_SHOW_CONTROL_POLYGON_SWITCH
     };
 
     enum ValueIds {
@@ -56,7 +58,9 @@ private:
         VID_WDEGREE_VALUE,
         VID_WDEGREE_MAX,
         VID_HSTEP,
-        VID_WSTEP
+        VID_WSTEP,
+        VID_CONTROL_POINTS_FLAG,
+        VID_CONTROL_POLYGON_FLAG
     };
 
     std::vector<float> m_surfaceColumnValues;
@@ -93,6 +97,12 @@ private:
     bool m_wknotChanged;
     bool m_hrenderStepChanged;
     bool m_wrenderStepChanged;
+
+    bool m_showControlPoints;
+    bool m_showControlPointsChanged;
+
+    bool m_showControlPolygon;
+    bool m_showControlPolygonChanged;
 
 };
 

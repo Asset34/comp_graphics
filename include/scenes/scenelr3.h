@@ -14,7 +14,7 @@ public:
     void set(int vid, int value) override;
     void set(int vid, float value) override;
     // void set(int vid, const float values[]) override;
-    // void set(int vid, bool value) override;
+    void set(int vid, bool value) override;
     void get(int vid, int &receiver) override;
     void get(int vid, float &receiver) override;
     void get(int vid, bool &receiver) override;
@@ -43,7 +43,9 @@ private:
         CMD_HDEGREE_SET,
         CMD_WDEGREE_SET,
         CMD_HSTEP_SET,
-        CMD_WSTEP_SET
+        CMD_WSTEP_SET,
+        CMD_SHOW_CONTROL_POINTS_SWITCH,
+        CMD_SHOW_CONTROL_POLYGON_SWITCH
     };
 
     enum ValueIds {
@@ -66,7 +68,9 @@ private:
         VID_WDEGREE_VALUE,
         VID_WDEGREE_MAX,
         VID_HSTEP,
-        VID_WSTEP
+        VID_WSTEP,
+        VID_CONTROL_POINTS_FLAG,
+        VID_CONTROL_POLYGON_FLAG
     };
 
     // Objects
@@ -89,6 +93,9 @@ private:
     int m_degree;
 
     float m_renderStep;
+
+    bool m_showControlPoints;
+    bool m_showControlPolygon;
 
     bool m_updated;
     std::list<int> m_updateList;

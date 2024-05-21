@@ -17,7 +17,9 @@ UiLr3Controller::UiLr3Controller(GLFWwindow * w, bool manageContext)
       m_hknotChanged(false),
       m_wknotChanged(false),
       m_hrenderStepChanged(false),
-      m_wrenderStepChanged(false)
+      m_wrenderStepChanged(false),
+      m_showControlPointsChanged(false),
+      m_showControlPolygonChanged(false)
 {
     m_surfaceColumn = 0;
     m_surfaceRow = 0;
@@ -81,6 +83,10 @@ void UiLr3Controller::initFromControllable()
     // Init render steps
     this->getControllable()->get(VID_HSTEP, m_hrenderStep);
     this->getControllable()->get(VID_WSTEP, m_wrenderStep);
+
+    // Init Flags
+    this->getControllable()->get(VID_CONTROL_POINTS_FLAG, m_showControlPoints);
+    this->getControllable()->get(VID_CONTROL_POLYGON_FLAG, m_showControlPolygon);
 }
 
 void UiLr3Controller::updateFromControllable()
@@ -267,6 +273,21 @@ void UiLr3Controller::control()
 
         m_wrenderStepChanged = false;
     }
+
+    if (m_showControlPointsChanged) {
+        this->getControllable()->set(VID_CONTROL_POINTS_FLAG, m_showControlPoints);
+        this->getControllable()->control(CMD_SHOW_CONTROL_POINTS_SWITCH);
+
+        m_showControlPointsChanged = false;
+    }
+
+    if (m_showControlPolygonChanged) {
+        this->getControllable()->set(VID_CONTROL_POLYGON_FLAG, m_showControlPolygon);
+        this->getControllable()->control(CMD_SHOW_CONTROL_POLYGON_SWITCH);
+        
+        m_showControlPolygonChanged = false;
+    }
+
 }
 
 void UiLr3Controller::renderUi()
@@ -278,8 +299,10 @@ void UiLr3Controller::renderUi()
     // ImGui::BeginGroup()
     ImGui::SeparatorText("Control Points Mesh");
 
-
     ImGui::BeginGroup();
+        m_showControlPointsChanged = ImGui::Checkbox("Show Control Points", &m_showControlPoints);
+        m_showControlPolygonChanged = ImGui::Checkbox("Show Polygon", &m_showControlPolygon);
+        ImGui::Separator();
         ImGui::PushItemWidth(100);
         m_surfaceHeightChanged = ImGui::InputInt("H", &m_surfaceHeight);
         if (m_surfaceHeight < 1) m_surfaceHeight = 1;

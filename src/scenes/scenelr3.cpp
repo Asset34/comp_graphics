@@ -75,6 +75,19 @@ void SceneLR3::set(int vid, float value)
     }
 }
 
+void SceneLR3::set(int vid, bool value)
+{
+    switch (vid)
+    {
+    case VID_CONTROL_POINTS_FLAG:
+        m_showControlPoints = value;
+    break;
+    case VID_CONTROL_POLYGON_FLAG:
+        m_showControlPolygon = value;
+    break;
+    }
+}
+
 void SceneLR3::get(int vid, int &receiver)
 {
     switch (vid)
@@ -130,6 +143,15 @@ void SceneLR3::get(int vid, float &receiver)
 
 void SceneLR3::get(int vid, bool &receiver)
 {
+    switch (vid)
+    {
+    case VID_CONTROL_POINTS_FLAG:
+        receiver = m_surfacePolygon.getControlPointsShowStatus();
+    break;
+    case VID_CONTROL_POLYGON_FLAG:
+        receiver = m_surfacePolygon.getPolygonShowStatus();
+    break;
+    }
 }
 
 void SceneLR3::get(int vid, float receiver[])
@@ -232,6 +254,12 @@ void SceneLR3::control(int cmd)
     break;
     case CMD_WSTEP_SET:
         m_surface.setURenderStep(m_renderStep);
+    break;
+    case CMD_SHOW_CONTROL_POINTS_SWITCH:
+        m_surfacePolygon.showControlPoints(m_showControlPoints);
+    break;
+    case CMD_SHOW_CONTROL_POLYGON_SWITCH:
+        m_surfacePolygon.showPolygon(m_showControlPolygon);
     break;
     }
 }
