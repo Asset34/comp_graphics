@@ -41,7 +41,9 @@ private:
         CMD_WKNOTS_UNIFORM,
         CMD_WKNOTS_OPENUNIFORM,
         CMD_HDEGREE_SET,
-        CMD_WDEGREE_SET
+        CMD_WDEGREE_SET,
+        CMD_HSTEP_SET,
+        CMD_WSTEP_SET
     };
 
     enum ValueIds {
@@ -63,6 +65,8 @@ private:
         VID_HDEGREE_MAX,
         VID_WDEGREE_VALUE,
         VID_WDEGREE_MAX,
+        VID_HSTEP,
+        VID_WSTEP
     };
 
     // Objects
@@ -83,6 +87,8 @@ private:
     float m_knotStep;
 
     int m_degree;
+
+    float m_renderStep;
 
     bool m_updated;
     std::list<int> m_updateList;

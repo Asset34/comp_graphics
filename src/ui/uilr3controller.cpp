@@ -15,7 +15,9 @@ UiLr3Controller::UiLr3Controller(GLFWwindow * w, bool manageContext)
       m_surfaceRowValueChanged(false),
       m_controlPointValueChanged(false),
       m_hknotChanged(false),
-      m_wknotChanged(false)
+      m_wknotChanged(false),
+      m_hrenderStepChanged(false),
+      m_wrenderStepChanged(false)
 {
     m_surfaceColumn = 0;
     m_surfaceRow = 0;
@@ -75,6 +77,10 @@ void UiLr3Controller::initFromControllable()
     this->getControllable()->get(VID_HDEGREE_MAX, m_hdegreeMax);
     this->getControllable()->get(VID_WDEGREE_VALUE, m_wdegree);
     this->getControllable()->get(VID_WDEGREE_MAX, m_wdegreeMax);
+
+    // Init render steps
+    this->getControllable()->get(VID_HSTEP, m_hrenderStep);
+    this->getControllable()->get(VID_WSTEP, m_wrenderStep);
 }
 
 void UiLr3Controller::updateFromControllable()
@@ -140,6 +146,12 @@ void UiLr3Controller::updateFromControllable()
         break;
         case VID_WDEGREE_VALUE:
             this->getControllable()->get(VID_WDEGREE_VALUE, m_wdegree);
+        break;
+        case VID_HSTEP:
+            this->getControllable()->get(VID_HSTEP, m_hrenderStep);
+        break;
+        case VID_WSTEP:
+            this->getControllable()->get(VID_WSTEP, m_wrenderStep);
         break;
         }
     }
@@ -242,6 +254,19 @@ void UiLr3Controller::control()
         m_buttonOpenUniformHKnots = false;
     }
 
+    if (m_hrenderStepChanged) {
+        this->getControllable()->set(VID_HSTEP, m_hrenderStep);
+        this->getControllable()->control(CMD_HSTEP_SET);
+
+        m_hrenderStepChanged = false;
+    }
+
+    if (m_wrenderStepChanged) {
+        this->getControllable()->set(VID_WSTEP, m_wrenderStep);
+        this->getControllable()->control(CMD_WSTEP_SET);
+
+        m_wrenderStepChanged = false;
+    }
 }
 
 void UiLr3Controller::renderUi()
@@ -360,6 +385,9 @@ void UiLr3Controller::renderUi()
                 if (m_hknots[i] > max) m_hknots[i] = max;
             }
 
+            ImGui::SeparatorText("Render");
+            m_hrenderStepChanged = ImGui::SliderFloat("Step##HRender", &m_hrenderStep, 0.01, 1.0, "%.3f", ImGuiSliderFlags_Logarithmic);
+
             ImGui::EndTabItem();
         }
         if (ImGui::BeginTabItem("Width"))
@@ -410,6 +438,9 @@ void UiLr3Controller::renderUi()
                 if (m_wknots[i] < min) m_wknots[i] = min;
                 if (m_wknots[i] > max) m_wknots[i] = max;
             }
+
+            ImGui::SeparatorText("Render");
+            m_wrenderStepChanged = ImGui::SliderFloat("Step##WRender", &m_wrenderStep, 0.001, 1.0, "%.3f", ImGuiSliderFlags_Logarithmic);
 
             ImGui::EndTabItem();
         }

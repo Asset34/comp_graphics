@@ -66,6 +66,12 @@ void SceneLR3::set(int vid, float value)
     case VID_KNOT_STEP:
         m_knotStep = value;
     break;
+    case VID_HSTEP:
+        m_renderStep = value;
+    break;
+    case VID_WSTEP:
+        m_renderStep = value;
+    break;
     }
 }
 
@@ -112,6 +118,12 @@ void SceneLR3::get(int vid, float &receiver)
     break;
     case VID_SURFACE_VALUE:
         receiver = m_surfacePolygon.getControlPointValue(m_surfaceRow, m_surfaceColumn);
+    break;
+    case VID_HSTEP:
+        receiver = m_surface.getWRenderStep();
+    break;
+    case VID_WSTEP:
+        receiver = m_surface.getURenderStep();
     break;
     }
 }
@@ -215,6 +227,12 @@ void SceneLR3::control(int cmd)
         m_updated = true;
         m_updateList.push_back(VID_WKNOTS);
     break;
+    case CMD_HSTEP_SET:
+        m_surface.setWRenderStep(m_renderStep);
+    break;
+    case CMD_WSTEP_SET:
+        m_surface.setURenderStep(m_renderStep);
+    break;
     }
 }
 
@@ -273,5 +291,7 @@ void SceneLR3::buildSurface()
     m_surface.defineWKnotsOpenUniform(1.0);
     m_surface.defineUKnotsUniform(2.0);
     m_surface.setControlPoints(m_surfacePolygon);
+    m_surface.setWRenderStep(0.1);
+    m_surface.setURenderStep(0.04);
 
 }

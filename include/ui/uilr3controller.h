@@ -18,7 +18,7 @@ protected:
 
 private:
 
-    enum Commands {
+      enum Commands {
         CMD_SET_SURFACE_HEIGHT,
         CMD_SET_SURFACE_WIDTH,
         CMD_SET_SURFACE_ROW_VALUE,
@@ -31,7 +31,9 @@ private:
         CMD_WKNOTS_UNIFORM,
         CMD_WKNOTS_OPENUNIFORM,
         CMD_HDEGREE_SET,
-        CMD_WDEGREE_SET
+        CMD_WDEGREE_SET,
+        CMD_HSTEP_SET,
+        CMD_WSTEP_SET
     };
 
     enum ValueIds {
@@ -53,6 +55,8 @@ private:
         VID_HDEGREE_MAX,
         VID_WDEGREE_VALUE,
         VID_WDEGREE_MAX,
+        VID_HSTEP,
+        VID_WSTEP
     };
 
     std::vector<float> m_surfaceColumnValues;
@@ -73,6 +77,8 @@ private:
     int m_hknotIndex, m_wknotIndex;
     float m_hknotStep, m_wknotStep;
 
+    float m_hrenderStep, m_wrenderStep;
+
     bool m_buttonUniformHKnots;
     bool m_buttonOpenUniformHKnots;
     bool m_buttonUniformWKnots;
@@ -85,6 +91,8 @@ private:
     bool m_controlPointValueChanged;
     bool m_hknotChanged;
     bool m_wknotChanged;
+    bool m_hrenderStepChanged;
+    bool m_wrenderStepChanged;
 
 };
 
