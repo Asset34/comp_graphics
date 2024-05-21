@@ -4,6 +4,7 @@
 #include "scenes/scene3d.h"
 #include "interfaces/controllable.h"
 #include "objects/bsurfacepolygon.h"
+#include "objects/bsurface.h"
 
 class SceneLR3 : public Scene3D, public Controllable {
 public:
@@ -16,8 +17,8 @@ public:
     // void set(int vid, bool value) override;
     void get(int vid, int &receiver) override;
     void get(int vid, float &receiver) override;
-    // void get(int vid, bool &receiver) override;
-    // void get(int vid, float receiver[]) override;
+    void get(int vid, bool &receiver) override;
+    void get(int vid, float receiver[]) override;
 
     void control(int cmd) override;
     bool updated() override;
@@ -32,7 +33,13 @@ private:
         CMD_SET_SURFACE_WIDTH,
         CMD_SET_SURFACE_ROW_VALUE,
         CMD_SET_SURFACE_COLUMN_VALUE,
-        CMD_SET_SURFACE_VALUE
+        CMD_SET_SURFACE_VALUE,
+        CMD_HKNOT_SET,
+        CMD_HKNOTS_UNIFORM,
+        CMD_HKNOTS_OPENUNIFORM,
+        CMD_WKNOT_SET,
+        CMD_WKNOTS_UNIFORM,
+        CMD_WKNOTS_OPENUNIFORM
     };
 
     enum ValueIds {
@@ -42,11 +49,19 @@ private:
         VID_SURFACE_COLUMN,
         VID_SURFACE_ROW_VALUE,
         VID_SURFACE_COLUMN_VALUE,
-        VID_SURFACE_VALUE
+        VID_SURFACE_VALUE,
+        VID_KNOT_INDEX,
+        VID_KNOT_VALUE,
+        VID_HKNOT_SIZE,
+        VID_WKNOT_SIZE,
+        VID_HKNOTS,
+        VID_WKNOTS,
+        VID_KNOT_STEP
     };
 
     // Objects
     BSurfacePolygon m_surfacePolygon;
+    BSurface m_surface;
 
     // Control values
     int m_surfaceHeight;
@@ -56,6 +71,10 @@ private:
     float m_surfaceRowValue;
     float m_surfaceColumnValue;
     float m_surfaceValue;
+
+    int m_knotIndex;
+    float m_knot;
+    float m_knotStep;
 
     bool m_updated;
     std::list<int> m_updateList;

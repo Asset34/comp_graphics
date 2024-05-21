@@ -23,7 +23,13 @@ private:
         CMD_SET_SURFACE_WIDTH,
         CMD_SET_SURFACE_ROW_VALUE,
         CMD_SET_SURFACE_COLUMN_VALUE,
-        CMD_SET_SURFACE_VALUE
+        CMD_SET_SURFACE_VALUE,
+        CMD_HKNOT_SET,
+        CMD_HKNOTS_UNIFORM,
+        CMD_HKNOTS_OPENUNIFORM,
+        CMD_WKNOT_SET,
+        CMD_WKNOTS_UNIFORM,
+        CMD_WKNOTS_OPENUNIFORM
     };
 
     enum ValueIds {
@@ -33,12 +39,21 @@ private:
         VID_SURFACE_COLUMN,
         VID_SURFACE_ROW_VALUE,
         VID_SURFACE_COLUMN_VALUE,
-        VID_SURFACE_VALUE
+        VID_SURFACE_VALUE,
+        VID_KNOT_INDEX,
+        VID_KNOT_VALUE,
+        VID_HKNOT_SIZE,
+        VID_WKNOT_SIZE,
+        VID_HKNOTS,
+        VID_WKNOTS,
+        VID_KNOT_STEP
     };
 
     std::vector<float> m_surfaceColumnValues;
     std::vector<float> m_surfaceRowValues;
     std::vector<std::vector<float>> m_surfaceValues;
+    std::vector<float> m_hknots;
+    std::vector<float> m_wknots;
 
     int m_surfaceHeight;
     int m_surfaceWidth;
@@ -46,11 +61,24 @@ private:
     int m_surfaceRow;
     float m_controlPointValue;
 
+    int m_hdegree, m_wdegree;
+    int m_hdegreeMax, m_wdegreeMax;
+
+    int m_hknotIndex, m_wknotIndex;
+    float m_hknotStep, m_wknotStep;
+
+    bool m_buttonUniformHKnots;
+    bool m_buttonOpenUniformHKnots;
+    bool m_buttonUniformWKnots;
+    bool m_buttonOpenUniformWKnots;
+
     bool m_surfaceHeightChanged;
     bool m_surfaceWidthChanged;
     bool m_surfaceColumnValueChanged;
     bool m_surfaceRowValueChanged;
     bool m_controlPointValueChanged;
+    bool m_hknotChanged;
+    bool m_wknotChanged;
 
 };
 

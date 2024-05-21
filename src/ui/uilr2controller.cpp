@@ -204,7 +204,7 @@ void UiLr2Controller::renderUi()
     ImGui::Begin("Spline Control");
     
     ImGui::SeparatorText("Degree");
-    m_degreeChanged = ImGui::SliderInt("##", &m_degreeValue, 2, m_degreeMax);
+    m_degreeChanged = ImGui::SliderInt("##", &m_degreeValue, 1, m_degreeMax);
 
     ImGui::SeparatorText("Control Points");
     for (int i = 0; i < m_controlPoints.size(); i++) {

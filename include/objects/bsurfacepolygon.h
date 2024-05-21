@@ -32,6 +32,8 @@ public:
     bool getPolygonShowStatus() const;
     bool getControlPointsShowStatus() const;
 
+    std::vector<std::vector<vec3>> getControlPoints() const;
+
     const RenderData &getRenderData() override;
 
 private:

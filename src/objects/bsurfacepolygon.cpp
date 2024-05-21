@@ -148,6 +148,19 @@ bool BSurfacePolygon::getControlPointsShowStatus() const
     return m_showControlPoints;
 }
 
+std::vector<std::vector<vec3>> BSurfacePolygon::getControlPoints() const
+{
+    std::vector<std::vector<vec3>> points(this->getHeight(), std::vector<vec3>(this->getWidth()));
+
+    for (int i = 0; i < this->getHeight(); i++) {
+        for (int j = 0; j < this->getWidth(); j++) {
+            points[i][j] = vec3(m_columnValues[j], m_rowValues[i], m_controlPointsValues[i][j]);
+        }
+    }
+
+    return points;
+}
+
 const RenderData &BSurfacePolygon::getRenderData()
 {
     // Setup Transformation Matrix
