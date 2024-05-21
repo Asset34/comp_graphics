@@ -39,7 +39,9 @@ private:
         CMD_HKNOTS_OPENUNIFORM,
         CMD_WKNOT_SET,
         CMD_WKNOTS_UNIFORM,
-        CMD_WKNOTS_OPENUNIFORM
+        CMD_WKNOTS_OPENUNIFORM,
+        CMD_HDEGREE_SET,
+        CMD_WDEGREE_SET
     };
 
     enum ValueIds {
@@ -56,7 +58,11 @@ private:
         VID_WKNOT_SIZE,
         VID_HKNOTS,
         VID_WKNOTS,
-        VID_KNOT_STEP
+        VID_KNOT_STEP,
+        VID_HDEGREE_VALUE,
+        VID_HDEGREE_MAX,
+        VID_WDEGREE_VALUE,
+        VID_WDEGREE_MAX,
     };
 
     // Objects
@@ -75,6 +81,8 @@ private:
     int m_knotIndex;
     float m_knot;
     float m_knotStep;
+
+    int m_degree;
 
     bool m_updated;
     std::list<int> m_updateList;

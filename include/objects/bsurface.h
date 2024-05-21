@@ -51,7 +51,11 @@ public:
     const RenderData &getRenderData() override;
 
 private:
+    void updateWKnots();
+    void updateUKnots();
+    
     void initRenderData();
+
 
     // Default values
     static const Color COLOR_DEFAULT; // BLACK

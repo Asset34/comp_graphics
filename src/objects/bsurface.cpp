@@ -19,6 +19,9 @@ void BSurface::compute()
 void BSurface::setControlPoints(const BSurfacePolygon &polygon)
 {
     m_controlPoints = polygon.getControlPoints();
+
+    this->updateWKnots();
+    this->updateUKnots();
 }
 
 void BSurface::defineWKnots(const std::vector<float> &knots)
@@ -163,6 +166,8 @@ void BSurface::setWDegree(int degree)
 
     if (m_autoCompute) {
         // TODO
+        this->updateWKnots();
+        this->setUpdated();
     }
 }
 
@@ -182,6 +187,8 @@ void BSurface::setUDegree(int degree)
 
     if (m_autoCompute) {
         // TODO
+        this->updateUKnots();
+        this->setUpdated();
     }
 }
 
@@ -194,7 +201,7 @@ int BSurface::getUDegreeMax() const
 {
     if (!m_controlPoints.size()) return 0;
 
-    return m_controlPoints[0].size();
+    return m_controlPoints[0].size() - 1;
 }
 
 void BSurface::setWRenderStep(float step)
@@ -239,6 +246,44 @@ const RenderData &BSurface::getRenderData()
 
 
     return m_renderData;
+}
+
+void BSurface::updateWKnots()
+{
+    int diff = m_controlPoints.size() + m_worder - m_wknots.size();
+
+    if (diff > 0) {
+        float knotvalue = m_wknots.back() + 1;
+        for (int i = 0; i < diff; i++) {
+            m_wknots.push_back(knotvalue);
+        }
+    } else if (diff < 0) {
+        for (int i = 0; i < -diff; i++) {
+            m_wknots.pop_back();
+        }
+    }
+
+    // TODO: Compute borders
+}
+
+void BSurface::updateUKnots()
+{
+    if (!m_controlPoints.size()) return;
+
+    int diff = m_controlPoints[0].size() + m_worder - m_uknots.size();
+
+    if (diff > 0) {
+        float knotvalue = m_uknots.back() + 1;
+        for (int i = 0; i < diff; i++) {
+            m_uknots.push_back(knotvalue);
+        }
+    } else if (diff < 0) {
+        for (int i = 0; i < -diff; i++) {
+            m_uknots.pop_back();
+        }
+    }
+
+    // TODO: Compute borders
 }
 
 void BSurface::initRenderData()

@@ -38,6 +38,12 @@ void SceneLR3::set(int vid, int value)
     case VID_KNOT_INDEX:
         m_knotIndex = value;
     break;
+    case VID_HDEGREE_VALUE:
+        m_degree = value;
+    break;
+    case VID_WDEGREE_VALUE:
+        m_degree = value;
+    break;
     }
 }
 
@@ -78,6 +84,18 @@ void SceneLR3::get(int vid, int &receiver)
     break;
     case VID_WKNOT_SIZE:
         receiver = m_surface.getUKnotNumber();
+    break;
+    case VID_HDEGREE_MAX:
+        receiver = m_surface.getWDegreeMax();
+    break;
+    case VID_HDEGREE_VALUE:
+        receiver = m_surface.getWDegree();
+    break;
+    case VID_WDEGREE_MAX:
+        receiver = m_surface.getUDegreeMax();
+    break;
+    case VID_WDEGREE_VALUE:
+        receiver = m_surface.getUDegree();
     break;
     }
 }
@@ -125,26 +143,35 @@ void SceneLR3::control(int cmd)
     {
     case CMD_SET_SURFACE_HEIGHT:
         m_surfacePolygon.setHeight(m_surfaceHeight);
+        m_surface.setControlPoints(m_surfacePolygon);
 
         m_updated = true;
         m_updateList.push_back(VID_SURFACE_VALUE);
         m_updateList.push_back(VID_SURFACE_ROW_VALUE);
+        m_updateList.push_back(VID_HKNOTS);
+        m_updateList.push_back(VID_HDEGREE_MAX);
     break;
     case CMD_SET_SURFACE_WIDTH:
         m_surfacePolygon.setWidth(m_surfaceWidth);
+        m_surface.setControlPoints(m_surfacePolygon);
 
         m_updated = true;
         m_updateList.push_back(VID_SURFACE_VALUE);
         m_updateList.push_back(VID_SURFACE_COLUMN_VALUE);
+        m_updateList.push_back(VID_WKNOTS);
+        m_updateList.push_back(VID_WDEGREE_MAX);
     break;
     case CMD_SET_SURFACE_ROW_VALUE:
         m_surfacePolygon.setRow(m_surfaceRow, m_surfaceRowValue);
+        m_surface.setControlPoints(m_surfacePolygon);
     break;
     case CMD_SET_SURFACE_COLUMN_VALUE:
         m_surfacePolygon.setColumn(m_surfaceColumn, m_surfaceColumnValue);
+        m_surface.setControlPoints(m_surfacePolygon);
     break;
     case CMD_SET_SURFACE_VALUE:
         m_surfacePolygon.setControlPointValue(m_surfaceRow, m_surfaceColumn, m_surfaceValue);
+        m_surface.setControlPoints(m_surfacePolygon);
     break;
     case CMD_HKNOT_SET:
         m_surface.setWKnot(m_knotIndex, m_knot);
@@ -172,6 +199,18 @@ void SceneLR3::control(int cmd)
     break;
     case CMD_WKNOTS_OPENUNIFORM:
         m_surface.defineUKnotsOpenUniform(m_knotStep);
+
+        m_updated = true;
+        m_updateList.push_back(VID_WKNOTS);
+    break;
+    case CMD_HDEGREE_SET:
+        m_surface.setWDegree(m_degree);
+
+        m_updated = true;
+        m_updateList.push_back(VID_HKNOTS);
+    break;
+    case CMD_WDEGREE_SET:
+        m_surface.setUDegree(m_degree);
 
         m_updated = true;
         m_updateList.push_back(VID_WKNOTS);
@@ -229,10 +268,10 @@ void SceneLR3::buildSurface()
 
 
     // Build surface
-    m_surface.setControlPoints(m_surfacePolygon);
     m_surface.setWDegree(1);
     m_surface.setUDegree(2);
     m_surface.defineWKnotsOpenUniform(1.0);
     m_surface.defineUKnotsUniform(2.0);
+    m_surface.setControlPoints(m_surfacePolygon);
 
 }

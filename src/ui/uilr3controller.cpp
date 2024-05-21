@@ -19,6 +19,8 @@ UiLr3Controller::UiLr3Controller(GLFWwindow * w, bool manageContext)
 {
     m_surfaceColumn = 0;
     m_surfaceRow = 0;
+    m_hknotStep = 1.0;
+    m_wknotStep = 1.0;
 }
 
 void UiLr3Controller::initFromControllable()
@@ -67,6 +69,12 @@ void UiLr3Controller::initFromControllable()
     for (int i = 0; i < m_wknots.size(); i++) {
         m_wknots[i] = wknotsValues[i];
     }
+
+    // Init degrees
+    this->getControllable()->get(VID_HDEGREE_VALUE, m_hdegree);
+    this->getControllable()->get(VID_HDEGREE_MAX, m_hdegreeMax);
+    this->getControllable()->get(VID_WDEGREE_VALUE, m_wdegree);
+    this->getControllable()->get(VID_WDEGREE_MAX, m_wdegreeMax);
 }
 
 void UiLr3Controller::updateFromControllable()
@@ -120,6 +128,18 @@ void UiLr3Controller::updateFromControllable()
                 m_wknots[i] = knotsValues[i];
             }
         }
+        break;
+        case VID_HDEGREE_MAX:
+            this->getControllable()->get(VID_HDEGREE_MAX, m_hdegreeMax);
+        break;
+        case VID_HDEGREE_VALUE:
+            this->getControllable()->get(VID_HDEGREE_VALUE, m_hdegree);
+        break;
+        case VID_WDEGREE_MAX:
+            this->getControllable()->get(VID_WDEGREE_MAX, m_wdegreeMax);
+        break;
+        case VID_WDEGREE_VALUE:
+            this->getControllable()->get(VID_WDEGREE_VALUE, m_wdegree);
         break;
         }
     }
