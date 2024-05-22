@@ -514,10 +514,12 @@ void BSurface::updateAllSegments()
     }
 
     // Update segments
-    for (int i = m_leftSegment; i <= m_rightSegment; i++) {
-        for (int j = m_bottomSegment; j <= m_topSegment; j++) {
-            this->updateSegment(j, i);
+    for (int i = m_bottomSegment; i <= m_topSegment; i++) {
+        for (int j = m_leftSegment; j <= m_rightSegment; j++) {
+            this->updateSegment(i, j);
         }
+
+        this->updateLastU(i);
     }
 }
 
@@ -560,6 +562,51 @@ void BSurface::updateSegment(int indexw, int indexu)
 
         k++;
     }
+}
+
+
+void BSurface::updateLastU(int indexw)
+{
+    int segment = m_rightSegment;
+    while (isUSegmentEmpty(segment) && segment > 0) {
+        segment--;
+    }
+
+    if (segment < m_leftSegment) return;
+
+    float umax = m_uknots[segment + 1];
+
+    // Define starting basis indexes
+    int left = segment - m_uorder + 1;
+    int bottom = indexw - m_worder + 1;
+
+    // Define range
+    float wmin = m_wknots[indexw];
+    float wmax = m_wknots[indexw + 1];
+
+    // Compute last values for every spline in the segment
+    vec3 value;
+    int k = 0;
+    for (float w = wmin; w < wmax; w += m_wrenderStep) {
+        // Prepare intermediate control points vector
+        m_intermediateControlPoints.clear();
+        m_intermediateControlPoints.resize(2 * m_uorder - 1);
+
+        // Find all active intermediate control points
+        for (int c = 0; c < m_intermediateControlPoints.size(); c++) {
+            m_intermediateControlPoints[c] = this->computeIntermediateControlPoint(indexw, bottom, left + c, w);
+        }
+
+        value = this->computeSegment(segment, left, umax);
+        m_segments[indexw][segment].splines[k].push_back(value);
+
+        k++;
+    }
+}
+
+void BSurface::updateLastW()
+{
+
 }
 
 vec3 BSurface::computeSegment(int indexu, int basisBegin, float u)
@@ -645,6 +692,16 @@ vec3 BSurface::computeIntermediateControlPoint(int indexw, int basisStart, int p
     }
 
     return value;
+}
+
+bool BSurface::isUSegmentEmpty(int index)
+{
+    return m_uknots[index + 1] - m_uknots[index] == 0;
+}
+
+bool BSurface::isWSegmentEmpty(int index)
+{
+    return m_wknots[index + 1] - m_wknots[index] == 0;
 }
 
 void BSurface::initRenderData()
