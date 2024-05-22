@@ -40,7 +40,7 @@ private:
         CMD_WAUTO_OPEN_UNIFORM_SWITCH,
         CMD_SURFACE_POSITION_SET,
         CMD_SURFACE_XROTATE,
-        CMD_SURFACE_yROTATE
+        CMD_SURFACE_YROTATE
     };
 
     enum ValueIds {
@@ -96,11 +96,13 @@ private:
     
     float m_surfacePos[3];
 
+    float m_xsurfaceRotationAngle;
+    float m_ysurfaceRotationAngle;
+
     bool m_buttonUniformHKnots;
     bool m_buttonOpenUniformHKnots;
     bool m_buttonUniformWKnots;
     bool m_buttonOpenUniformWKnots;
-    
 
     bool m_surfaceHeightChanged;
     bool m_surfaceWidthChanged;
@@ -114,6 +116,8 @@ private:
     bool m_hrenderStepChanged;
     bool m_wrenderStepChanged;
     bool m_surfacePositionChanged;
+    bool m_xsurfaceRotationAngleChanged;
+    bool m_ysurfaceRotationAngleChanged;
 
     bool m_showControlPoints;
     bool m_showControlPointsChanged;

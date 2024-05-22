@@ -52,7 +52,7 @@ private:
         CMD_WAUTO_OPEN_UNIFORM_SWITCH,
         CMD_SURFACE_POSITION_SET,
         CMD_SURFACE_XROTATE,
-        CMD_SURFACE_yROTATE
+        CMD_SURFACE_YROTATE
     };
 
     enum ValueIds {
@@ -114,6 +114,8 @@ private:
     vec3 m_surfacePos;
     float m_xrotationAngle;
     float m_yrotationAngle;
+    float m_xrotationAngle_prev = 0;
+    float m_yrotationAngle_prev = 0;
 
     bool m_updated;
     std::list<int> m_updateList;

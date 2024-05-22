@@ -318,6 +318,16 @@ void SceneLR3::control(int cmd)
         m_surfacePolygon.translateItselfTo(m_surfacePos);
         m_surface.translateItselfTo(m_surfacePos);
     break;
+    case CMD_SURFACE_XROTATE:
+        m_surfacePolygon.rotatex(m_xrotationAngle - m_xrotationAngle_prev);
+        m_surface.rotatex(m_xrotationAngle - m_xrotationAngle_prev);
+        m_xrotationAngle_prev = m_xrotationAngle;
+    break;
+    case CMD_SURFACE_YROTATE:
+        m_surfacePolygon.rotatey(m_yrotationAngle - m_yrotationAngle_prev);
+        m_surface.rotatey(m_yrotationAngle - m_yrotationAngle_prev);
+        m_yrotationAngle_prev = m_yrotationAngle;
+    break;
     }
 }
 

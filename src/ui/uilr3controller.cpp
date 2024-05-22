@@ -21,6 +21,8 @@ UiLr3Controller::UiLr3Controller(GLFWwindow * w, bool manageContext)
       m_hrenderStepChanged(false),
       m_wrenderStepChanged(false),
       m_surfacePositionChanged(false),
+      m_xsurfaceRotationAngleChanged(false),
+      m_ysurfaceRotationAngleChanged(false),
       m_showControlPointsChanged(false),
       m_showControlPolygonChanged(false),
       m_hautoOpenUniformSwitchChanged(false),
@@ -30,6 +32,8 @@ UiLr3Controller::UiLr3Controller(GLFWwindow * w, bool manageContext)
     m_surfaceRow = 0;
     m_hknotStep = 1.0;
     m_wknotStep = 1.0;
+    m_xsurfaceRotationAngle = 0.0;
+    m_ysurfaceRotationAngle = 0.0;
 }
 
 void UiLr3Controller::initFromControllable()
@@ -97,7 +101,6 @@ void UiLr3Controller::initFromControllable()
 
     // Init Surface orientation
     this->getControllable()->get(VID_SURFACE_POSITION, m_surfacePos);
-
 }
 
 void UiLr3Controller::updateFromControllable()
@@ -335,6 +338,20 @@ void UiLr3Controller::control()
 
         m_surfacePositionChanged = false;
     }
+
+    if (m_xsurfaceRotationAngleChanged) {
+        this->getControllable()->set(VID_XROTATION_ANGLE, m_xsurfaceRotationAngle);
+        this->getControllable()->control(CMD_SURFACE_XROTATE);
+
+        m_xsurfaceRotationAngleChanged = false;
+    }
+
+    if (m_ysurfaceRotationAngleChanged) {
+        this->getControllable()->set(VID_YROTATION_ANGLE, m_ysurfaceRotationAngle);
+        this->getControllable()->control(CMD_SURFACE_YROTATE);
+
+        m_ysurfaceRotationAngleChanged = false;
+    }
 }
 
 void UiLr3Controller::renderUi()
@@ -525,6 +542,8 @@ void UiLr3Controller::renderUi()
     ImGui::Begin("Surface Transformations");
 
     m_surfacePositionChanged = ImGui::SliderFloat3("Position", m_surfacePos, -100, 100);
+    m_xsurfaceRotationAngleChanged = ImGui::SliderFloat("Angle X", &m_xsurfaceRotationAngle, -360, 360, "%.0f deg");
+    m_ysurfaceRotationAngleChanged = ImGui::SliderFloat("Angle Y", &m_ysurfaceRotationAngle, -360, 360, "%.0f deg");
 
     ImGui::End();
 }
