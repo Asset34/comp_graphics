@@ -29,6 +29,7 @@ void BSurfacePolygon::setHeight(int height)
         }
     }
 
+    this->updateCenterVaue();
     this->setUpdated();
 }
 
@@ -59,6 +60,7 @@ void BSurfacePolygon::setWidth(int width)
         }
     }
 
+    this->updateCenterVaue();
     this->setUpdated();
 }
 
@@ -66,6 +68,7 @@ void BSurfacePolygon::setRow(int index, float value)
 {
     m_rowValues[index] = value;
 
+    this->updateCenterVaue();
     this->setUpdated();
 }
 
@@ -73,6 +76,7 @@ void BSurfacePolygon::setColumn(int index, float value)
 {
     m_columnValues[index] = value;
     
+    this->updateCenterVaue();
     this->setUpdated();
 }
 
@@ -80,7 +84,13 @@ void BSurfacePolygon::setControlPointValue(int row, int column, float value)
 {
     m_controlPointsValues[row][column] = value;
 
+    this->updateCenterVaue();
     this->setUpdated();
+}
+
+const vec3 &BSurfacePolygon::getCenterValue() const
+{
+    return m_centerValue;
 }
 
 int BSurfacePolygon::getHeight() const
@@ -218,6 +228,19 @@ const RenderData &BSurfacePolygon::getRenderData()
     return m_renderData;
 }
 
+const vec3 &BSurfacePolygon::selfOrigin() const
+{
+    return m_center;
+}
+
+void BSurfacePolygon::transformationCallback()
+{
+    TransformableObj3D::transformationCallback();
+
+    // Update center
+    m_center = this->getModelMatrix() * vec4(m_centerValue, 1);
+}
+
 void BSurfacePolygon::initRenderData()
 {
     // Setup Flags
@@ -226,4 +249,23 @@ void BSurfacePolygon::initRenderData()
     m_renderData.UseProjMatr = true;
     m_renderData.UseGlobalEdgeColor = true;
     m_renderData.UseGlobalVertexColor = true;
+}
+
+void BSurfacePolygon::updateCenterVaue()
+{
+    double sumx =  0;
+    double sumy =  0;
+    double sumz =  0;
+
+    for (int i = 0; i < m_columnValues.size(); i++) {
+        sumx += m_columnValues[i] * this->getHeight();
+    }
+    for (int i = 0; i < m_rowValues.size(); i++) {
+        sumy += m_rowValues[i] * this->getWidth();
+    }
+
+    int n = this->getWidth() * this->getHeight();
+    m_centerValue.x = sumx / n;
+    m_centerValue.y = sumy / n;
+    m_centerValue.z = 0;
 }

@@ -20,6 +20,7 @@ UiLr3Controller::UiLr3Controller(GLFWwindow * w, bool manageContext)
       m_wdegreeChanged(false),
       m_hrenderStepChanged(false),
       m_wrenderStepChanged(false),
+      m_surfacePositionChanged(false),
       m_showControlPointsChanged(false),
       m_showControlPolygonChanged(false),
       m_hautoOpenUniformSwitchChanged(false),
@@ -93,6 +94,10 @@ void UiLr3Controller::initFromControllable()
     this->getControllable()->get(VID_CONTROL_POLYGON_FLAG, m_showControlPolygon);
     this->getControllable()->get(VID_HAUTO_OPEN_UNIFORM_FLAG, m_hautoOpenUniformSwitch);
     this->getControllable()->get(VID_WAUTO_OPEN_UNIFORM_FLAG, m_wautoOpenUniformSwitch);
+
+    // Init Surface orientation
+    this->getControllable()->get(VID_SURFACE_POSITION, m_surfacePos);
+
 }
 
 void UiLr3Controller::updateFromControllable()
@@ -323,6 +328,13 @@ void UiLr3Controller::control()
 
         m_wautoOpenUniformSwitchChanged = false;
     }
+
+    if (m_surfacePositionChanged) {
+        this->getControllable()->set(VID_SURFACE_POSITION, m_surfacePos);
+        this->getControllable()->control(CMD_SURFACE_POSITION_SET);
+
+        m_surfacePositionChanged = false;
+    }
 }
 
 void UiLr3Controller::renderUi()
@@ -507,6 +519,12 @@ void UiLr3Controller::renderUi()
 
         ImGui::EndTabBar();
     }
+
+    ImGui::End();
+
+    ImGui::Begin("Surface Transformations");
+
+    m_surfacePositionChanged = ImGui::SliderFloat3("Position", m_surfacePos, -100, 100);
 
     ImGui::End();
 }

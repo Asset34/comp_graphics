@@ -20,6 +20,7 @@ public:
     const vec3 &getUnity() const;
     const vec3 &getUnitz() const;
     const vec3 &getOrigin() const;
+    const vec3 &getSelfOrigin() const;
     const vec3 &getScales() const;
 
     void reset();
@@ -59,8 +60,8 @@ public:
     float getAngle() const;
 
 protected:
-    virtual void transformationCallback();
     virtual const vec3 &selfOrigin() const;
+    virtual void transformationCallback();
 
 private:
     void translate_base(const vec3 &t);

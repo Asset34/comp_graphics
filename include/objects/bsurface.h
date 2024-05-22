@@ -57,6 +57,10 @@ public:
     
     const RenderData &getRenderData() override;
 
+protected:
+    const vec3 &selfOrigin() const override;
+    void transformationCallback() override;
+
 private:
     void computeBorders();
     void updateWKnots();
@@ -76,7 +80,10 @@ private:
 
     // Default values
     static const Color COLOR_DEFAULT; // BLACK
-    
+
+    vec3 m_centerValue = {0, 0, 0};
+    vec3 m_center      = {0, 0, 0};
+
     // Control data
     std::vector<std::vector<vec3>> m_controlPoints;
     std::vector<float> m_wknots;

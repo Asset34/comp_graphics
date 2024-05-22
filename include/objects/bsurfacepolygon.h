@@ -16,6 +16,8 @@ public:
     void setColumn(int index, float value);
     void setControlPointValue(int row, int column, float value);
 
+    const vec3 &getCenterValue() const;
+
     int getHeight() const;
     int getWidth() const;
     float getRow(int index) const;
@@ -36,10 +38,13 @@ public:
 
     const RenderData &getRenderData() override;
 
+protected:
+    const vec3 &selfOrigin() const override;
+    void transformationCallback() override;
+
 private:
     void initRenderData();
-
-    std::vector<std::vector<vec3>> m_controlPoints;
+    void updateCenterVaue();
 
     std::vector<float> m_columnValues;
     std::vector<float> m_rowValues;
@@ -50,6 +55,9 @@ private:
     static const float DEFAULT_COLUMN_VALUE; // 0
     static const float DEFAULT_ROW_VALUE; // 0
     static const float DEFAULT_CONTROL_POINT_VALUE; // 0
+
+    vec3 m_centerValue = {0, 0, 0};
+    vec3 m_center      = {0, 0, 0};
 
     // Flags
     bool m_showPolygon       = true;

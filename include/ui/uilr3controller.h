@@ -18,7 +18,7 @@ protected:
 
 private:
 
-   enum Commands {
+     enum Commands {
         CMD_SET_SURFACE_HEIGHT,
         CMD_SET_SURFACE_WIDTH,
         CMD_SET_SURFACE_ROW_VALUE,
@@ -37,7 +37,10 @@ private:
         CMD_SHOW_CONTROL_POINTS_SWITCH,
         CMD_SHOW_CONTROL_POLYGON_SWITCH,
         CMD_HAUTO_OPEN_UNIFORM_SWITCH,
-        CMD_WAUTO_OPEN_UNIFORM_SWITCH
+        CMD_WAUTO_OPEN_UNIFORM_SWITCH,
+        CMD_SURFACE_POSITION_SET,
+        CMD_SURFACE_XROTATE,
+        CMD_SURFACE_yROTATE
     };
 
     enum ValueIds {
@@ -64,7 +67,10 @@ private:
         VID_CONTROL_POINTS_FLAG,
         VID_CONTROL_POLYGON_FLAG,
         VID_HAUTO_OPEN_UNIFORM_FLAG,
-        VID_WAUTO_OPEN_UNIFORM_FLAG
+        VID_WAUTO_OPEN_UNIFORM_FLAG,
+        VID_SURFACE_POSITION,
+        VID_XROTATION_ANGLE,
+        VID_YROTATION_ANGLE
     };
 
 
@@ -87,11 +93,14 @@ private:
     float m_hknotStep, m_wknotStep;
 
     float m_hrenderStep, m_wrenderStep;
+    
+    float m_surfacePos[3];
 
     bool m_buttonUniformHKnots;
     bool m_buttonOpenUniformHKnots;
     bool m_buttonUniformWKnots;
     bool m_buttonOpenUniformWKnots;
+    
 
     bool m_surfaceHeightChanged;
     bool m_surfaceWidthChanged;
@@ -104,6 +113,7 @@ private:
     bool m_wdegreeChanged;
     bool m_hrenderStepChanged;
     bool m_wrenderStepChanged;
+    bool m_surfacePositionChanged;
 
     bool m_showControlPoints;
     bool m_showControlPointsChanged;

@@ -1,7 +1,5 @@
 #include "scenes/scenelr3.h"
 
-#include <iostream>
-
 SceneLR3::SceneLR3()
 {
     // Build objects
@@ -11,10 +9,14 @@ SceneLR3::SceneLR3()
     m_surface.setWRenderStep(0.1);
     m_surface.setURenderStep(0.04);
     m_surface.setAutocompute(true);
+    m_surface.setAutoWKnotsOpenUniform(true);
+    m_surface.setAutoUKnotsOpenUniform(true);
     m_surface.compute();
 
     m_surfacePolygon.rotateItselfx(-90);
     m_surface.rotateItselfx(-90);
+    m_surfacePolygon.translateItselfTo({0, 0, 0});
+    m_surface.translateItselfTo({0, 0, 0});
 
     this->addObject(&m_surfacePolygon);
     this->addObject(&m_surface);
@@ -81,6 +83,24 @@ void SceneLR3::set(int vid, float value)
     break;
     case VID_WSTEP:
         m_renderStep = value;
+    break;
+    case VID_XROTATION_ANGLE:
+        m_xrotationAngle = value;
+    break;
+    case VID_YROTATION_ANGLE:
+        m_yrotationAngle = value;
+    break;
+    }
+}
+
+void SceneLR3::set(int vid, const float values[])
+{
+    switch (vid)
+    {
+    case VID_SURFACE_POSITION:
+        m_surfacePos.x = values[0];
+        m_surfacePos.y = values[1];
+        m_surfacePos.z = values[2];
     break;
     }
 }
@@ -190,6 +210,11 @@ void SceneLR3::get(int vid, float receiver[])
             receiver[i] = m_surface.getUKnot(i);
         }
     break;
+    case VID_SURFACE_POSITION:
+        receiver[0] = m_surface.getSelfOrigin().x;
+        receiver[1] = m_surface.getSelfOrigin().y;
+        receiver[2] = m_surface.getSelfOrigin().z;
+    break;
     }
 }
 
@@ -288,6 +313,10 @@ void SceneLR3::control(int cmd)
     break;
     case CMD_WAUTO_OPEN_UNIFORM_SWITCH:
         m_surface.setAutoUKnotsOpenUniform(m_wAutoOpenUniform);
+    break;
+    case CMD_SURFACE_POSITION_SET:
+        m_surfacePolygon.translateItselfTo(m_surfacePos);
+        m_surface.translateItselfTo(m_surfacePos);
     break;
     }
 }

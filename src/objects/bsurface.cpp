@@ -26,6 +26,7 @@ void BSurface::compute()
 void BSurface::setControlPoints(const BSurfacePolygon &polygon)
 {
     m_controlPoints = polygon.getControlPoints();
+    m_centerValue = polygon.getCenterValue();
 
     if (m_autoCompute) {
         this->updateOrders();
@@ -36,6 +37,7 @@ void BSurface::setControlPoints(const BSurfacePolygon &polygon)
 
         this->setUpdated();
     }
+
 }
 
 void BSurface::defineWKnots(const std::vector<float> &knots)
@@ -422,6 +424,19 @@ const RenderData &BSurface::getRenderData()
     m_renderData.Edges.erase(m_renderData.Edges.end());
 
     return m_renderData;
+}
+
+const vec3 &BSurface::selfOrigin() const
+{
+    return m_center;
+}
+
+void BSurface::transformationCallback()
+{
+    TransformableObj3D::transformationCallback();
+
+    // Update center
+    m_center = this->getModelMatrix() * vec4(m_centerValue, 1);
 }
 
 void BSurface::computeBorders()

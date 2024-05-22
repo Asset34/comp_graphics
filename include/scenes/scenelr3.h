@@ -15,7 +15,7 @@ public:
 
     void set(int vid, int value) override;
     void set(int vid, float value) override;
-    // void set(int vid, const float values[]) override;
+    void set(int vid, const float values[]) override;
     void set(int vid, bool value) override;
     void get(int vid, int &receiver) override;
     void get(int vid, float &receiver) override;
@@ -49,7 +49,10 @@ private:
         CMD_SHOW_CONTROL_POINTS_SWITCH,
         CMD_SHOW_CONTROL_POLYGON_SWITCH,
         CMD_HAUTO_OPEN_UNIFORM_SWITCH,
-        CMD_WAUTO_OPEN_UNIFORM_SWITCH
+        CMD_WAUTO_OPEN_UNIFORM_SWITCH,
+        CMD_SURFACE_POSITION_SET,
+        CMD_SURFACE_XROTATE,
+        CMD_SURFACE_yROTATE
     };
 
     enum ValueIds {
@@ -76,7 +79,10 @@ private:
         VID_CONTROL_POINTS_FLAG,
         VID_CONTROL_POLYGON_FLAG,
         VID_HAUTO_OPEN_UNIFORM_FLAG,
-        VID_WAUTO_OPEN_UNIFORM_FLAG
+        VID_WAUTO_OPEN_UNIFORM_FLAG,
+        VID_SURFACE_POSITION,
+        VID_XROTATION_ANGLE,
+        VID_YROTATION_ANGLE
     };
 
     // Objects
@@ -104,6 +110,10 @@ private:
     bool m_showControlPolygon;
     bool m_hAutoOpenUniform;
     bool m_wAutoOpenUniform;
+
+    vec3 m_surfacePos;
+    float m_xrotationAngle;
+    float m_yrotationAngle;
 
     bool m_updated;
     std::list<int> m_updateList;

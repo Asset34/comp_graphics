@@ -50,6 +50,11 @@ const vec3 &TransformableObj3D::getOrigin() const
     return m_origin;
 }
 
+const vec3 &TransformableObj3D::getSelfOrigin() const
+{
+    return this->selfOrigin();
+}
+
 const vec3 &TransformableObj3D::getScales() const
 {
     return m_scales;
