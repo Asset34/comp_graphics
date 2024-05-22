@@ -21,7 +21,9 @@ UiLr3Controller::UiLr3Controller(GLFWwindow * w, bool manageContext)
       m_hrenderStepChanged(false),
       m_wrenderStepChanged(false),
       m_showControlPointsChanged(false),
-      m_showControlPolygonChanged(false)
+      m_showControlPolygonChanged(false),
+      m_hautoOpenUniformSwitchChanged(false),
+      m_wautoOpenUniformSwitchChanged(false)
 {
     m_surfaceColumn = 0;
     m_surfaceRow = 0;
@@ -89,6 +91,8 @@ void UiLr3Controller::initFromControllable()
     // Init Flags
     this->getControllable()->get(VID_CONTROL_POINTS_FLAG, m_showControlPoints);
     this->getControllable()->get(VID_CONTROL_POLYGON_FLAG, m_showControlPolygon);
+    this->getControllable()->get(VID_HAUTO_OPEN_UNIFORM_FLAG, m_hautoOpenUniformSwitch);
+    this->getControllable()->get(VID_WAUTO_OPEN_UNIFORM_FLAG, m_wautoOpenUniformSwitch);
 }
 
 void UiLr3Controller::updateFromControllable()
@@ -306,6 +310,19 @@ void UiLr3Controller::control()
         m_wdegreeChanged = false;
     }
 
+    if (m_hautoOpenUniformSwitchChanged) {
+        this->getControllable()->set(VID_HAUTO_OPEN_UNIFORM_FLAG, m_hautoOpenUniformSwitch);
+        this->getControllable()->control(CMD_HAUTO_OPEN_UNIFORM_SWITCH);
+
+        m_hautoOpenUniformSwitchChanged = false;
+    }
+    
+    if (m_wautoOpenUniformSwitchChanged) {
+        this->getControllable()->set(VID_WAUTO_OPEN_UNIFORM_FLAG, m_wautoOpenUniformSwitch);
+        this->getControllable()->control(CMD_WAUTO_OPEN_UNIFORM_SWITCH);
+
+        m_wautoOpenUniformSwitchChanged = false;
+    }
 }
 
 void UiLr3Controller::renderUi()
@@ -383,6 +400,7 @@ void UiLr3Controller::renderUi()
             m_hdegreeChanged = ImGui::SliderInt("Degree##Height", &m_hdegree, 1, m_hdegreeMax);
 
             ImGui::SeparatorText("Knots");
+            m_hautoOpenUniformSwitchChanged = ImGui::Checkbox("Auto Open Uniform##Height", &m_hautoOpenUniformSwitch);
             ImGui::PushItemWidth(120);
             m_buttonUniformHKnots = ImGui::Button("Uniform##Height");
             ImGui::SameLine();
@@ -437,6 +455,7 @@ void UiLr3Controller::renderUi()
             m_wdegreeChanged = ImGui::SliderInt("Degree##Width", &m_wdegree, 1, m_wdegreeMax);
 
             ImGui::SeparatorText("Knots");
+            m_wautoOpenUniformSwitchChanged = ImGui::Checkbox("Auto Open Uniform##Weight", &m_wautoOpenUniformSwitch);
             ImGui::PushItemWidth(120);
             m_buttonUniformWKnots = ImGui::Button("Uniform##Width");
             ImGui::SameLine();

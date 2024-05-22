@@ -1,7 +1,5 @@
 #include "objects/bsurface.h"
 
-#include <iostream>
-
 const Color BSurface::COLOR_DEFAULT = {0, 0, 0};
 
 BSurface::BSurface()
@@ -16,6 +14,9 @@ void BSurface::setAutocompute(bool value)
 
 void BSurface::compute()
 {
+    this->updateOrders();
+    this->updateWKnots();
+    this->updateUKnots();
     this->computeBorders();
     this->updateAllSegments();
 
@@ -113,6 +114,23 @@ void BSurface::setWKnot(int index, float knot)
     }
 }
 
+void BSurface::setAutoWKnotsOpenUniform(bool value)
+{
+    m_wautoOpenUniform = value;
+
+    if (m_autoCompute) {
+        this->updateWKnots();
+        this->computeBorders();
+        this->updateAllSegments();
+
+        this->setUpdated();
+    }
+}
+
+bool BSurface::getAutoWKnotsOpenUniformStatus() const
+{
+    return m_wautoOpenUniform;
+}
 float BSurface::getWKnot(int index) const
 {
     return m_wknots[index];
@@ -199,6 +217,24 @@ void BSurface::setUKnot(int index, float knot)
     }
 }
 
+void BSurface::setAutoUKnotsOpenUniform(bool value)
+{
+    m_uautoOpenUniform = value;
+
+    if (m_autoCompute) {
+        this->updateUKnots();
+        this->computeBorders();
+        this->updateAllSegments();
+
+        this->setUpdated();
+    }
+}
+
+bool BSurface::getAutoUKnotsOpenUniformStatus() const
+{
+    return m_uautoOpenUniform;
+}
+
 float BSurface::getUKnot(int index) const
 {
     return m_uknots[index];
@@ -215,8 +251,8 @@ void BSurface::setWDegree(int degree)
 
     if (m_autoCompute) {
         // TODO
-        this->computeBorders();
         this->updateWKnots();
+        this->computeBorders();
         this->updateAllSegments();
 
         this->setUpdated();
@@ -230,7 +266,7 @@ int BSurface::getWDegree() const
 
 int BSurface::getWDegreeMax() const
 {
-    int degree = this->getWOrderMax();
+    int degree = this->getWOrderMax() - 1;
 
     if (degree) return degree;
     else return 0;
@@ -399,6 +435,12 @@ void BSurface::computeBorders()
 
 void BSurface::updateWKnots()
 {
+    if (m_wautoOpenUniform) {
+        this->defineWKnotsOpenUniform(1.0);
+
+        return;
+    }
+
     int diff = m_controlPoints.size() + m_worder - m_wknots.size();
 
     if (diff > 0) {
@@ -418,6 +460,12 @@ void BSurface::updateWKnots()
 void BSurface::updateUKnots()
 {
     if (!m_controlPoints.size()) return;
+
+    if (m_uautoOpenUniform) {
+        this->defineUKnotsOpenUniform(1.0);
+
+        return;
+    }
 
     int diff = m_controlPoints[0].size() + m_uorder - m_uknots.size();
 

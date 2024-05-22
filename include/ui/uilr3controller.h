@@ -18,7 +18,7 @@ protected:
 
 private:
 
-    enum Commands {
+   enum Commands {
         CMD_SET_SURFACE_HEIGHT,
         CMD_SET_SURFACE_WIDTH,
         CMD_SET_SURFACE_ROW_VALUE,
@@ -35,7 +35,9 @@ private:
         CMD_HSTEP_SET,
         CMD_WSTEP_SET,
         CMD_SHOW_CONTROL_POINTS_SWITCH,
-        CMD_SHOW_CONTROL_POLYGON_SWITCH
+        CMD_SHOW_CONTROL_POLYGON_SWITCH,
+        CMD_HAUTO_OPEN_UNIFORM_SWITCH,
+        CMD_WAUTO_OPEN_UNIFORM_SWITCH
     };
 
     enum ValueIds {
@@ -60,8 +62,11 @@ private:
         VID_HSTEP,
         VID_WSTEP,
         VID_CONTROL_POINTS_FLAG,
-        VID_CONTROL_POLYGON_FLAG
+        VID_CONTROL_POLYGON_FLAG,
+        VID_HAUTO_OPEN_UNIFORM_FLAG,
+        VID_WAUTO_OPEN_UNIFORM_FLAG
     };
+
 
     std::vector<float> m_surfaceColumnValues;
     std::vector<float> m_surfaceRowValues;
@@ -105,6 +110,12 @@ private:
 
     bool m_showControlPolygon;
     bool m_showControlPolygonChanged;
+
+    bool m_hautoOpenUniformSwitch;
+    bool m_hautoOpenUniformSwitchChanged;
+
+    bool m_wautoOpenUniformSwitch;
+    bool m_wautoOpenUniformSwitchChanged;
 
 };
 

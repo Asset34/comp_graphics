@@ -95,6 +95,12 @@ void SceneLR3::set(int vid, bool value)
     case VID_CONTROL_POLYGON_FLAG:
         m_showControlPolygon = value;
     break;
+    case VID_HAUTO_OPEN_UNIFORM_FLAG:
+        m_hAutoOpenUniform = value;
+    break;
+    case VID_WAUTO_OPEN_UNIFORM_FLAG:
+        m_wAutoOpenUniform = value;
+    break;
     }
 }
 
@@ -160,6 +166,12 @@ void SceneLR3::get(int vid, bool &receiver)
     break;
     case VID_CONTROL_POLYGON_FLAG:
         receiver = m_surfacePolygon.getPolygonShowStatus();
+    break;
+    case VID_HAUTO_OPEN_UNIFORM_FLAG:
+        receiver = m_surface.getAutoWKnotsOpenUniformStatus();
+    break;
+    case VID_WAUTO_OPEN_UNIFORM_FLAG:
+        receiver = m_surface.getAutoUKnotsOpenUniformStatus();
     break;
     }
 }
@@ -271,6 +283,12 @@ void SceneLR3::control(int cmd)
     case CMD_SHOW_CONTROL_POLYGON_SWITCH:
         m_surfacePolygon.showPolygon(m_showControlPolygon);
     break;
+    case CMD_HAUTO_OPEN_UNIFORM_SWITCH:
+        m_surface.setAutoWKnotsOpenUniform(m_hAutoOpenUniform);
+    break;
+    case CMD_WAUTO_OPEN_UNIFORM_SWITCH:
+        m_surface.setAutoUKnotsOpenUniform(m_wAutoOpenUniform);
+    break;
     }
 }
 
@@ -324,7 +342,7 @@ void SceneLR3::buildSurface()
 
     // Build surface
     m_surface.setControlPoints(m_surfacePolygon);
-    m_surface.setWDegree(1);
+    m_surface.setWDegree(2);
     m_surface.setUDegree(3);
     m_surface.defineWKnotsOpenUniform(1.0);
     m_surface.defineUKnotsOpenUniform(1.0);

@@ -19,6 +19,8 @@ public:
     void defineWKnotsUniform(float step);
     void defineWKnotsOpenUniform(float step);
     void setWKnot(int index, float knot);
+    void setAutoWKnotsOpenUniform(bool value);
+    bool getAutoWKnotsOpenUniformStatus() const;
     float getWKnot(int index) const;
     int getWKnotNumber() const;
 
@@ -26,6 +28,8 @@ public:
     void defineUKnotsUniform(float step);
     void defineUKnotsOpenUniform(float step);
     void setUKnot(int index, float knot);
+    void setAutoUKnotsOpenUniform(bool value);
+    bool getAutoUKnotsOpenUniformStatus() const;
     float getUKnot(int index) const;
     int getUKnotNumber() const;
 
@@ -93,6 +97,8 @@ private:
     int m_topSegment;
 
     bool m_autoCompute = false;
+    bool m_uautoOpenUniform = false;
+    bool m_wautoOpenUniform = false;
     
     // Render Data
     float m_wrenderStep = 0.1;

@@ -47,7 +47,9 @@ private:
         CMD_HSTEP_SET,
         CMD_WSTEP_SET,
         CMD_SHOW_CONTROL_POINTS_SWITCH,
-        CMD_SHOW_CONTROL_POLYGON_SWITCH
+        CMD_SHOW_CONTROL_POLYGON_SWITCH,
+        CMD_HAUTO_OPEN_UNIFORM_SWITCH,
+        CMD_WAUTO_OPEN_UNIFORM_SWITCH
     };
 
     enum ValueIds {
@@ -72,7 +74,9 @@ private:
         VID_HSTEP,
         VID_WSTEP,
         VID_CONTROL_POINTS_FLAG,
-        VID_CONTROL_POLYGON_FLAG
+        VID_CONTROL_POLYGON_FLAG,
+        VID_HAUTO_OPEN_UNIFORM_FLAG,
+        VID_WAUTO_OPEN_UNIFORM_FLAG
     };
 
     // Objects
@@ -98,6 +102,8 @@ private:
 
     bool m_showControlPoints;
     bool m_showControlPolygon;
+    bool m_hAutoOpenUniform;
+    bool m_wAutoOpenUniform;
 
     bool m_updated;
     std::list<int> m_updateList;
