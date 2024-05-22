@@ -95,6 +95,8 @@ private:
     bool m_controlPointValueChanged;
     bool m_hknotChanged;
     bool m_wknotChanged;
+    bool m_hdegreeChanged;
+    bool m_wdegreeChanged;
     bool m_hrenderStepChanged;
     bool m_wrenderStepChanged;
 

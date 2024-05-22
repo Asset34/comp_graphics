@@ -11,6 +11,8 @@ public:
     SceneLR3();
     ~SceneLR3() {};
     
+    void update() override;
+
     void set(int vid, int value) override;
     void set(int vid, float value) override;
     // void set(int vid, const float values[]) override;

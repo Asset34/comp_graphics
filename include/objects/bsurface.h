@@ -37,6 +37,9 @@ public:
     int getUDegree() const;
     int getUDegreeMax() const;
 
+    int getWOrderMax() const;    
+    int getUOrderMax() const;    
+
     void setWRenderStep(float step);
     float getWRenderStep() const;
 
@@ -51,11 +54,21 @@ public:
     const RenderData &getRenderData() override;
 
 private:
+    void computeBorders();
     void updateWKnots();
     void updateUKnots();
-    
+    void updateOrders();
+
+    void updateAllSegments();
+    void updateSegment(int indexw, int indexu);
+    vec3 computeSegment(int indexu, int basisBegin, float u);
+    vec3 computeIntermediateControlPoint(int indexw, int basisStart, int pointsIndex, float w);
+
     void initRenderData();
 
+    struct Segment {
+        std::vector<std::vector<vec3>> splines;
+    };
 
     // Default values
     static const Color COLOR_DEFAULT; // BLACK
@@ -67,14 +80,17 @@ private:
     int m_worder = 0;
     int m_uorder = 0;
 
+    // Data
+    std::vector<std::vector<Segment>> m_segments;
+
+    // Computational values
+    std::vector<vec3> m_intermediateControlPoints;
+
     // Borders
     int m_leftSegment;
     int m_rightSegment;
     int m_bottomSegment;
     int m_topSegment;
-
-    // Computational values
-
 
     bool m_autoCompute = false;
     

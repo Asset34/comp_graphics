@@ -16,6 +16,8 @@ UiLr3Controller::UiLr3Controller(GLFWwindow * w, bool manageContext)
       m_controlPointValueChanged(false),
       m_hknotChanged(false),
       m_wknotChanged(false),
+      m_hdegreeChanged(false),
+      m_wdegreeChanged(false),
       m_hrenderStepChanged(false),
       m_wrenderStepChanged(false),
       m_showControlPointsChanged(false),
@@ -143,12 +145,14 @@ void UiLr3Controller::updateFromControllable()
         break;
         case VID_HDEGREE_MAX:
             this->getControllable()->get(VID_HDEGREE_MAX, m_hdegreeMax);
+            this->getControllable()->get(VID_HDEGREE_VALUE, m_hdegree);
         break;
         case VID_HDEGREE_VALUE:
             this->getControllable()->get(VID_HDEGREE_VALUE, m_hdegree);
         break;
         case VID_WDEGREE_MAX:
             this->getControllable()->get(VID_WDEGREE_MAX, m_wdegreeMax);
+            this->getControllable()->get(VID_WDEGREE_VALUE, m_wdegree);
         break;
         case VID_WDEGREE_VALUE:
             this->getControllable()->get(VID_WDEGREE_VALUE, m_wdegree);
@@ -232,7 +236,7 @@ void UiLr3Controller::control()
         this->getControllable()->set(VID_KNOT_VALUE, m_wknots[m_wknotIndex]);
         this->getControllable()->control(CMD_WKNOT_SET);
 
-        m_hknotChanged = false;
+        m_wknotChanged = false;
     }
 
     if (m_buttonUniformHKnots) {
@@ -257,7 +261,7 @@ void UiLr3Controller::control()
         this->getControllable()->set(VID_KNOT_STEP, m_wknotStep);
         this->getControllable()->control(CMD_WKNOTS_OPENUNIFORM);
 
-        m_buttonOpenUniformHKnots = false;
+        m_buttonOpenUniformWKnots = false;
     }
 
     if (m_hrenderStepChanged) {
@@ -286,6 +290,20 @@ void UiLr3Controller::control()
         this->getControllable()->control(CMD_SHOW_CONTROL_POLYGON_SWITCH);
         
         m_showControlPolygonChanged = false;
+    }
+
+    if (m_hdegreeChanged) {
+        this->getControllable()->set(VID_HDEGREE_VALUE, m_hdegree);
+        this->getControllable()->control(CMD_HDEGREE_SET);
+
+        m_hdegreeChanged = false;
+    }
+
+    if (m_wdegreeChanged) {
+        this->getControllable()->set(VID_WDEGREE_VALUE, m_wdegree);
+        this->getControllable()->control(CMD_WDEGREE_SET);
+
+        m_wdegreeChanged = false;
     }
 
 }
@@ -362,7 +380,7 @@ void UiLr3Controller::renderUi()
         if (ImGui::BeginTabItem("Height"))
         {
             ImGui::SeparatorText("Degree");
-            ImGui::SliderInt("Degree##Height", &m_hdegree, 1, m_hdegreeMax);
+            m_hdegreeChanged = ImGui::SliderInt("Degree##Height", &m_hdegree, 1, m_hdegreeMax);
 
             ImGui::SeparatorText("Knots");
             ImGui::PushItemWidth(120);
@@ -416,7 +434,7 @@ void UiLr3Controller::renderUi()
         if (ImGui::BeginTabItem("Width"))
         {
             ImGui::SeparatorText("Degree");
-            ImGui::SliderInt("Degree##Width", &m_wdegree, 1, m_wdegreeMax);
+            m_wdegreeChanged = ImGui::SliderInt("Degree##Width", &m_wdegree, 1, m_wdegreeMax);
 
             ImGui::SeparatorText("Knots");
             ImGui::PushItemWidth(120);
@@ -437,8 +455,8 @@ void UiLr3Controller::renderUi()
                 char buf[32];
                 sprintf(buf, "x%d", i);
 
-                if (!m_hknotChanged) {
-                    m_hknotIndex = i;
+                if (!m_wknotChanged) {
+                    m_wknotIndex = i;
                 }
 
                 // Determine min for current knot        
@@ -455,7 +473,7 @@ void UiLr3Controller::renderUi()
                     max = m_wknots[i + 1];
                 }
 
-                m_hknotChanged |= ImGui::SliderFloat(buf, &m_wknots[i], min, max);
+                m_wknotChanged |= ImGui::SliderFloat(buf, &m_wknots[i], min, max);
 
                 // Check for borders
                 if (m_wknots[i] < min) m_wknots[i] = min;

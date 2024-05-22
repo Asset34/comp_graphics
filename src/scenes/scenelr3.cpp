@@ -1,22 +1,32 @@
 #include "scenes/scenelr3.h"
 
+#include <iostream>
+
 SceneLR3::SceneLR3()
 {
     // Build objects
     this->buildSurface();
 
     // Init objects
-    m_surfacePolygon.setPolygonColor({0.0, 1.0, 0.0});
-    m_surfacePolygon.setControlPointsColor({1.0, 1.0, 0.0});
-    m_surfacePolygon.setPolygonLineWidth(2.0);
-    m_surfacePolygon.setControlPointSize(5);
+    m_surface.setWRenderStep(0.1);
+    m_surface.setURenderStep(0.04);
+    m_surface.setAutocompute(true);
+    m_surface.compute();
 
     m_surfacePolygon.rotateItselfx(-90);
+    m_surface.rotateItselfx(-90);
 
     this->addObject(&m_surfacePolygon);
+    this->addObject(&m_surface);
 
     // Init control values
     m_updated = false;
+}
+
+void SceneLR3::update()
+{
+    // m_surfacePolygon.rotatez(1);
+    // m_surface.rotatez(1);
 }
 
 void SceneLR3::set(int vid, int value)
@@ -312,14 +322,19 @@ void SceneLR3::buildSurface()
     m_surfacePolygon.setControlPointValue(1, 3, 30);
     m_surfacePolygon.setControlPointValue(2, 3, 20);
 
-
     // Build surface
-    m_surface.setWDegree(1);
-    m_surface.setUDegree(2);
-    m_surface.defineWKnotsOpenUniform(1.0);
-    m_surface.defineUKnotsUniform(2.0);
     m_surface.setControlPoints(m_surfacePolygon);
-    m_surface.setWRenderStep(0.1);
-    m_surface.setURenderStep(0.04);
+    m_surface.setWDegree(1);
+    m_surface.setUDegree(3);
+    m_surface.defineWKnotsOpenUniform(1.0);
+    m_surface.defineUKnotsOpenUniform(1.0);
+    
+    // Define visuals
+    m_surfacePolygon.setPolygonColor({1.0, 1.0, 0.0});
+    m_surfacePolygon.setControlPointsColor({1.0, 0.0, 0.0});
+    m_surfacePolygon.setPolygonLineWidth(2.0);
+    m_surfacePolygon.setControlPointSize(5);
+    m_surface.setColor({0.0, 1.0, 0.0});
+    m_surface.setLineWidth(3.0);
 
 }
