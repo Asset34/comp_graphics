@@ -421,7 +421,7 @@ const RenderData &BSurface::getRenderData()
         }
     }
 
-    m_renderData.Edges.erase(m_renderData.Edges.end());
+    m_renderData.Edges.back().end = m_renderData.Edges.back().begin;
 
     return m_renderData;
 }

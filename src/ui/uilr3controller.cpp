@@ -175,6 +175,9 @@ void UiLr3Controller::updateFromControllable()
         case VID_WSTEP:
             this->getControllable()->get(VID_WSTEP, m_wrenderStep);
         break;
+        case VID_SURFACE_POSITION:
+            this->getControllable()->get(VID_SURFACE_POSITION, m_surfacePos);
+        break;
         }
     }
 
