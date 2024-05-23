@@ -191,10 +191,15 @@ void SceneLR2::control(int cmd)
         this->addObject(&m_rememberedSplines.back());
     break;
     case CMD_CLEAR_SPLINES:
-        for (auto it = m_rememberedSplines.begin(); it != m_rememberedSplines.end(); ++it) {
-            this->removeObject(&(*it));
-            m_rememberedSplines.erase(it);
-            break;
+        // for (auto it = m_rememberedSplines.begin(); it != m_rememberedSplines.end(); ++it) {
+        //     this->removeObject(&(*it));
+        //     m_rememberedSplines.erase(it);
+        //     break;
+        // }
+
+        while (!m_rememberedSplines.empty()) {
+            this->removeObject(&m_rememberedSplines.back());
+            m_rememberedSplines.pop_back();
         }
     break;
     }
