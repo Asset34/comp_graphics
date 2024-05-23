@@ -219,6 +219,7 @@ const RenderData &BSpline2D::getRenderData()
         }
     }
 
+    m_renderData.Edges.clear();
     if (size > 0) {
         m_renderData.Edges.resize(size - 1);
         for (int i = 0; i < size - 1; i++) {
