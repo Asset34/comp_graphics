@@ -191,12 +191,6 @@ void SceneLR2::control(int cmd)
         this->addObject(&m_rememberedSplines.back());
     break;
     case CMD_CLEAR_SPLINES:
-        // for (auto it = m_rememberedSplines.begin(); it != m_rememberedSplines.end(); ++it) {
-        //     this->removeObject(&(*it));
-        //     m_rememberedSplines.erase(it);
-        //     break;
-        // }
-
         while (!m_rememberedSplines.empty()) {
             this->removeObject(&m_rememberedSplines.back());
             m_rememberedSplines.pop_back();
@@ -233,12 +227,6 @@ void SceneLR2::buildSpline()
         {48, 31},
         {64, -5}
     };
-    // std::vector<vec2> controlPoints = {
-    //     {0, 0},
-    //     {3, 9},
-    //     {6, 3},
-    //     {9, 6}
-    // };
 
     // Add control points
     for (auto cp : controlPoints) {

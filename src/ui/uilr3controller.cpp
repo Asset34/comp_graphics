@@ -478,6 +478,12 @@ void UiLr3Controller::renderUi()
 
             ImGui::SeparatorText("Render");
             m_hrenderStepChanged = ImGui::SliderFloat("Step##HRender", &m_hrenderStep, 0.01, 1.0, "%.3f", ImGuiSliderFlags_Logarithmic);
+            if (m_hrenderStep < 0.001) {
+                m_hrenderStep = 0.001;
+            }
+            if (m_hrenderStep > 1) {
+                m_hrenderStep = 1;
+            }
 
             ImGui::EndTabItem();
         }
@@ -533,6 +539,12 @@ void UiLr3Controller::renderUi()
 
             ImGui::SeparatorText("Render");
             m_wrenderStepChanged = ImGui::SliderFloat("Step##WRender", &m_wrenderStep, 0.001, 1.0, "%.3f", ImGuiSliderFlags_Logarithmic);
+            if (m_wrenderStep < 0.001) {
+                m_wrenderStep = 0.001;
+            }
+            if (m_wrenderStep > 1) {
+                m_wrenderStep = 1;
+            }
 
             ImGui::EndTabItem();
         }

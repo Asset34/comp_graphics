@@ -267,6 +267,9 @@ void UiLr2Controller::renderUi()
     ImGui::SeparatorText("Render");
     m_renderColorChanged = ImGui::ColorEdit3("Color", m_renderColor, ImGuiColorEditFlags_NoOptions | ImGuiColorEditFlags_NoInputs);
     m_renderStepChanged = ImGui::SliderFloat("Step##Render", &m_renderStep, 0.001, 1.0, "%.3f", ImGuiSliderFlags_Logarithmic);
+    if (m_renderStep < 0.001) {
+        m_renderStep = 0.001;
+    }
     m_showControlPointsChanged = ImGui::Checkbox("Show Control Points", &m_showControlPoints);
     m_showControlPolygonChanged = ImGui::Checkbox("Show Polygon", &m_showControlPolygon);
 

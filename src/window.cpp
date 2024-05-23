@@ -132,7 +132,7 @@ void Window::setupWorkspaces()
     GLRenderer *rendererLr1 = new GLRenderer;
     rendererLr1->attach(sceneLr1);
     UiLr1Controller *uiManagerLr1 = new UiLr1Controller(m_window);
-    uiManagerLr1->setAreaMargins(0, 200, 0, 0);
+    // uiManagerLr1->setAreaMargins(0, 200, 0, 0);
     uiManagerLr1->attachControllable(sceneLr1);
     uiManagerLr1->attachObservationController(sceneLr1->getObservationController());
     uiManagerLr1->handlePostRendering();
@@ -152,7 +152,7 @@ void Window::setupWorkspaces()
     GLRenderer *rendererLr3 = new GLRenderer;
     rendererLr3->attach(sceneLr3);
     UiLr3Controller *uiManagerLr3 = new UiLr3Controller(m_window);
-    uiManagerLr3->setAreaMargins(0, 200, 0, 0);
+    // uiManagerLr3->setAreaMargins(0, 200, 0, 0);
     uiManagerLr3->attachControllable(sceneLr3);
     uiManagerLr3->attachObservationController(sceneLr3->getObservationController());
     uiManagerLr3->handlePostRendering();
