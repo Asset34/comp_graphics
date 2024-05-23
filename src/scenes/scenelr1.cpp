@@ -183,7 +183,7 @@ void SceneLR1::buildShape()
 
     // Set Flags
     m_shape.setRenderEdgesFlag(true);
-    m_shape.setRenderPolygonsFlag(true);
+    m_shape.setRenderPolygonsFlag(false);
     m_shape.setUseModelMatrFlag(true);
     m_shape.setUseViewMatrFlag(true);
     m_shape.setUseProjMatrFlag(true);

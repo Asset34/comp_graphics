@@ -1,12 +1,9 @@
 #ifndef TRANSFORMABLECOBJ2D_H_
 #define TRANSFORMABLECOBJ2D_H_
 
+#include "geometry.h"
 #include <vector>
 #include "glm/glm.hpp"
-
-using glm::vec2;
-using glm::vec3;
-using glm::mat3;
 
 class TransformableObj2D {
 public:

@@ -1,13 +1,9 @@
 #ifndef TRANSFORMABLECOBJ3D_H_
 #define TRANSFORMABLECOBJ3D_H_
 
+#include "geometry.h"
 #include <vector>
 #include "glm/glm.hpp"
-
-using glm::vec3;
-using glm::vec4;
-using glm::mat3;
-using glm::mat4;
 
 class TransformableObj3D {
 public:

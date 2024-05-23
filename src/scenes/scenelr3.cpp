@@ -25,12 +25,6 @@ SceneLR3::SceneLR3()
     m_updated = false;
 }
 
-void SceneLR3::update()
-{
-    // m_surfacePolygon.rotatez(1);
-    // m_surface.rotatez(1);
-}
-
 void SceneLR3::set(int vid, int value)
 {
     switch (vid)
