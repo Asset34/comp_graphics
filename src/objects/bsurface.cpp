@@ -604,11 +604,6 @@ void BSurface::updateLastU(int indexw)
     }
 }
 
-void BSurface::updateLastW()
-{
-
-}
-
 vec3 BSurface::computeSegment(int indexu, int basisBegin, float u)
 {
     // Setup initial basis vector

@@ -364,7 +364,7 @@ void UiLr3Controller::renderUi()
     ImGui::Begin("Surface Control");
 
     // ImGui::BeginGroup()
-    ImGui::SeparatorText("Control Points Mesh");
+    ImGui::SeparatorText("Defining Polygon Net");
 
     ImGui::BeginGroup();
         m_showControlPointsChanged = ImGui::Checkbox("Show Control Points", &m_showControlPoints);

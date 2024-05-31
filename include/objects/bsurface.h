@@ -69,11 +69,8 @@ private:
 
     void updateAllSegments();
     void updateSegment(int indexw, int indexu);
-    // void updateLastU(std::vector<vec3> &spline);
-    // void updateLastW();
 
     void updateLastU(int indexw);
-    void updateLastW();
 
     vec3 computeSegment(int indexu, int basisBegin, float u);
     vec3 computeIntermediateControlPoint(int indexw, int basisStart, int pointsIndex, float w);
